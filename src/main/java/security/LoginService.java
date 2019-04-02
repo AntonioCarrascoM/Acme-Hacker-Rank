@@ -31,6 +31,11 @@ public class LoginService implements UserDetailsService {
 	UserAccountRepository	userRepository;
 
 
+	// Supported services -----------------------------------------------------
+
+	//	@Autowired
+	//	ActorService			actorService;
+
 	// Business methods -------------------------------------------------------
 
 	@Override
@@ -38,6 +43,13 @@ public class LoginService implements UserDetailsService {
 		Assert.notNull(username);
 
 		UserDetails result;
+		//TODO implementar el ban
+		//		final Actor a = this.actorService.getActorByUsername(username);
+		//		final UserAccount acc = a.getUserAccount();
+		//
+		//		Assert.isTrue(!acc.getBanned());
+		//
+		//		Assert.isTrue(!acc.getInactive());
 
 		result = this.userRepository.findByUsername(username);
 		Assert.notNull(result);
@@ -72,6 +84,11 @@ public class LoginService implements UserDetailsService {
 		Assert.isTrue(result.getId() != 0);
 
 		return result;
+	}
+
+	public UserAccount findOne(final Integer id) {
+		return this.userRepository.findOne(id);
+
 	}
 
 }
