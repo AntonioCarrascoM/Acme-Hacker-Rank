@@ -19,7 +19,7 @@ public class Problem extends DomainEntity {
 	private String		title;
 	private String		statement;
 	private String		hint;
-	private String		attatchments;
+	private String		attachments;
 	private Boolean		finalMode;
 
 	//Relationships
@@ -43,8 +43,8 @@ public class Problem extends DomainEntity {
 	}
 
 	@NotBlank
-	public String getAttatchments() {
-		return this.attatchments;
+	public String getAttachments() {
+		return this.attachments;
 	}
 
 	@NotNull
@@ -72,12 +72,16 @@ public class Problem extends DomainEntity {
 		this.hint = hint;
 	}
 
-	public void setAttatchments(final String attatchments) {
-		this.attatchments = attatchments;
+	public void setAttachments(final String attachments) {
+		this.attachments = attachments;
 	}
 
 	public void setFinalMode(final Boolean finalMode) {
 		this.finalMode = finalMode;
+	}
+
+	public void setPosition(final Position position) {
+		this.position = position;
 	}
 
 }

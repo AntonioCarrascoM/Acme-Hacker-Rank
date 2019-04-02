@@ -32,6 +32,7 @@ public class EducationData extends DomainEntity {
 
 
 	//Getters
+
 	@NotBlank
 	public String getDegree() {
 		return this.degree;

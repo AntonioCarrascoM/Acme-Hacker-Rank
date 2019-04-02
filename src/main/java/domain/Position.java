@@ -42,7 +42,7 @@ public class Position extends DomainEntity {
 	//Getters
 	@Column(unique = true)
 	@NotBlank
-	@Pattern(regexp = "\\d{2}\\d{2}\\d{2}-\\w{5}")
+	@Pattern(regexp = "\\w{4}-\\d{4}")
 	public String getTicker() {
 		return this.ticker;
 	}
@@ -60,7 +60,7 @@ public class Position extends DomainEntity {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	public Date getDeadline() {
+	public Date getDeadLine() {
 		return this.deadline;
 	}
 
@@ -109,7 +109,7 @@ public class Position extends DomainEntity {
 		this.description = description;
 	}
 
-	public void setDeadline(final Date deadline) {
+	public void setDeadLine(final Date deadline) {
 		this.deadline = deadline;
 	}
 

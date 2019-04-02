@@ -47,6 +47,7 @@ public class Application extends DomainEntity {
 
 	@NotNull
 	@Valid
+	@ManyToOne(optional = false)
 	public Problem getProblem() {
 		return this.problem;
 	}
