@@ -31,6 +31,7 @@ public class PositionData extends DomainEntity {
 
 
 	//Getters
+
 	@NotBlank
 	public String getTitle() {
 		return this.title;

@@ -16,7 +16,7 @@ public class MiscellaneousData extends DomainEntity {
 
 	//Attributes
 	private String		text;
-	private String		attatchments;
+	private String		attachments;
 
 	//Relationships
 	private Curriculum	curriculum;
@@ -28,8 +28,8 @@ public class MiscellaneousData extends DomainEntity {
 		return this.text;
 	}
 
-	public String getAttatchments() {
-		return this.attatchments;
+	public String getAttachments() {
+		return this.attachments;
 	}
 
 	@Valid
@@ -44,8 +44,8 @@ public class MiscellaneousData extends DomainEntity {
 		this.text = text;
 	}
 
-	public void setAttatchments(final String attatchments) {
-		this.attatchments = attatchments;
+	public void setAttachments(final String attachments) {
+		this.attachments = attachments;
 	}
 
 	public void setCurriculum(final Curriculum curriculum) {
