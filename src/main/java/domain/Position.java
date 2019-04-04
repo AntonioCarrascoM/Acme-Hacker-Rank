@@ -32,6 +32,7 @@ public class Position extends DomainEntity {
 	private String	requiredSkills;
 	private String	requiredTech;
 	private Double	offeredSalary;
+	private Boolean	cancelled;
 	private Boolean	finalMode;
 
 	//Relationships
@@ -60,7 +61,7 @@ public class Position extends DomainEntity {
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	public Date getDeadLine() {
+	public Date getDeadline() {
 		return this.deadline;
 	}
 
@@ -82,6 +83,11 @@ public class Position extends DomainEntity {
 	@Min(0)
 	public Double getOfferedSalary() {
 		return this.offeredSalary;
+	}
+
+	@NotNull
+	public Boolean getCancelled() {
+		return this.cancelled;
 	}
 
 	@NotNull
@@ -109,7 +115,7 @@ public class Position extends DomainEntity {
 		this.description = description;
 	}
 
-	public void setDeadLine(final Date deadline) {
+	public void setDeadline(final Date deadline) {
 		this.deadline = deadline;
 	}
 
@@ -135,5 +141,9 @@ public class Position extends DomainEntity {
 
 	public void setCompany(final Company company) {
 		this.company = company;
+	}
+
+	public void setCancelled(final Boolean cancelled) {
+		this.cancelled = cancelled;
 	}
 }

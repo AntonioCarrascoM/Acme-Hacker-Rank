@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import services.ActorService;
+import domain.Actor;
+
 @Service
 @Transactional
 public class LoginService implements UserDetailsService {
@@ -30,11 +33,11 @@ public class LoginService implements UserDetailsService {
 	@Autowired
 	UserAccountRepository	userRepository;
 
-
 	// Supported services -----------------------------------------------------
 
-	//	@Autowired
-	//	ActorService			actorService;
+	@Autowired
+	ActorService			actorService;
+
 
 	// Business methods -------------------------------------------------------
 
@@ -43,13 +46,13 @@ public class LoginService implements UserDetailsService {
 		Assert.notNull(username);
 
 		UserDetails result;
-		//TODO implementar el ban
-		//		final Actor a = this.actorService.getActorByUsername(username);
-		//		final UserAccount acc = a.getUserAccount();
-		//
-		//		Assert.isTrue(!acc.getBanned());
-		//
-		//		Assert.isTrue(!acc.getInactive());
+
+		final Actor a = this.actorService.getActorByUsername(username);
+		final UserAccount acc = a.getUserAccount();
+
+		Assert.isTrue(!acc.getBanned());
+
+		Assert.isTrue(!acc.getInactive());
 
 		result = this.userRepository.findByUsername(username);
 		Assert.notNull(result);

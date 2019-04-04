@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.SocialProfileRepository;
+import domain.Actor;
 import domain.SocialProfile;
 
 @Service
@@ -23,8 +24,8 @@ public class SocialProfileService {
 
 	// Supporting service
 
-	//@Autowired
-	//private ActorService			actorService;
+	@Autowired
+	private ActorService			actorService;
 
 	@Autowired
 	private Validator				validator;
@@ -34,8 +35,8 @@ public class SocialProfileService {
 
 	public SocialProfile create() {
 		final SocialProfile sp = new SocialProfile();
-		//final Actor a = this.actorService.findByPrincipal();
-		//sp.setActor(a);
+		final Actor a = this.actorService.findByPrincipal();
+		sp.setActor(a);
 
 		return sp;
 	}
@@ -54,7 +55,7 @@ public class SocialProfileService {
 		Assert.notNull(sp);
 
 		//Assertion that the user deleting this social profile has the correct privilege.
-		//Assert.isTrue(this.actorService.findByPrincipal().getId() == sp.getActor().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == sp.getActor().getId());
 
 		final SocialProfile saved = this.socialProfileRepository.save(sp);
 
@@ -65,7 +66,7 @@ public class SocialProfileService {
 		Assert.notNull(sp);
 
 		//Assertion that the user deleting this social identity has the correct privilege.
-		//Assert.isTrue(this.actorService.findByPrincipal().getId() == sp.getActor().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == sp.getActor().getId());
 
 		this.socialProfileRepository.delete(sp);
 
@@ -85,7 +86,7 @@ public class SocialProfileService {
 		result.setNick(sp.getNick());
 		result.setSocialNetwork(sp.getSocialNetwork());
 
-		//Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getActor().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getActor().getId());
 
 		this.validator.validate(result, binding);
 

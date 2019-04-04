@@ -85,16 +85,15 @@ public class ActorService {
 		a.setUserAccount(newOne);
 	}
 
-	//TODO Checks if an actor is contained in the spammer list
-	//	public boolean isBannable(final Actor a) {
-	//		Boolean isSpam = false;
-	//
-	//		final Collection<Actor> spammerActors = this.bannableActors();
-	//		if (spammerActors.contains(a))
-	//			isSpam = true;
-	//
-	//		return isSpam;
-	//	}
+	public boolean isBannable(final Actor a) {
+		Boolean isSpam = false;
+
+		final Collection<Actor> spammerActors = this.bannableActors();
+		if (spammerActors.contains(a))
+			isSpam = true;
+
+		return isSpam;
+	}
 
 	//Method to check the users email adjusts to the given patterns.
 	public boolean checkUserEmail(final String email) {
@@ -248,21 +247,21 @@ public class ActorService {
 
 		return result;
 	}
-	//TODO Method to ban or unban an actor
-	//	public void BanOrUnban(final int actorId) {
-	//		final Actor a = this.actorRepository.findOne(actorId);
-	//
-	//		final Collection<Actor> bannableActors = this.bannableActors();
-	//
-	//		//Checking that the selected actor is bannable.
-	//		Assert.isTrue(bannableActors.contains(a));
-	//
-	//		final Boolean ban = a.getUserAccount().getBanned();
-	//		if (ban == true)
-	//			a.getUserAccount().setBanned(false);
-	//		if (ban == false)
-	//			a.getUserAccount().setBanned(true);
-	//	}
+	//Method to ban or unban an actor
+	public void BanOrUnban(final int actorId) {
+		final Actor a = this.actorRepository.findOne(actorId);
+
+		final Collection<Actor> bannableActors = this.bannableActors();
+
+		//Checking that the selected actor is bannable.
+		Assert.isTrue(bannableActors.contains(a));
+
+		final Boolean ban = a.getUserAccount().getBanned();
+		if (ban == true)
+			a.getUserAccount().setBanned(false);
+		if (ban == false)
+			a.getUserAccount().setBanned(true);
+	}
 
 	//Ancillary methods
 	public Actor findByUserAccountId(final int id) {
@@ -273,14 +272,14 @@ public class ActorService {
 		return this.actorRepository.getActorByUsername(username);
 	}
 
-	//	// TODO Listing of actors with at least 10% of the messages flagged as spam.
-	//	public Collection<Actor> bannableActors() {
-	//		return this.actorRepository.bannableActors();
-	//	}
-	//
-	//	// TODO Listing of actors with at least 1 message sent.
-	//	public Collection<Actor> actorWithSentMessages() {
-	//		return this.actorRepository.actorWithSentMessages();
-	//	}
+	// TODO Listing of actors with at least 10% of the messages flagged as spam.
+	public Collection<Actor> bannableActors() {
+		return this.actorRepository.bannableActors();
+	}
+
+	//Listing of actors with at least 1 message sent.
+	public Collection<Actor> actorWithSentMessages() {
+		return this.actorRepository.actorWithSentMessages();
+	}
 
 }
