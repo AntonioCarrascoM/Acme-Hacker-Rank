@@ -93,4 +93,8 @@ public class SocialProfileService {
 		return result;
 
 	}
+	//The social profiles from an Actor
+	public Collection<SocialProfile> socialProfilesFromActor(final int actorId) {
+		return this.socialProfileRepository.socialProfilesFromActor(actorId);
+	}
 }
