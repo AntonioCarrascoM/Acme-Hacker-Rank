@@ -140,6 +140,8 @@ public class AdministratorService {
 
 		result.setName(administrator.getName());
 		result.setSurnames(administrator.getSurnames());
+		result.setVatNumber(administrator.getVatNumber());
+		result.setCreditCard(administrator.getCreditCard());
 		result.setPhoto(administrator.getPhoto());
 		result.setEmail(administrator.getEmail());
 		result.setPhone(administrator.getPhone());

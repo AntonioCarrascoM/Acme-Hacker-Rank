@@ -140,6 +140,8 @@ public class CompanyService {
 
 		result.setName(company.getName());
 		result.setSurnames(company.getSurnames());
+		result.setVatNumber(company.getVatNumber());
+		result.setCreditCard(company.getCreditCard());
 		result.setPhoto(company.getPhoto());
 		result.setEmail(company.getEmail());
 		result.setPhone(company.getPhone());

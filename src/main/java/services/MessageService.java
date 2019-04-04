@@ -98,7 +98,7 @@ public class MessageService {
 
 		//Assert.isTrue(this.actorService.findByPrincipal().getId() == boxes.getId());
 		if (!message.getTags().contains("DELETED")) {
-			final String newTags = message.getTags() + "DELETED";
+			final String newTags = message.getTags() + ", DELETED";
 			message.setTags(newTags);
 			this.save(message);
 
@@ -145,7 +145,7 @@ public class MessageService {
 	}
 
 	//Sends a message to the member associated to an request.
-
+	//TODO adaptar a los estados de la application, si el estado es submitted se manda a company, si es accepted o rejected se manda a hacker
 	public void applicationStatusNotification(final Application p) {
 		Assert.notNull(p);
 

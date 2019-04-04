@@ -24,6 +24,7 @@ public class Problem extends DomainEntity {
 
 	//Relationships
 
+	private Company		company;
 	private Position	position;
 
 
@@ -55,6 +56,12 @@ public class Problem extends DomainEntity {
 	@Valid
 	@NotNull
 	@ManyToOne(optional = false)
+	public Company getCompany() {
+		return this.company;
+	}
+
+	@Valid
+	@ManyToOne(optional = true)
 	public Position getPosition() {
 		return this.position;
 	}
@@ -78,6 +85,10 @@ public class Problem extends DomainEntity {
 
 	public void setFinalMode(final Boolean finalMode) {
 		this.finalMode = finalMode;
+	}
+
+	public void setCompany(final Company company) {
+		this.company = company;
 	}
 
 	public void setPosition(final Position position) {

@@ -140,6 +140,8 @@ public class HackerService {
 
 		result.setName(hacker.getName());
 		result.setSurnames(hacker.getSurnames());
+		result.setVatNumber(hacker.getVatNumber());
+		result.setCreditCard(hacker.getCreditCard());
 		result.setPhoto(hacker.getPhoto());
 		result.setEmail(hacker.getEmail());
 		result.setPhone(hacker.getPhone());

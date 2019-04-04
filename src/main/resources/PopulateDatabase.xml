@@ -420,6 +420,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the library: http://stringtopdf.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company1" />
 		<property name="position" ref="position1" />
 	</bean>
 	
@@ -429,6 +430,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the code: http://codecreate.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company1" />
 		<property name="position" ref="position1" />
 	</bean>
 	
@@ -438,6 +440,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="false" />
+		<property name="company" ref="company1" />
 		<property name="position" ref="position2" />
 	</bean>
 	
@@ -447,6 +450,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company2" />
 		<property name="position" ref="position3" />
 	</bean>
 	
@@ -456,6 +460,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the git account: http://gitaccount.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company2" />
 		<property name="position" ref="position3" />
 	</bean>
 	
@@ -465,6 +470,7 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the image: http://imagelocation.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company3" />
 		<property name="position" ref="position5" />
 	</bean>
 	
@@ -474,7 +480,18 @@
 		<property name="hint"><null /></property>
 		<property name="attachments" value="Here is the pom link: http://pomlocation.com"/>
 		<property name="finalMode" value="true" />
+		<property name="company" ref="company3" />
 		<property name="position" ref="position5" />
+	</bean>
+	
+	<bean id="problem8" class="domain.Problem">
+		<property name="title" value="Navigability failure" />
+		<property name="statement" value="You can't go from A to B" />
+		<property name="hint"><null /></property>
+		<property name="attachments" value="Here is the link: I'm a link"/>
+		<property name="finalMode" value="false" />
+		<property name="company" ref="company3" />
+		<property name="position"><null /></property>
 	</bean>
 	
 	

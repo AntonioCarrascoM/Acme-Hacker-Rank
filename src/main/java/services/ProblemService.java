@@ -14,7 +14,7 @@ import org.springframework.validation.Validator;
 
 import repositories.ProblemRepository;
 import security.Authority;
-import domain.Position;
+import domain.Company;
 import domain.Problem;
 
 @Service
@@ -32,20 +32,15 @@ public class ProblemService {
 	private ActorService		actorService;
 
 	@Autowired
-	private PositionService		positionService;
-
-	@Autowired
 	private Validator			validator;
 
 
 	//Simple CRUD methods
 
-	public Problem create(final int varId) {
+	public Problem create() {
 		final Problem p = new Problem();
 
-		final Position pos = this.positionService.findOne(varId);
-
-		p.setPosition(pos);
+		p.setCompany((Company) this.actorService.findByPrincipal());
 		p.setFinalMode(false);
 
 		return p;
@@ -70,7 +65,7 @@ public class ProblemService {
 		Assert.isTrue(p.getPosition().getCancelled() == false);
 
 		//Assertion that the user modifying this task has the correct privilege.
-		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getPosition().getCompany().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
 
 		//A problem can only be final mode if it has at least 2 problems
 		if (b == true)
@@ -99,7 +94,7 @@ public class ProblemService {
 		authCompany.setAuthority(Authority.COMPANY);
 
 		if (p.getId() == 0)
-			result = this.create(p.getPosition().getId());
+			result = this.create();
 		else
 			result = this.problemRepository.findOne(p.getId());
 		result.setTitle(p.getTitle());
@@ -117,7 +112,7 @@ public class ProblemService {
 		Assert.isTrue(p.getPosition().getCancelled() == false);
 
 		//Assertion that the user modifying this task has the correct privilege.
-		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getPosition().getCompany().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getCompany().getId());
 
 		return result;
 
