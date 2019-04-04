@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -169,5 +170,22 @@ public class HackerService {
 
 	public Hacker hackerByFinder(final int id) {
 		return this.hackerRepository.hackerByFinder(id);
+	}
+
+	//The average, the minimum, the maximum, and the standard deviation of the number of applications per hacker
+	public Double[] avgMinMaxStddevApplicationsPerHacker() {
+		return this.hackerRepository.avgMinMaxStddevApplicationsPerHacker();
+	}
+
+	//The hackers who have made more applications
+	public Collection<Hacker> hackersWithMoreApplications() {
+		Collection<Hacker> results = new ArrayList<>();
+		final Collection<Hacker> hackers = this.hackerRepository.hackersWithMoreApplications();
+		final int maxResults = 1;
+		if (hackers.size() > maxResults)
+			results = new ArrayList<Hacker>(((ArrayList<Hacker>) hackers).subList(0, maxResults));
+		else
+			results = hackers;
+		return results;
 	}
 }

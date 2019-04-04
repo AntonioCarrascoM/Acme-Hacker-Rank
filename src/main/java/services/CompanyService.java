@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -164,7 +165,20 @@ public class CompanyService {
 	}
 
 	//Other methods
+
 	public void flush() {
 		this.companyRepository.flush();
+	}
+
+	//The companies that have offered more positions
+	public Collection<Company> companiesWithMoreOfferedPossitions() {
+		Collection<Company> results = new ArrayList<>();
+		final Collection<Company> companies = this.companyRepository.companiesWithMoreOfferedPossitions();
+		final int maxResults = 1;
+		if (companies.size() > maxResults)
+			results = new ArrayList<Company>(((ArrayList<Company>) companies).subList(0, maxResults));
+		else
+			results = companies;
+		return results;
 	}
 }
