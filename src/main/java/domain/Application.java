@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -31,6 +32,7 @@ public class Application extends DomainEntity {
 
 	//Relationships
 
+	private Curriculum	curriculum;
 	private Position	position;
 	private Hacker		hacker;
 
@@ -73,6 +75,13 @@ public class Application extends DomainEntity {
 	@Valid
 	public Status getStatus() {
 		return this.status;
+	}
+
+	@Valid
+	@NotNull
+	@OneToOne(optional = false)
+	public Curriculum getCurriculum() {
+		return this.curriculum;
 	}
 
 	@Valid
@@ -120,5 +129,9 @@ public class Application extends DomainEntity {
 
 	public void setHacker(final Hacker hacker) {
 		this.hacker = hacker;
+	}
+
+	public void setCurriculum(final Curriculum curriculum) {
+		this.curriculum = curriculum;
 	}
 }

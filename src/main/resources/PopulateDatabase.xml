@@ -296,11 +296,12 @@
 		<property name="ticker" value="Code-4451" />
 		<property name="title" value="Java developer" />
 		<property name="description" value="This position offers you the chance of work during a year in our company as Java developer" />
-		<property name="deadLine" value="2019/10/20 13:00"/>
+		<property name="deadline" value="2019/10/20 13:00"/>
 		<property name="requiredProfile" value="Cute, Proffesional, Formal, Team worker"/>
 		<property name="requiredSkills" value="Good developer, Communicator, Fast programmer" />
 		<property name="requiredTech" value="Java, MySQL, Spring" />
-		<property name="offeredSalary" value="1000.0" /> 
+		<property name="offeredSalary" value="1000.0" />
+		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="true"/>
  		<property name="company" ref="company1" />
 	</bean>
@@ -309,11 +310,12 @@
 		<property name="ticker" value="Code-3974" />
 		<property name="title" value="Requirements engineer" />
 		<property name="description" value="We offers you the chance of work during two years as Requirements engineer" />
-		<property name="deadLine" value="2020/06/17 10:00"/>
+		<property name="deadline" value="2020/06/17 10:00"/>
 		<property name="requiredProfile" value="Clean, Self car, Proffesional, High availability"/>
 		<property name="requiredSkills" value="Good elicitator, Comprehensive, Polite, C1 English level" />
 		<property name="requiredTech" value="Astah, Excel, Word, Adobe" />
-		<property name="offeredSalary" value="6000.0" /> 
+		<property name="offeredSalary" value="6000.0" />
+		<property name="cancelled" value="false"/> 
 		<property name="finalMode" value="false"/>
  		<property name="company" ref="company1" />
 	</bean>
@@ -322,11 +324,12 @@
 		<property name="ticker" value="Info-7835" />
 		<property name="title" value="Scrum Master" />
 		<property name="description" value="Would you like to work during three years as Scrum Master? This is your chance" />
-		<property name="deadLine" value="2020/02/19 11:40"/>
+		<property name="deadline" value="2020/02/19 11:40"/>
 		<property name="requiredProfile" value="Leader, Performer, Selfish"/>
 		<property name="requiredSkills" value="Comprehensive, Polite, B1 English level" />
 		<property name="requiredTech" value="Gantt project, Clockify, Trello" />
 		<property name="offeredSalary" value="10000.0" /> 
+		<property name="cancelled" value="true"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company2" />
 	</bean>
@@ -335,11 +338,12 @@
 		<property name="ticker" value="Code-7888" />
 		<property name="title" value="Database Engineer" />
 		<property name="description" value="Would you like to work during three years as Database Engineer? This is your chance" />
-		<property name="deadLine" value="2019/12/19 19:40"/>
+		<property name="deadline" value="2019/12/19 19:40"/>
 		<property name="requiredProfile" value="Shy, Estimator, Antisocial"/>
 		<property name="requiredSkills" value="Very fast developer, Opendmind, Choser" />
 		<property name="requiredTech" value="PostgresSQL, MySQL, MongoDB, MariaDB" />
 		<property name="offeredSalary" value="1500.0" /> 
+		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="false"/>
 		<property name="company" ref="company1" />
 	</bean>
@@ -348,11 +352,12 @@
 		<property name="ticker" value="High-0435" />
 		<property name="title" value="Tester" />
 		<property name="description" value="We need to test our application service methods" />
-		<property name="deadLine" value="2019/12/19 19:40"/>
+		<property name="deadline" value="2019/12/19 19:40"/>
 		<property name="requiredProfile" value="Proffesional, Formal, Individual worker"/>
 		<property name="requiredSkills" value="Good developer, Communicator, Fast programmer" />
 		<property name="requiredTech" value="JUnit, Travis, CircleCI" />
 		<property name="offeredSalary" value="1600.0" /> 
+		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company3" />
 	</bean>
@@ -366,6 +371,7 @@
 		<property name="answerLink" value="https://www.answersCode.com/answer34533445322" />
 		<property name="answerMoment" value="2018/11/20 13:00" />
 		<property name="problem" ref="problem1"/>
+		<property name="curriculum" ref="curriculum1" />
 		<property name="position" ref="position1" />
 		<property name="hacker" ref="hacker1" />
 	</bean>
@@ -377,6 +383,7 @@
 		<property name="answerLink" value="https://www.controllerCode.com/answer377852" />
 		<property name="answerMoment" value="2019/02/20 13:15" />
 		<property name="problem" ref="problem4"/>
+		<property name="curriculum" ref="curriculum3" />
 		<property name="position" ref="position3" />
 		<property name="hacker" ref="hacker2" />
 	</bean>
@@ -388,6 +395,7 @@
 		<property name="answerLink" value="https://www.serviceCode.com/answer322377852" />
 		<property name="answerMoment" value="2019/01/01 08:15" />
 		<property name="problem" ref="problem2"/>
+		<property name="curriculum" ref="curriculum4" />
 		<property name="position" ref="position1" />
 		<property name="hacker" ref="hacker2" />
 	</bean>
@@ -399,6 +407,7 @@
 		<property name="answerLink" value="https://www.panicCode.com/answer3223007552" />
 		<property name="answerMoment" value="2019/03/25 09:15" />
 		<property name="problem" ref="problem6"/>
+		<property name="curriculum" ref="curriculum2" />
 		<property name="position" ref="position5" />
 		<property name="hacker" ref="hacker1" />
 	</bean>
@@ -480,7 +489,11 @@
 		</bean>
 		
 		<bean id="curriculum3" class="domain.Curriculum">
-		<property name="hacker" ref="hacker2" />
+		<property name="hacker" ref="hacker3" />
+		</bean>
+		
+		<bean id="curriculum4" class="domain.Curriculum">
+		<property name="hacker" ref="hacker3" />
 		</bean>
 		
 	<!-- Personal Data beans -->
