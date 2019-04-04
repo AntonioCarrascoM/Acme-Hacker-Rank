@@ -13,6 +13,23 @@ import domain.Position;
 public interface PositionRepository extends JpaRepository<Position, Integer> {
 
 	//Retrieves a list of positions with final mode = true and not cancelled
-	@Query("select p from Position p where p.finalMode=1 and p.cancelled=0")
+	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0'")
 	Collection<Position> getPublicPositions();
+
+	//The average, the minimum, the maximum, and the standard deviation of the number of positions per company.
+	@Query("select avg((select count(p) from Position p where p.company.id=c.id)*1.0), min((select count(p) from Position p where p.company.id=c.id)*1.0), max((select count(p) from Position p where p.company.id=c.id)*1.0), stddev((select count(p) from Position p where p.company.id=c.id)*1.0) from Company c")
+	Double[] avgMinMaxStddevPositionsPerCompany();
+
+	//The average, the minimum, the maximum, and the standard deviation of the salaries offered.
+	@Query("select avg(p.offeredSalary), min(p.offeredSalary), max(p.offeredSalary), stddev(p.offeredSalary) from Position p where p.finalMode=true")
+	Double[] avgMinMaxStddevOfferedSalaries();
+
+	//The best position in terms of salary
+	@Query("select p.title from Position p where p.finalMode=true order by p.offeredSalary desc")
+	Collection<String> bestPositions();
+
+	//The worst position in terms of salary
+	@Query("select p.title from Position p where p.finalMode=true order by p.offeredSalary asc")
+	Collection<String> worstPositions();
+
 }

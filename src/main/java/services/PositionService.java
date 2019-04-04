@@ -3,6 +3,7 @@ package services;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
@@ -194,9 +195,32 @@ public class PositionService {
 		return this.positionRepository.getPublicPositions();
 	}
 
-	//Other methods
+	//Other methods´
+
 	public void flush() {
 		this.positionRepository.flush();
 	}
 
+	//The average, the minimum, the maximum, and the standard deviation of the number of positions per company.
+	public Double[] avgMinMaxStddevPositionsPerCompany() {
+		return this.positionRepository.avgMinMaxStddevPositionsPerCompany();
+	}
+
+	//The average, the minimum, the maximum, and the standard deviation of the salaries offered.
+	public Double[] avgMinMaxStddevOfferedSalaries() {
+		return this.positionRepository.avgMinMaxStddevOfferedSalaries();
+	}
+
+	//The best and the worst position in terms of salary
+	public String[] bestAndWorstPositions() {
+		final String[] results = null;
+		final Collection<String> bestPositions = this.positionRepository.bestPositions();
+		final Collection<String> worstPositions = this.positionRepository.worstPositions();
+
+		results[0] = ((ArrayList<String>) bestPositions).get(0);
+		results[1] = ((ArrayList<String>) worstPositions).get(0);
+
+		return results;
+
+	}
 }
