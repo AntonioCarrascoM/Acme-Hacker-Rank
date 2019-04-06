@@ -134,4 +134,8 @@ public class ProblemService {
 		this.problemRepository.flush();
 	}
 
+	//Problems in final mode by position
+	public Collection<Problem> problemsInFinalModeByPosition(final int id) {
+		return this.problemRepository.problemsInFinalModeByPosition(id);
+	}
 }
