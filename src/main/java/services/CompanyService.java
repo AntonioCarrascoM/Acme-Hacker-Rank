@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import repositories.CompanyRepository;
 import security.Authority;
 import security.UserAccount;
 import domain.Company;
+import forms.FormObjectCompany;
 
 @Service
 @Transactional
@@ -100,39 +103,41 @@ public class CompanyService {
 		this.companyRepository.delete(company);
 	}
 
-	//	public Company reconstruct(final FormObjectAdministrator foc, final BindingResult binding) {
-	//		final Company result = this.create();
-	//
-	//		Assert.isTrue(foc.getAcceptedTerms());
-	//		Assert.isTrue(foc.getPassword().equals(foc.getSecondPassword()));
-	//
-	//		result.setName(foc.getName());
-	//		result.setMiddleName(foc.getMiddleName());
-	//		result.setSurname(foc.getSurname());
-	//		result.setPhoto(foc.getPhoto());
-	//		result.setEmail(foc.getEmail());
-	//		result.setPhone(foc.getPhone());
-	//		result.setAddress(foc.getAddress());
-	//		result.getUserAccount().setUsername(foc.getUsername());
-	//		result.getUserAccount().setPassword(foc.getPassword());
-	//
-	//		this.validator.validate(result, binding);
-	//
-	//		if (binding.hasErrors())
-	//			throw new ValidationException();
-	//
-	//		//Assertion that the email is valid according to the checkAdminEmail method.
-	//		Assert.isTrue(this.actorService.checkAdminEmail(result.getEmail()));
-	//
-	//		//Assertion to check that the address isn't just a white space.
-	//		Assert.isTrue(this.actorService.checkAddress(result.getAddress()));
-	//
-	//		//Assertion that the phone is valid according to the checkPhone method.
-	//		Assert.isTrue(this.actorService.checkPhone(result.getPhone()));
-	//
-	//		return result;
-	//
-	//	}
+	public Company reconstruct(final FormObjectCompany foc, final BindingResult binding) {
+		final Company result = this.create();
+
+		Assert.isTrue(foc.getAcceptedTerms());
+		Assert.isTrue(foc.getPassword().equals(foc.getSecondPassword()));
+
+		result.setName(foc.getName());
+		result.setSurnames(foc.getSurnames());
+		result.setVatNumber(foc.getVatNumber());
+		result.setCreditCard(foc.getCreditCard());
+		result.setPhoto(foc.getPhoto());
+		result.setEmail(foc.getEmail());
+		result.setPhone(foc.getPhone());
+		result.setAddress(foc.getAddress());
+		result.setCommercialName(foc.getCommercialName());
+		result.getUserAccount().setUsername(foc.getUsername());
+		result.getUserAccount().setPassword(foc.getPassword());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion that the email is valid according to the checkAdminEmail method.
+		Assert.isTrue(this.actorService.checkUserEmail(result.getEmail()));
+
+		//Assertion to check that the address isn't just a white space.
+		Assert.isTrue(this.actorService.checkAddress(result.getAddress()));
+
+		//Assertion that the phone is valid according to the checkPhone method.
+		Assert.isTrue(this.actorService.checkPhone(result.getPhone()));
+
+		return result;
+
+	}
 
 	public Company reconstructPruned(final Company company, final BindingResult binding) {
 		Company result;

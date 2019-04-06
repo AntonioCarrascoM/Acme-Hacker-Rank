@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.MessageRepository;
+import security.Authority;
 import domain.Actor;
 import domain.Application;
 import domain.Configuration;
@@ -201,32 +202,32 @@ public class MessageService {
 
 	}
 
-	//	//Reconstruct
-	//	public Message reconstructBroadcast(final Message m, final BindingResult binding) {
-	//		Message result;
-	//		final Authority authAdmin = new Authority();
-	//		authAdmin.setAuthority(Authority.ADMIN);
-	//
-	//		if (m.getId() == 0)
-	//			result = this.create();
-	//		else
-	//			result = this.messageRepository.findOne(m.getId());
-	//
-	//		result.setSubject(m.getSubject());
-	//		result.setBody(m.getBody());
-	//		result.setTags(m.getTags());
-	//
-	//		this.validator.validate(result, binding);
-	//
-	//		if (binding.hasErrors())
-	//			throw new ValidationException();
-	//
-	//		//Assertion that the user modifying this message has the correct privilege, that is, he or she is the sender or recipient.
-	//		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getSender().getId() || this.actorService.findByPrincipal().getId() == result.getRecipient().getId());
-	//
-	//		return result;
-	//
-	//	}
+	//Reconstruct broadcast
+	public Message reconstructBroadcast(final Message m, final BindingResult binding) {
+		Message result;
+		final Authority authAdmin = new Authority();
+		authAdmin.setAuthority(Authority.ADMIN);
+
+		if (m.getId() == 0)
+			result = this.create();
+		else
+			result = this.messageRepository.findOne(m.getId());
+
+		result.setSubject(m.getSubject());
+		result.setBody(m.getBody());
+		result.setTags(m.getTags());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion that the user modifying this message has the correct privilege, that is, he or she is the sender or recipient.
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getSender().getId() || this.actorService.findByPrincipal().getId() == result.getRecipient().getId());
+
+		return result;
+
+	}
 
 	//Listing of the messages sent by a certain actor.
 	public Collection<Message> sentMessagesForActor(final int id) {

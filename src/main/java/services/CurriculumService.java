@@ -100,11 +100,13 @@ public class CurriculumService {
 	}
 
 	//Copy method
+
 	public Curriculum copy(final Curriculum orig) {
 		final Curriculum copy = this.create();
 
-		//TODO método copiar de cada data. Setear en dicho metodo el curriculum  de la data en cuestion y guardar dicho data, al final del todo (las 4 datas diferentes) devolver este curriculum
-
+		this.educationDataService.copy(orig, copy);
+		this.miscellaneousDataService.copy(orig, copy);
+		this.personalDataService.copy(orig, copy);
 		this.positionDataService.copy(orig, copy);
 
 		return copy;
