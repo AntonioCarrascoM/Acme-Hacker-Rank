@@ -163,6 +163,7 @@ public class ActorService {
 		return result;
 	}
 	//Method to check the Admin email adjusts to the given patterns.
+
 	public boolean checkAdminEmail(final String email) {
 		String parts[] = null;
 		String aliasParts[];

@@ -676,7 +676,7 @@
 		<property name="maxFinderResults" value="10" />
 	</bean>
 	
-	<!-- Social Profile beans 
+	<!-- Social Profile beans -->
 	
 	<bean id="socialProfile1" class="domain.SocialProfile">
 		<property name="nick" value="Luis1" />
@@ -718,6 +718,6 @@
 		<property name="socialNetwork" value="Twiter" />
 		<property name="profileLink" value="https://www.twitter.com" />
 		<property name="actor" ref="hacker2" />
-	</bean>-->
+	</bean>
 	
 </beans>

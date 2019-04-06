@@ -4,6 +4,8 @@ package services;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import repositories.AdministratorRepository;
 import security.Authority;
 import security.UserAccount;
 import domain.Administrator;
+import forms.FormObjectAdministrator;
 
 @Service
 @Transactional
@@ -99,39 +102,40 @@ public class AdministratorService {
 		this.administratorRepository.delete(administrator);
 	}
 
-	//	public Administrator reconstruct(final FormObjectAdministrator foa, final BindingResult binding) {
-	//		final Administrator result = this.create();
-	//
-	//		Assert.isTrue(foa.getAcceptedTerms());
-	//		Assert.isTrue(foa.getPassword().equals(foa.getSecondPassword()));
-	//
-	//		result.setName(foa.getName());
-	//		result.setMiddleName(foa.getMiddleName());
-	//		result.setSurname(foa.getSurname());
-	//		result.setPhoto(foa.getPhoto());
-	//		result.setEmail(foa.getEmail());
-	//		result.setPhone(foa.getPhone());
-	//		result.setAddress(foa.getAddress());
-	//		result.getUserAccount().setUsername(foa.getUsername());
-	//		result.getUserAccount().setPassword(foa.getPassword());
-	//
-	//		this.validator.validate(result, binding);
-	//
-	//		if (binding.hasErrors())
-	//			throw new ValidationException();
-	//
-	//		//Assertion that the email is valid according to the checkAdminEmail method.
-	//		Assert.isTrue(this.actorService.checkAdminEmail(result.getEmail()));
-	//
-	//		//Assertion to check that the address isn't just a white space.
-	//		Assert.isTrue(this.actorService.checkAddress(result.getAddress()));
-	//
-	//		//Assertion that the phone is valid according to the checkPhone method.
-	//		Assert.isTrue(this.actorService.checkPhone(result.getPhone()));
-	//
-	//		return result;
-	//
-	//	}
+	public Administrator reconstruct(final FormObjectAdministrator foa, final BindingResult binding) {
+		final Administrator result = this.create();
+
+		Assert.isTrue(foa.getAcceptedTerms());
+		Assert.isTrue(foa.getPassword().equals(foa.getSecondPassword()));
+
+		result.setName(foa.getName());
+		result.setSurnames(foa.getSurnames());
+		result.setVatNumber(foa.getVatNumber());
+		result.setCreditCard(foa.getCreditCard());
+		result.setPhoto(foa.getPhoto());
+		result.setEmail(foa.getEmail());
+		result.setPhone(foa.getPhone());
+		result.setAddress(foa.getAddress());
+		result.getUserAccount().setUsername(foa.getUsername());
+		result.getUserAccount().setPassword(foa.getPassword());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion that the email is valid according to the checkAdminEmail method.
+		Assert.isTrue(this.actorService.checkAdminEmail(result.getEmail()));
+
+		//Assertion to check that the address isn't just a white space.
+		Assert.isTrue(this.actorService.checkAddress(result.getAddress()));
+
+		//Assertion that the phone is valid according to the checkPhone method.
+		Assert.isTrue(this.actorService.checkPhone(result.getPhone()));
+
+		return result;
+
+	}
 
 	public Administrator reconstructPruned(final Administrator administrator, final BindingResult binding) {
 		Administrator result;
@@ -149,6 +153,7 @@ public class AdministratorService {
 
 		this.validator.validate(result, binding);
 
+		//Assertion the user has the correct privilege
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getId());
 
 		//Assertion that the email is valid according to the checkAdminEmail method.
