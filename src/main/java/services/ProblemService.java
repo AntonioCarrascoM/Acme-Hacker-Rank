@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.ValidationException;
@@ -15,6 +16,7 @@ import org.springframework.validation.Validator;
 import repositories.ProblemRepository;
 import security.Authority;
 import domain.Company;
+import domain.Position;
 import domain.Problem;
 
 @Service
@@ -40,6 +42,7 @@ public class ProblemService {
 	public Problem create() {
 		final Problem p = new Problem();
 
+		p.setPositions(new ArrayList<Position>());
 		p.setCompany((Company) this.actorService.findByPrincipal());
 		p.setFinalMode(false);
 
@@ -61,8 +64,9 @@ public class ProblemService {
 		//Assertion to make sure that the problem is not on final mode.
 		Assert.isTrue(p.getFinalMode() == false);
 
+		//TODO Antonio, podemos hacer que solo se muestren las position no canceladas, porque siino comprobar esto aqui es un ffffollonito
 		//Assertion to make sure that the position associated with the problem is not cancelled.
-		Assert.isTrue(p.getPosition().getCancelled() == false);
+		//Assert.isTrue(p.getPosition().getCancelled() == false);
 
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
@@ -80,7 +84,7 @@ public class ProblemService {
 		Assert.notNull(p);
 
 		//Assertion that the user deleting this task has the correct privilege.
-		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getPosition().getCompany().getId());
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
 
 		this.problemRepository.delete(p);
 	}
@@ -98,6 +102,7 @@ public class ProblemService {
 		else
 			result = this.problemRepository.findOne(p.getId());
 		result.setTitle(p.getTitle());
+		result.setPositions(p.getPositions());
 		result.setStatement(p.getStatement());
 		result.setHint(p.getHint());
 		result.setAttachments(p.getAttachments());
@@ -108,8 +113,9 @@ public class ProblemService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
+		//TODO Antonio, podemos hacer que solo se muestren las position no canceladas, porque siino comprobar esto aqui es un ffffollonito
 		//Assertion to make sure that the position associated with the problem is not cancelled.
-		Assert.isTrue(p.getPosition().getCancelled() == false);
+		//Assert.isTrue(p.getPosition().getCancelled() == false);
 
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getCompany().getId());

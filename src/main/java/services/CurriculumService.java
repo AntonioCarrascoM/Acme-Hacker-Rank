@@ -23,26 +23,25 @@ public class CurriculumService {
 	//Managed repository
 
 	@Autowired
-	private CurriculumRepository	curriculumRepository;
+	private CurriculumRepository		curriculumRepository;
 
 	//Supporting services
 
 	@Autowired
-	private ActorService			actorService;
-
-	//TODO Ajustar cuando se creen todos
-	//	@Autowired
-	//	private PersonalDataService			personalDataService;
+	private ActorService				actorService;
 
 	@Autowired
-	private PositionDataService		positionDataService;
+	private PersonalDataService			personalDataService;
 
+	@Autowired
+	private PositionDataService			positionDataService;
 
-	//	@Autowired
-	//	private EducationDataService		educationDataService;
-	//
-	//	@Autowired
-	//	private MiscellaneousDataService	miscellaneousDataService;
+	@Autowired
+	private EducationDataService		educationDataService;
+
+	@Autowired
+	private MiscellaneousDataService	miscellaneousDataService;
+
 
 	//Simple CRUD methods
 
@@ -82,21 +81,20 @@ public class CurriculumService {
 		//Assertion that the user deleting this curriculum has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == c.getHacker().getId());
 
-		//TODO descomentar cuando estén los services de los datas
-		//		if (this.getPersonalDataForCurriculum(c.getId()) != null)
-		//			this.personalDataService.delete(this.getPersonalDataForCurriculum(c.getId()));
+		if (this.getPersonalDataForCurriculum(c.getId()) != null)
+			this.personalDataService.delete(this.getPersonalDataForCurriculum(c.getId()));
 		//
 		if (!(this.getPositionDataForCurriculum(c.getId()).isEmpty()))
 			for (final PositionData pd : this.getPositionDataForCurriculum(c.getId()))
 				this.positionDataService.delete(pd);
-		//
-		//		if (!(this.getEducationDataForCurriculum(c.getId()).isEmpty()))
-		//			for (final EducationData ed : this.getEducationDataForCurriculum(c.getId()))
-		//				this.educationDataService.delete(ed);
-		//
-		//		if (!(this.getMiscellaneousDataForCurriculum(c.getId()).isEmpty()))
-		//			for (final MiscellaneousData md : this.getMiscellaneousDataForCurriculum(c.getId()))
-		//				this.miscellaneousData.delete(md);
+
+		if (!(this.getEducationDataForCurriculum(c.getId()).isEmpty()))
+			for (final EducationData ed : this.getEducationDataForCurriculum(c.getId()))
+				this.educationDataService.delete(ed);
+
+		if (!(this.getMiscellaneousDataForCurriculum(c.getId()).isEmpty()))
+			for (final MiscellaneousData md : this.getMiscellaneousDataForCurriculum(c.getId()))
+				this.miscellaneousDataService.delete(md);
 
 		this.curriculumRepository.delete(c);
 	}
