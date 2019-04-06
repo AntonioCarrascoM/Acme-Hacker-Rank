@@ -1,9 +1,12 @@
 
 package domain;
 
+import java.util.Collection;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,16 +19,16 @@ public class Problem extends DomainEntity {
 
 	//Attributes
 
-	private String		title;
-	private String		statement;
-	private String		hint;
-	private String		attachments;
-	private Boolean		finalMode;
+	private String					title;
+	private String					statement;
+	private String					hint;
+	private String					attachments;
+	private Boolean					finalMode;
 
 	//Relationships
 
-	private Company		company;
-	private Position	position;
+	private Company					company;
+	private Collection<Position>	positions;
 
 
 	//Getters
@@ -61,9 +64,9 @@ public class Problem extends DomainEntity {
 	}
 
 	@Valid
-	@ManyToOne(optional = true)
-	public Position getPosition() {
-		return this.position;
+	@ManyToMany
+	public Collection<Position> getPositions() {
+		return this.positions;
 	}
 
 	//Setters
@@ -91,8 +94,8 @@ public class Problem extends DomainEntity {
 		this.company = company;
 	}
 
-	public void setPosition(final Position position) {
-		this.position = position;
+	public void setPositions(final Collection<Position> positions) {
+		this.positions = positions;
 	}
 
 }

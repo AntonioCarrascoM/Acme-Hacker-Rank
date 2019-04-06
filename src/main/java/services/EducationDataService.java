@@ -12,18 +12,18 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
-import repositories.PositionDataRepository;
+import repositories.EducationDataRepository;
 import domain.Curriculum;
-import domain.PositionData;
+import domain.EducationData;
 
 @Service
 @Transactional
-public class PositionDataService {
+public class EducationDataService {
 
 	//Managed service
 
 	@Autowired
-	private PositionDataRepository	positionDataRepository;
+	private EducationDataRepository	educationDataRepository;
 
 	//Supporting service
 
@@ -39,8 +39,8 @@ public class PositionDataService {
 
 	//Simple CRUD methods
 
-	public PositionData create(final int curriculumId) {
-		final PositionData er = new PositionData();
+	public EducationData create(final int curriculumId) {
+		final EducationData er = new EducationData();
 
 		final Curriculum c = this.curriculumService.findOne(curriculumId);
 		er.setCurriculum(c);
@@ -48,17 +48,17 @@ public class PositionDataService {
 		return er;
 	}
 
-	public PositionData findOne(final int id) {
+	public EducationData findOne(final int id) {
 		Assert.notNull(id);
 
-		return this.positionDataRepository.findOne(id);
+		return this.educationDataRepository.findOne(id);
 	}
 
-	public Collection<PositionData> findAll() {
-		return this.positionDataRepository.findAll();
+	public Collection<EducationData> findAll() {
+		return this.educationDataRepository.findAll();
 	}
 
-	public PositionData save(final PositionData er) {
+	public EducationData save(final EducationData er) {
 		Assert.notNull(er);
 
 		//Assertion that the user modifying this education record has the correct privilege.
@@ -67,34 +67,35 @@ public class PositionDataService {
 		//Assertion that the start date is before end date.
 		Assert.isTrue(er.getStartDate().before(er.getEndDate()));
 
-		final PositionData saved = this.positionDataRepository.save(er);
+		final EducationData saved = this.educationDataRepository.save(er);
 
 		return saved;
 	}
 
-	public void delete(final PositionData er) {
+	public void delete(final EducationData er) {
 		Assert.notNull(er);
 
 		//Assertion that the user deleting this education record has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == er.getCurriculum().getHacker().getId());
 
-		this.positionDataRepository.delete(er);
+		this.educationDataRepository.delete(er);
 	}
 
 	//Other methods--------------------------
 
 	//Reconstruct
 
-	public PositionData reconstruct(final PositionData p, final int curriculumId, final BindingResult binding) {
+	public EducationData reconstruct(final EducationData p, final int curriculumId, final BindingResult binding) {
 		Assert.notNull(p);
-		PositionData result;
+		EducationData result;
 
 		if (p.getId() == 0)
 			result = this.create(curriculumId);
 		else
-			result = this.positionDataRepository.findOne(p.getId());
-		result.setTitle(p.getTitle());
-		result.setDescription(p.getDescription());
+			result = this.educationDataRepository.findOne(p.getId());
+		result.setDegree(p.getDegree());
+		result.setInstitution(p.getInstitution());
+		result.setMark(p.getMark());
 		result.setStartDate(p.getStartDate());
 		result.setEndDate(p.getEndDate());
 
@@ -116,13 +117,14 @@ public class PositionDataService {
 	//Copy
 
 	public void copy(final Curriculum orig, final Curriculum copy) {
-		PositionData nueva;
-		final Collection<PositionData> pdOrig = this.curriculumService.getPositionDataForCurriculum(orig.getId());
+		EducationData nueva;
+		final Collection<EducationData> pdOrig = this.curriculumService.getEducationDataForCurriculum(orig.getId());
 		if (pdOrig != null && !pdOrig.isEmpty())
-			for (final PositionData pd : pdOrig) {
+			for (final EducationData pd : pdOrig) {
 				nueva = this.create(copy.getId());
-				nueva.setTitle(pd.getTitle());
-				nueva.setDescription(pd.getDescription());
+				nueva.setDegree(pd.getDegree());
+				nueva.setInstitution(pd.getInstitution());
+				nueva.setMark(pd.getInstitution());
 				nueva.setStartDate(pd.getStartDate());
 				nueva.setEndDate(pd.getEndDate());
 				this.save(nueva);

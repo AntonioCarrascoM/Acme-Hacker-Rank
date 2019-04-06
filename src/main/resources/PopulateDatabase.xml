@@ -421,7 +421,11 @@
 		<property name="attachments" value="Here is the library: http://stringtopdf.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="position" ref="position1" />
+		<property name="positions">
+			<list>
+				<ref bean="position1" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem2" class="domain.Problem">
@@ -431,7 +435,11 @@
 		<property name="attachments" value="Here is the code: http://codecreate.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="position" ref="position1" />
+		<property name="positions">
+			<list>
+				<ref bean="position1" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem3" class="domain.Problem">
@@ -441,7 +449,11 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company1" />
-		<property name="position" ref="position2" />
+		<property name="positions">
+			<list>
+				<ref bean="position2" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem4" class="domain.Problem">
@@ -451,7 +463,11 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="position" ref="position3" />
+		<property name="positions">
+			<list>
+				<ref bean="position3" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem5" class="domain.Problem">
@@ -461,7 +477,11 @@
 		<property name="attachments" value="Here is the git account: http://gitaccount.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="position" ref="position3" />
+		<property name="positions">
+			<list>
+				<ref bean="position3" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem6" class="domain.Problem">
@@ -471,7 +491,11 @@
 		<property name="attachments" value="Here is the image: http://imagelocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="position" ref="position5" />
+		<property name="positions">
+			<list>
+				<ref bean="position5" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem7" class="domain.Problem">
@@ -481,7 +505,11 @@
 		<property name="attachments" value="Here is the pom link: http://pomlocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="position" ref="position5" />
+		<property name="positions">
+			<list>
+				<ref bean="position5" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="problem8" class="domain.Problem">
@@ -491,7 +519,10 @@
 		<property name="attachments" value="Here is the link: I'm a link"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company3" />
-		<property name="position"><null /></property>
+		<property name="positions">
+			<list>
+			</list>
+		</property>
 	</bean>
 	
 	
