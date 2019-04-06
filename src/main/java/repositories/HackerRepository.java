@@ -12,7 +12,7 @@ import domain.Hacker;
 @Repository
 public interface HackerRepository extends JpaRepository<Hacker, Integer> {
 
-	@Query("select h from Hacker where h.finder.id=?1")
+	@Query("select h from Hacker h where h.finder.id=?1")
 	Hacker hackerByFinder(int id);
 
 	//The average, the minimum, the maximum, and the standard deviation of the number of applications per hacker
