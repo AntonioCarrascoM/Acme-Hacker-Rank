@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 import javax.validation.ValidationException;
 
@@ -137,5 +138,17 @@ public class ProblemService {
 	//Problems in final mode by position
 	public Collection<Problem> problemsInFinalModeByPosition(final int id) {
 		return this.problemRepository.problemsInFinalModeByPosition(id);
+	}
+
+	//Random problem in final mode by position
+	public Problem randomProblemInFinalModeByPosition(final int id) {
+		final Collection<Problem> problems = this.problemRepository.problemsInFinalModeByPosition(id);
+		if (problems.isEmpty())
+			return null;
+		else {
+			final Random rnd = new Random();
+			final int i = rnd.nextInt(problems.size());
+			return (Problem) problems.toArray()[i];
+		}
 	}
 }

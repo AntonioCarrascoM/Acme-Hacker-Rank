@@ -4,16 +4,22 @@ package services;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.ApplicationRepository;
+import security.Authority;
 import domain.Application;
 import domain.Curriculum;
 import domain.Hacker;
 import domain.Position;
+import domain.Problem;
 import domain.Status;
 
 @Service
@@ -31,6 +37,9 @@ public class ApplicationService {
 	private PositionService			positionService;
 
 	@Autowired
+	private ProblemService			problemService;
+
+	@Autowired
 	private CurriculumService		curriculumService;
 
 	@Autowired
@@ -38,6 +47,9 @@ public class ApplicationService {
 
 	@Autowired
 	private MessageService			messageService;
+
+	@Autowired
+	private Validator				validator;
 
 
 	//Simple CRUD Methods --------------------------------
@@ -50,12 +62,14 @@ public class ApplicationService {
 
 		final Position position = this.positionService.findOne(id);
 		a.setPosition(position);
+		final Problem problem = this.problemService.randomProblemInFinalModeByPosition(position.getId());
+		a.setProblem(problem);
+
 		final Hacker hacker = (Hacker) this.actorService.findByPrincipal();
 		a.setHacker(hacker);
 		a.setMoment(new Date(System.currentTimeMillis() - 1));
 		return a;
 	}
-
 	public Collection<Application> findAll() {
 
 		return this.applicationRepository.findAll();
@@ -98,14 +112,14 @@ public class ApplicationService {
 		return saved;
 	}
 
-	public void delete(final Application application) {
-		Assert.notNull(application);
-
-		//Assertion that the user deleting this application has the correct privilege.
-		Assert.isTrue(this.actorService.findByPrincipal().getId() == application.getHacker().getId());
-
-		this.applicationRepository.delete(application);
-	}
+	//	public void delete(final Application application) {
+	//		Assert.notNull(application);
+	//
+	//		//Assertion that the user deleting this application has the correct privilege.
+	//		Assert.isTrue(this.actorService.findByPrincipal().getId() == application.getHacker().getId());
+	//
+	//		this.applicationRepository.delete(application);
+	//	}
 
 	//Reject method
 	public void reject(final Application app) {
@@ -119,7 +133,7 @@ public class ApplicationService {
 		this.applicationRepository.save(app);
 	}
 
-	//Reject method
+	//Accept method
 	public void accept(final Application app) {
 		Assert.notNull(app);
 
@@ -131,6 +145,65 @@ public class ApplicationService {
 		this.applicationRepository.save(app);
 	}
 
+	//Reconstruct
+
+	public Application reconstruct(final Application app, final int positionId, final BindingResult binding) {
+		Application result;
+
+		final Authority authCompany = new Authority();
+		authCompany.setAuthority(Authority.COMPANY);
+
+		final Authority authHacker = new Authority();
+		authHacker.setAuthority(Authority.HACKER);
+
+		if (app.getId() == 0)
+			result = this.create(positionId);
+		else {
+			result = this.applicationRepository.findOne(app.getId());
+
+			if (this.actorService.findByPrincipal().getUserAccount().getAuthorities().contains(authCompany) && result.getStatus() == Status.SUBMITTED) {
+				if (app.getStatus().equals(Status.ACCEPTED)) {
+					result.setStatus(app.getStatus());
+					this.messageService.applicationStatusNotification(result);
+				}
+				if (app.getStatus().equals(Status.REJECTED)) {
+					result.setStatus(app.getStatus());
+					this.messageService.applicationStatusNotification(result);
+				}
+				//				result.setAnswerDescription(app.getAnswerDescription());
+				//				result.setAnswerLink(app.getAnswerLink());
+				//				result.setAnswerMoment(app.getAnswerMoment());
+				//				result.setProblem(app.getProblem());
+				//				result.setMoment(app.getMoment());
+			}
+
+			if (this.actorService.findByPrincipal().getUserAccount().getAuthorities().contains(authHacker) && result.getStatus() == Status.PENDING)
+				if (app.getStatus().equals(Status.SUBMITTED)) {
+					result.setStatus(app.getStatus());
+					result.setAnswerDescription(app.getAnswerDescription());
+					result.setAnswerLink(app.getAnswerLink());
+					result.setAnswerMoment(app.getAnswerMoment());
+					this.messageService.applicationStatusNotification(result);
+				}
+			//				result.setProblem(app.getProblem());
+			//				result.setMoment(app.getMoment());
+		}
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion that the user modifying this request has the correct privilege.
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getHacker().getId() || this.actorService.findByPrincipal().getId() == result.getPosition().getCompany().getId());
+
+		return result;
+
+	}
 	//Time for motion and queries
+
+	//The applications given a hacker id
+	public Collection<Application> applicationsOfAHacker(final int id) {
+		return this.applicationRepository.applicationsOfAHacker(id);
+	}
 
 }

@@ -26,4 +26,5 @@ public class Hacker extends Actor {
 	public void setFinder(final Finder finder) {
 		this.finder = finder;
 	}
+
 }
