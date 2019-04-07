@@ -194,4 +194,9 @@ public class HackerService {
 			results = hackers;
 		return results;
 	}
+
+	//The minimum, the maximum, the average, and the standard deviation of the number of curricula per hacker
+	public Double[] minMaxAvgStddevCurriculaPerHacker() {
+		return this.hackerRepository.minMaxAvgStddevCurriculaPerHacker();
+	}
 }

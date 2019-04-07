@@ -25,8 +25,8 @@ public class Finder extends DomainEntity {
 
 	private String					keyWord;
 	private Date					specificDeadline;
-	private Double					minimumSalary;
-	private Date					maxDeadline;
+	private Double					minSalary;
+	private Double					maxSalary;
 	private Date					moment;
 
 	//Relationships
@@ -47,14 +47,13 @@ public class Finder extends DomainEntity {
 	}
 
 	@Min(0)
-	public Double getMinimumSalary() {
-		return this.minimumSalary;
+	public Double getMinSalary() {
+		return this.minSalary;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-	public Date getMaxDeadline() {
-		return this.maxDeadline;
+	@Min(0)
+	public Double getMaxSalary() {
+		return this.maxSalary;
 	}
 
 	@Past
@@ -81,12 +80,12 @@ public class Finder extends DomainEntity {
 		this.specificDeadline = specificDeadline;
 	}
 
-	public void setMinimumSalary(final Double minimumSalary) {
-		this.minimumSalary = minimumSalary;
+	public void setMinSalary(final Double minSalary) {
+		this.minSalary = minSalary;
 	}
 
-	public void setMaxDeadline(final Date maxDeadline) {
-		this.maxDeadline = maxDeadline;
+	public void setMaxSalary(final Double maxSalary) {
+		this.maxSalary = maxSalary;
 	}
 
 	public void setMoment(final Date moment) {
