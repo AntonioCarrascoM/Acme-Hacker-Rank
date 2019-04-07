@@ -13,10 +13,10 @@ import domain.Problem;
 public interface ProblemRepository extends JpaRepository<Problem, Integer> {
 
 	//Retrieves the problems for a certain position
-	@Query("select p from Problem p where p.position.id=?1")
+	@Query("select pr from Problem pr join pr.positions p where pr=?1")
 	Collection<Problem> problemsOfAPosition(int id);
 
 	//Problems in final mode by position
-	@Query("select pr from Problem pr join pr.position p where pr.finalMode='1' and p.id=?1")
+	@Query("select pr from Problem pr join pr.positions p where pr.finalMode='1' and p.id=?1")
 	Collection<Problem> problemsInFinalModeByPosition(int id);
 }

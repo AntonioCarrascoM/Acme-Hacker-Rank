@@ -647,6 +647,35 @@
 		<property name="attachments" value="You can visit my web in order to know me better" />
 		<property name="curriculum" ref="curriculum3" />
 	</bean>
+	
+	<!-- Finder beans -->
+
+	<bean id="finder1" class="domain.Finder">
+		<property name="keyWord" value="Adobe" />
+		<property name="specificDeadline"><null /></property>
+		<property name="minSalary"><null /></property>
+		<property name="maxSalary"><null /></property>
+		<property name="moment"><null /></property>
+		<property name="positions">
+			<list>
+				<ref bean="position2" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="finder2" class="domain.Finder">
+		<property name="keyWord"><null /></property>
+		<property name="specificDeadline"><null /></property>
+		<property name="minSalary" value="1400.0" />
+		<property name="maxSalary" value="1700.0" />
+		<property name="moment"><null /></property>
+		<property name="positions">
+			<list>
+				<ref bean="position4" />
+				<ref bean="position5" />
+			</list>
+		</property>
+	</bean>
 
 	<!-- Configuration beans -->
 	

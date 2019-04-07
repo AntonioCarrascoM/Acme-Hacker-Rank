@@ -99,19 +99,19 @@ public class FinderService {
 		Collection<Position> results = new ArrayList<>();
 
 		String keyWord = finder.getKeyWord();
-		Date specificDeadline = finder.getSpecificDeadline(), maxDeadline = finder.getMaxDeadline();
-		Double minimunSalary = finder.getMinimumSalary();
+		Date specificDeadline = finder.getSpecificDeadline();
+		Double minSalary = finder.getMinSalary(), maxSalary = finder.getMaxSalary();
 
 		if (finder.getKeyWord() == null)
 			keyWord = "";
 		if (specificDeadline == null)
 			specificDeadline = new Date(631152000L);
-		if (maxDeadline == null)
-			maxDeadline = new Date(2524694400000L);
-		if (minimunSalary == null)
-			minimunSalary = 0.;
+		if (minSalary == null)
+			minSalary = 0.;
+		if (maxSalary == null)
+			maxSalary = 0.;
 
-		final Collection<Position> positions = this.finderRepository.findPosition(keyWord, specificDeadline, maxDeadline, minimunSalary);
+		final Collection<Position> positions = this.finderRepository.findPosition(keyWord, specificDeadline, minSalary, maxSalary);
 
 		results = this.limitResults(positions);
 		return results;
@@ -127,22 +127,21 @@ public class FinderService {
 		return results;
 	}
 
-	//
-	//	//The minimum, the maximum, the average, and the standard deviation of the number of results in the finders.
-	//	public Double[] minMaxAvgStddevResultsFinders() {
-	//		return this.finderRepository.minMaxAvgAndStddevOfResultsByFinder();
-	//	}
-	//
-	//	//  The ratio of empty versus non-empty finders
-	//	public Double ratioEmptyVersusNonEmptyFinders() {
-	//		Double res = this.finderRepository.ratioEmptyVsNonEmptyFinders();
-	//		if (res == null)
-	//			res = 0.0;
-	//		return res;
-	//	}
-
 	//Returns a certain Hacker given his finder id
 	public Hacker getHackerByFinder(final int id) {
 		return this.finderRepository.getHackerByFinder(id);
+	}
+
+	//The minimum, the maximum, the average, and the standard deviation of the number of results in the finders.
+	public Double[] minMaxAvgStddevResultsFinders() {
+		return this.finderRepository.minMaxAvgAndStddevOfResultsByFinder();
+	}
+
+	//  The ratio of empty versus non-empty finders
+	public Double ratioEmptyVersusNonEmptyFinders() {
+		Double res = this.finderRepository.ratioEmptyVsNonEmptyFinders();
+		if (res == null)
+			res = 0.0;
+		return res;
 	}
 }
