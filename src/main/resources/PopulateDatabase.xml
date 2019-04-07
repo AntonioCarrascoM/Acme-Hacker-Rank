@@ -21,6 +21,8 @@
 	<bean id="userAccount1" class="security.UserAccount">
 		<property name="username" value="admin" />
 		<property name="password" value="21232f297a57a5a743894a0e4a801fc3" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -33,6 +35,8 @@
 	<bean id="userAccount2" class="security.UserAccount">
 		<property name="username" value="company1" />
 		<property name="password" value="df655f976f7c9d3263815bd981225cd9" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -45,6 +49,8 @@
 	<bean id="userAccount3" class="security.UserAccount">
 		<property name="username" value="company2" />
 		<property name="password" value="d196a28097115067fefd73d25b0c0be8" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -57,6 +63,8 @@
 	<bean id="userAccount4" class="security.UserAccount">
 		<property name="username" value="company3" />
 		<property name="password" value="e828ae3339b8d80b3902c1564578804e" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -69,6 +77,8 @@
 	<bean id="userAccount5" class="security.UserAccount">
 		<property name="username" value="hacker1" />
 		<property name="password" value="2ba2a8ac968a7a2b0a7baa7f2fef18d2" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -81,6 +91,8 @@
 	<bean id="userAccount6" class="security.UserAccount">
 		<property name="username" value="hacker2" />
 		<property name="password" value="91af68b69a50a98dbc0800942540342c" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -93,6 +105,8 @@
 	<bean id="userAccount7" class="security.UserAccount">
 		<property name="username" value="hacker3" />
 		<property name="password" value="c6ae6edca1ad45f42e619ec91a32b636" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
@@ -105,6 +119,8 @@
 	  <bean id="userAccount8" class="security.UserAccount">
 		<property name="username" value="super" />
 		<property name="password" value="1b3231655cebb7a1f783eddf27d254ca" />
+		<property name="banned" value="false" />
+		<property name="inactive" value="false" />
 		<property name="authorities">
 			<list>
 				<bean class="security.Authority">
