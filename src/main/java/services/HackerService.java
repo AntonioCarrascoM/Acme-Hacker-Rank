@@ -103,22 +103,22 @@ public class HackerService {
 		this.hackerRepository.delete(hacker);
 	}
 
-	public Hacker reconstruct(final FormObjectHacker foa, final BindingResult binding) {
+	public Hacker reconstruct(final FormObjectHacker foh, final BindingResult binding) {
 		final Hacker result = this.create();
 
-		Assert.isTrue(foa.getAcceptedTerms());
-		Assert.isTrue(foa.getPassword().equals(foa.getSecondPassword()));
+		Assert.isTrue(foh.getAcceptedTerms());
+		Assert.isTrue(foh.getPassword().equals(foh.getSecondPassword()));
 
-		result.setName(foa.getName());
-		result.setSurnames(foa.getSurnames());
-		result.setVatNumber(foa.getVatNumber());
-		result.setCreditCard(foa.getCreditCard());
-		result.setPhoto(foa.getPhoto());
-		result.setEmail(foa.getEmail());
-		result.setPhone(foa.getPhone());
-		result.setAddress(foa.getAddress());
-		result.getUserAccount().setUsername(foa.getUsername());
-		result.getUserAccount().setPassword(foa.getPassword());
+		result.setName(foh.getName());
+		result.setSurnames(foh.getSurnames());
+		result.setVatNumber(foh.getVatNumber());
+		result.setCreditCard(foh.getCreditCard());
+		result.setPhoto(foh.getPhoto());
+		result.setEmail(foh.getEmail());
+		result.setPhone(foh.getPhone());
+		result.setAddress(foh.getAddress());
+		result.getUserAccount().setUsername(foh.getUsername());
+		result.getUserAccount().setPassword(foh.getPassword());
 
 		this.validator.validate(result, binding);
 
