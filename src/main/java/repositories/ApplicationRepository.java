@@ -13,6 +13,6 @@ import domain.Application;
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
 	//The applications given a hacker idd
-	@Query("select app from Application app where app.hacker.id=1?")
+	@Query("select app from Application app where app.hacker.id=?1")
 	Collection<Application> applicationsOfAHacker(int id);
 }
