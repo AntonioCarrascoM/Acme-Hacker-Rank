@@ -12,9 +12,17 @@ import domain.Position;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Integer> {
 
+	//Retrieves a list of all positions for a certain company
+	@Query("select p from Position p where p.company.id=?1")
+	Collection<Position> getAllPositionsForCompany(int id);
+
 	//Retrieves a list of positions with final mode = true and not cancelled
 	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0'")
 	Collection<Position> getPublicPositions();
+
+	//Retrieves a list of positions with final mode = true and not cancelled for a certain company
+	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0' and p.company.id=?1")
+	Collection<Position> getPublicPositionsForCompany(int id);
 
 	//The average, the minimum, the maximum, and the standard deviation of the number of positions per company.
 	@Query("select avg((select count(p) from Position p where p.company.id=c.id)*1.0), min((select count(p) from Position p where p.company.id=c.id)*1.0), max((select count(p) from Position p where p.company.id=c.id)*1.0), stddev((select count(p) from Position p where p.company.id=c.id)*1.0) from Company c")

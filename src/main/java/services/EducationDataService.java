@@ -85,12 +85,12 @@ public class EducationDataService {
 
 	//Reconstruct
 
-	public EducationData reconstruct(final EducationData p, final int curriculumId, final BindingResult binding) {
+	public EducationData reconstruct(final EducationData p, final BindingResult binding) {
 		Assert.notNull(p);
 		EducationData result;
 
 		if (p.getId() == 0)
-			result = this.create(curriculumId);
+			result = this.create(p.getCurriculum().getId());
 		else
 			result = this.educationDataRepository.findOne(p.getId());
 		result.setDegree(p.getDegree());

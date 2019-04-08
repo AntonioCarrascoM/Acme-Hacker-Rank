@@ -1,5 +1,5 @@
 
-package controllers;
+package controllers.hacker;
 
 import java.util.Collection;
 
@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.CurriculumService;
 import services.PositionDataService;
+import controllers.AbstractController;
+import domain.Curriculum;
 import domain.PositionData;
 
 @Controller
-@RequestMapping("/positionData")
-public class PositionDataController extends AbstractController {
+@RequestMapping("positionData/hacker")
+public class PositionDataHackerController extends AbstractController {
 
 	//Services
 
@@ -26,40 +29,11 @@ public class PositionDataController extends AbstractController {
 	private PositionDataService	positionDataService;
 
 	@Autowired
+	private CurriculumService	curriculumService;
+
+	@Autowired
 	private ActorService		actorService;
 
-
-	//Listing
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		Collection<PositionData> positionDatas;
-
-		positionDatas = this.positionDataService.findAll();
-
-		result = new ModelAndView("positionData/list");
-		result.addObject("positionDatas", positionDatas);
-		result.addObject("requestURI", "positionData/list.do");
-
-		return result;
-	}
-
-	//Display
-
-	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display(@RequestParam final int positionDataId) {
-		ModelAndView result;
-		PositionData positionData;
-
-		positionData = this.positionDataService.findOne(positionDataId);
-
-		result = new ModelAndView("positionData/display");
-		result.addObject("positionData", positionData);
-		result.addObject("requestURI", "positionData/display.do");
-
-		return result;
-	}
 
 	//Creation
 
@@ -88,12 +62,13 @@ public class PositionDataController extends AbstractController {
 		return result;
 	}
 
+	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(PositionData positionData, final int curriculumId, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			positionData = this.positionDataService.reconstruct(positionData, curriculumId, binding);
+			positionData = this.positionDataService.reconstruct(positionData, binding);
 		} catch (final Throwable oops) {
 			return result = this.createEditModelAndView(positionData, "positionData.commit.error");
 		}
@@ -110,6 +85,7 @@ public class PositionDataController extends AbstractController {
 		return result;
 	}
 
+	//Delete POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(PositionData positionData, final BindingResult binding) {
 		ModelAndView result;
@@ -142,6 +118,39 @@ public class PositionDataController extends AbstractController {
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(positionData, "positionData.commit.error");
 		}
+		return result;
+	}
+
+	//Listing
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam final int varId) {
+		final ModelAndView result;
+		Collection<PositionData> positionDatas;
+
+		final Curriculum c = this.curriculumService.findOne(varId);
+		positionDatas = this.curriculumService.getPositionDataForCurriculum(c.getId());
+
+		result = new ModelAndView("positionData/list");
+		result.addObject("positionDatas", positionDatas);
+		result.addObject("requestURI", "positionData/list.do");
+
+		return result;
+	}
+
+	//Display
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int varId) {
+		ModelAndView result;
+		PositionData positionData;
+
+		positionData = this.positionDataService.findOne(varId);
+
+		result = new ModelAndView("positionData/display");
+		result.addObject("positionData", positionData);
+		result.addObject("requestURI", "positionData/display.do");
+
 		return result;
 	}
 

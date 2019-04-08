@@ -16,6 +16,10 @@ import domain.PositionData;
 @Repository
 public interface CurriculumRepository extends JpaRepository<Curriculum, Integer> {
 
+	//Retrieves the curriculum for a certain hacker
+	@Query("select c from Curriculum c where c.hacker.id=?1")
+	Collection<Curriculum> getCurriculumsForHacker(int id);
+
 	//Listing of personal datas for a certain curriculum
 	@Query("select p from PersonalData p where p.curriculum.id=?1")
 	PersonalData getPersonalDataForCurriculum(int id);

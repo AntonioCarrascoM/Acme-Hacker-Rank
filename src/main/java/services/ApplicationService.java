@@ -147,7 +147,7 @@ public class ApplicationService {
 
 	//Reconstruct
 
-	public Application reconstruct(final Application app, final int positionId, final BindingResult binding) {
+	public Application reconstruct(final Application app, final BindingResult binding) {
 		Application result;
 
 		final Authority authCompany = new Authority();
@@ -157,7 +157,7 @@ public class ApplicationService {
 		authHacker.setAuthority(Authority.HACKER);
 
 		if (app.getId() == 0)
-			result = this.create(positionId);
+			result = this.create(app.getPosition().getId());
 		else {
 			result = this.applicationRepository.findOne(app.getId());
 
@@ -176,18 +176,17 @@ public class ApplicationService {
 				//				result.setProblem(app.getProblem());
 				//				result.setMoment(app.getMoment());
 			}
-
+			//TODO revisar esta cacota dura
 			if (this.actorService.findByPrincipal().getUserAccount().getAuthorities().contains(authHacker) && result.getStatus() == Status.PENDING)
-				if (app.getStatus().equals(Status.SUBMITTED)) {
-					result.setStatus(app.getStatus());
-					result.setAnswerDescription(app.getAnswerDescription());
-					result.setAnswerLink(app.getAnswerLink());
-					result.setAnswerMoment(app.getAnswerMoment());
-					this.messageService.applicationStatusNotification(result);
-				}
-			//				result.setProblem(app.getProblem());
-			//				result.setMoment(app.getMoment());
+				result.setStatus(Status.SUBMITTED);
+			result.setAnswerDescription(app.getAnswerDescription());
+			result.setAnswerLink(app.getAnswerLink());
+			result.setAnswerMoment(new Date(System.currentTimeMillis() - 1));
+			this.messageService.applicationStatusNotification(result);
 		}
+		//				result.setProblem(app.getProblem());
+		//				result.setMoment(app.getMoment());
+
 		this.validator.validate(result, binding);
 
 		if (binding.hasErrors())

@@ -24,7 +24,6 @@ public class Application extends DomainEntity {
 	//Attributes
 
 	private Date		moment;
-	private Problem		problem;
 	private String		answerDescription;
 	private String		answerLink;
 	private Date		answerMoment;
@@ -33,6 +32,7 @@ public class Application extends DomainEntity {
 	//Relationships
 
 	private Curriculum	curriculum;
+	private Problem		problem;
 	private Position	position;
 	private Hacker		hacker;
 
