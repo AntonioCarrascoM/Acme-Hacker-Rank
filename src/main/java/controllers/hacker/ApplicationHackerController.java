@@ -85,7 +85,7 @@ public class ApplicationHackerController extends AbstractController {
 		Application saved;
 
 		try {
-			application = this.applicationService.reconstruct(application, application.getPosition().getId(), binding);
+			application = this.applicationService.reconstruct(application, binding);
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(application);
 		} catch (final Throwable oops) {
@@ -108,7 +108,7 @@ public class ApplicationHackerController extends AbstractController {
 		return result;
 	}
 
-	//Applications cannot be deleted
+	//Applications cannot be deleted according to the requirements document.
 
 	//Other methods
 

@@ -1,5 +1,5 @@
 
-package controllers;
+package controllers.hacker;
 
 import java.util.Collection;
 
@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.CurriculumService;
 import services.MiscellaneousDataService;
+import controllers.AbstractController;
+import domain.Curriculum;
 import domain.MiscellaneousData;
 
 @Controller
-@RequestMapping("/miscellaneousData")
-public class MiscellaneousDataController extends AbstractController {
+@RequestMapping("miscellaneousData/hacker")
+public class MiscellaneousDataHackerController extends AbstractController {
 
 	//Services
 
@@ -26,40 +29,11 @@ public class MiscellaneousDataController extends AbstractController {
 	private MiscellaneousDataService	miscellaneousDataService;
 
 	@Autowired
+	private CurriculumService			curriculumService;
+
+	@Autowired
 	private ActorService				actorService;
 
-
-	//Listing
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		Collection<MiscellaneousData> miscellaneousDatas;
-
-		miscellaneousDatas = this.miscellaneousDataService.findAll();
-
-		result = new ModelAndView("miscellaneousData/list");
-		result.addObject("miscellaneousDatas", miscellaneousDatas);
-		result.addObject("requestURI", "miscellaneousData/list.do");
-
-		return result;
-	}
-
-	//Display
-
-	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display(@RequestParam final int miscellaneousDataId) {
-		ModelAndView result;
-		MiscellaneousData miscellaneousData;
-
-		miscellaneousData = this.miscellaneousDataService.findOne(miscellaneousDataId);
-
-		result = new ModelAndView("miscellaneousData/display");
-		result.addObject("miscellaneousData", miscellaneousData);
-		result.addObject("requestURI", "miscellaneousData/display.do");
-
-		return result;
-	}
 
 	//Creation
 
@@ -88,12 +62,13 @@ public class MiscellaneousDataController extends AbstractController {
 		return result;
 	}
 
+	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(MiscellaneousData miscellaneousData, final int curriculumId, final BindingResult binding) {
+	public ModelAndView save(MiscellaneousData miscellaneousData, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			miscellaneousData = this.miscellaneousDataService.reconstruct(miscellaneousData, curriculumId, binding);
+			miscellaneousData = this.miscellaneousDataService.reconstruct(miscellaneousData, binding);
 		} catch (final Throwable oops) {
 			return result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
 		}
@@ -110,6 +85,7 @@ public class MiscellaneousDataController extends AbstractController {
 		return result;
 	}
 
+	//Delete POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(MiscellaneousData miscellaneousData, final BindingResult binding) {
 		ModelAndView result;
@@ -142,6 +118,39 @@ public class MiscellaneousDataController extends AbstractController {
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
 		}
+		return result;
+	}
+
+	//Listing
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam final int varId) {
+		final ModelAndView result;
+		Collection<MiscellaneousData> miscellaneousDatas;
+
+		final Curriculum c = this.curriculumService.findOne(varId);
+		miscellaneousDatas = this.curriculumService.getMiscellaneousDataForCurriculum(c.getId());
+
+		result = new ModelAndView("miscellaneousData/list");
+		result.addObject("miscellaneousDatas", miscellaneousDatas);
+		result.addObject("requestURI", "miscellaneousData/list.do");
+
+		return result;
+	}
+
+	//Display
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int varId) {
+		ModelAndView result;
+		MiscellaneousData miscellaneousData;
+
+		miscellaneousData = this.miscellaneousDataService.findOne(varId);
+
+		result = new ModelAndView("miscellaneousData/display");
+		result.addObject("miscellaneousData", miscellaneousData);
+		result.addObject("requestURI", "miscellaneousData/display.do");
+
 		return result;
 	}
 

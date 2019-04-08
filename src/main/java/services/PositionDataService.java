@@ -85,12 +85,12 @@ public class PositionDataService {
 
 	//Reconstruct
 
-	public PositionData reconstruct(final PositionData p, final int curriculumId, final BindingResult binding) {
+	public PositionData reconstruct(final PositionData p, final BindingResult binding) {
 		Assert.notNull(p);
 		PositionData result;
 
 		if (p.getId() == 0)
-			result = this.create(curriculumId);
+			result = this.create(p.getCurriculum().getId());
 		else
 			result = this.positionDataRepository.findOne(p.getId());
 		result.setTitle(p.getTitle());

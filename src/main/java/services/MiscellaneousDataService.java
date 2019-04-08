@@ -82,12 +82,12 @@ public class MiscellaneousDataService {
 
 	//Reconstruct
 
-	public MiscellaneousData reconstruct(final MiscellaneousData p, final int curriculumId, final BindingResult binding) {
+	public MiscellaneousData reconstruct(final MiscellaneousData p, final BindingResult binding) {
 		Assert.notNull(p);
 		MiscellaneousData result;
 
 		if (p.getId() == 0)
-			result = this.create(curriculumId);
+			result = this.create(p.getCurriculum().getId());
 		else
 			result = this.miscellaneousDataRepository.findOne(p.getId());
 		result.setText(p.getText());

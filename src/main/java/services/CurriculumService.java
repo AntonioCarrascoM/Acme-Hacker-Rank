@@ -3,10 +3,14 @@ package services;
 
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.CurriculumRepository;
 import domain.Curriculum;
@@ -41,6 +45,9 @@ public class CurriculumService {
 
 	@Autowired
 	private MiscellaneousDataService	miscellaneousDataService;
+
+	@Autowired
+	private Validator					validator;
 
 
 	//Simple CRUD methods
@@ -99,6 +106,28 @@ public class CurriculumService {
 		this.curriculumRepository.delete(c);
 	}
 
+	//Reconstruct
+	public Curriculum reconstruct(final Curriculum c, final BindingResult binding) {
+		Assert.notNull(c);
+		Curriculum result;
+
+		if (c.getId() == 0)
+			result = this.create();
+		else
+			result = this.findOne(c.getId());
+
+		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion that the user modifying this curriculum has the correct privilege.
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == c.getHacker().getId());
+
+		return result;
+
+	}
+
 	//Copy method
 
 	public Curriculum copy(final Curriculum orig) {
@@ -113,6 +142,11 @@ public class CurriculumService {
 	}
 
 	//Time for motion and queries
+
+	//Retrieves the curriculum for a certain hacker
+	public Collection<Curriculum> getCurriculumsForHacker(final int id) {
+		return this.curriculumRepository.getCurriculumsForHacker(id);
+	}
 
 	//Listing of personal datas for a certain curriculum
 	public PersonalData getPersonalDataForCurriculum(final int id) {

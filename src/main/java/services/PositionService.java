@@ -67,7 +67,7 @@ public class PositionService {
 		return this.positionRepository.findAll();
 	}
 
-	public Position save(final Position p, final boolean b) {
+	public Position save(final Position p) {
 		Assert.notNull(p);
 		final Date date = p.getDeadline();
 		final DateFormat fecha = new SimpleDateFormat("yyyy/MM/dd");
@@ -78,15 +78,12 @@ public class PositionService {
 
 		Assert.isTrue(!year.startsWith("00"));
 
-		//Assertion to make sure that the position is not on final mode.
-		Assert.isTrue(p.getFinalMode() == false);
-
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
 
 		//A position can only be final mode if it has at least 2 problems
-		if (b == true && this.problemService.problemsOfAPosition(p.getId()).size() >= 2)
-			p.setFinalMode(true);
+		if (p.getFinalMode() == true)
+			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsOfAPosition(p.getId()).size() >= 2);
 
 		final Position saved = this.positionRepository.save(p);
 
@@ -135,6 +132,14 @@ public class PositionService {
 			result = this.create();
 		else
 			result = this.positionRepository.findOne(p.getId());
+
+		//Assertion that the user modifying this task has the correct privilege.
+		Assert.isTrue(result.getFinalMode() == false);
+
+		//A position can only be final mode if it has at least 2 problems
+		if (p.getFinalMode() == true)
+			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsOfAPosition(p.getId()).size() >= 2);
+
 		result.setTitle(p.getTitle());
 		result.setDescription(p.getDescription());
 		result.setDeadline(p.getDeadline());
@@ -188,6 +193,18 @@ public class PositionService {
 	public String generateTicker(final Position p) {
 		final String res = this.generateName(p) + "-" + this.generateNumber();
 		return res;
+	}
+
+	//Time for motion and queries
+
+	//Retrieves a list of positions with final mode = true and not cancelled for a certain company
+	public Collection<Position> getPublicPositionsForCompany(final int id) {
+		return this.positionRepository.getPublicPositionsForCompany(id);
+	}
+
+	//Retrieves a list of all positions for a certain company
+	public Collection<Position> getAllPositionsForCompany(final int id) {
+		return this.positionRepository.getAllPositionsForCompany(id);
 	}
 
 	//Retrieves a list of positions with final mode = true and not cancelled

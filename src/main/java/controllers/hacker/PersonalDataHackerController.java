@@ -1,7 +1,5 @@
 
-package controllers;
-
-import java.util.Collection;
+package controllers.hacker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.PersonalDataService;
+import controllers.AbstractController;
 import domain.PersonalData;
 
 @Controller
-@RequestMapping("/personalData")
-public class PersonalDataController extends AbstractController {
+@RequestMapping("personalData/hacker")
+public class PersonalDataHackerController extends AbstractController {
 
 	//Services
 
@@ -28,38 +27,6 @@ public class PersonalDataController extends AbstractController {
 	@Autowired
 	private ActorService		actorService;
 
-
-	//Listing
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		Collection<PersonalData> personalDatas;
-
-		personalDatas = this.personalDataService.findAll();
-
-		result = new ModelAndView("personalData/list");
-		result.addObject("personalDatas", personalDatas);
-		result.addObject("requestURI", "personalData/list.do");
-
-		return result;
-	}
-
-	//Display
-
-	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display(@RequestParam final int personalDataId) {
-		ModelAndView result;
-		PersonalData personalData;
-
-		personalData = this.personalDataService.findOne(personalDataId);
-
-		result = new ModelAndView("personalData/display");
-		result.addObject("personalData", personalData);
-		result.addObject("requestURI", "personalData/display.do");
-
-		return result;
-	}
 
 	//Creation
 
@@ -88,12 +55,13 @@ public class PersonalDataController extends AbstractController {
 		return result;
 	}
 
+	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(PersonalData personalData, final int curriculumId, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			personalData = this.personalDataService.reconstruct(personalData, curriculumId, binding);
+			personalData = this.personalDataService.reconstruct(personalData, binding);
 		} catch (final Throwable oops) {
 			return result = this.createEditModelAndView(personalData, "personalData.commit.error");
 		}
@@ -110,6 +78,7 @@ public class PersonalDataController extends AbstractController {
 		return result;
 	}
 
+	//Delete POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(PersonalData personalData, final BindingResult binding) {
 		ModelAndView result;
@@ -142,6 +111,22 @@ public class PersonalDataController extends AbstractController {
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(personalData, "personalData.commit.error");
 		}
+		return result;
+	}
+
+	//Display
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int varId) {
+		ModelAndView result;
+		PersonalData personalData;
+
+		personalData = this.personalDataService.findOne(varId);
+
+		result = new ModelAndView("personalData/display");
+		result.addObject("personalData", personalData);
+		result.addObject("requestURI", "personalData/display.do");
+
 		return result;
 	}
 

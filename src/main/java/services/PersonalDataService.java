@@ -84,12 +84,12 @@ public class PersonalDataService {
 
 	//Reconstruct method
 
-	public PersonalData reconstruct(final PersonalData p, final int curriculumId, final BindingResult binding) {
+	public PersonalData reconstruct(final PersonalData p, final BindingResult binding) {
 		Assert.notNull(p);
 		PersonalData result;
 
 		if (p.getId() == 0)
-			result = this.create(curriculumId);
+			result = this.create(p.getCurriculum().getId());
 		else
 			result = this.personalDataRepository.findOne(p.getId());
 		result.setFullName(p.getFullName());

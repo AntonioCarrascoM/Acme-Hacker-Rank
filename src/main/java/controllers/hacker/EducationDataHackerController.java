@@ -1,5 +1,5 @@
 
-package controllers;
+package controllers.hacker;
 
 import java.util.Collection;
 
@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.CurriculumService;
 import services.EducationDataService;
+import controllers.AbstractController;
+import domain.Curriculum;
 import domain.EducationData;
 
 @Controller
-@RequestMapping("/educationData")
-public class EducationDataController extends AbstractController {
+@RequestMapping("educationData/hacker")
+public class EducationDataHackerController extends AbstractController {
 
 	//Services
 
@@ -26,40 +29,11 @@ public class EducationDataController extends AbstractController {
 	private EducationDataService	educationDataService;
 
 	@Autowired
+	private CurriculumService		curriculumService;
+
+	@Autowired
 	private ActorService			actorService;
 
-
-	//Listing
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		Collection<EducationData> educationDatas;
-
-		educationDatas = this.educationDataService.findAll();
-
-		result = new ModelAndView("educationData/list");
-		result.addObject("educationDatas", educationDatas);
-		result.addObject("requestURI", "educationData/list.do");
-
-		return result;
-	}
-
-	//Display
-
-	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView display(@RequestParam final int educationDataId) {
-		ModelAndView result;
-		EducationData educationData;
-
-		educationData = this.educationDataService.findOne(educationDataId);
-
-		result = new ModelAndView("educationData/display");
-		result.addObject("educationData", educationData);
-		result.addObject("requestURI", "educationData/display.do");
-
-		return result;
-	}
 
 	//Creation
 
@@ -88,12 +62,13 @@ public class EducationDataController extends AbstractController {
 		return result;
 	}
 
+	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(EducationData educationData, final int curriculumId, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			educationData = this.educationDataService.reconstruct(educationData, curriculumId, binding);
+			educationData = this.educationDataService.reconstruct(educationData, binding);
 		} catch (final Throwable oops) {
 			return result = this.createEditModelAndView(educationData, "educationData.commit.error");
 		}
@@ -110,6 +85,7 @@ public class EducationDataController extends AbstractController {
 		return result;
 	}
 
+	//Delete POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(EducationData educationData, final BindingResult binding) {
 		ModelAndView result;
@@ -129,7 +105,6 @@ public class EducationDataController extends AbstractController {
 	}
 
 	//Deleting
-
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
@@ -142,6 +117,39 @@ public class EducationDataController extends AbstractController {
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(educationData, "educationData.commit.error");
 		}
+		return result;
+	}
+
+	//Listing
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam final int varId) {
+		final ModelAndView result;
+		Collection<EducationData> educationDatas;
+
+		final Curriculum c = this.curriculumService.findOne(varId);
+		educationDatas = this.curriculumService.getEducationDataForCurriculum(c.getId());
+
+		result = new ModelAndView("educationData/list");
+		result.addObject("educationDatas", educationDatas);
+		result.addObject("requestURI", "educationData/list.do");
+
+		return result;
+	}
+
+	//Display
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int varId) {
+		ModelAndView result;
+		EducationData educationData;
+
+		educationData = this.educationDataService.findOne(varId);
+
+		result = new ModelAndView("educationData/display");
+		result.addObject("educationData", educationData);
+		result.addObject("requestURI", "educationData/display.do");
+
 		return result;
 	}
 
