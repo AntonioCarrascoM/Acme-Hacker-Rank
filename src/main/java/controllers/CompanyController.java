@@ -53,31 +53,15 @@ public class CompanyController extends AbstractController {
 		return result;
 	}
 
-	//Listing by company
-
-	@RequestMapping(value = "/listByPosition", method = RequestMethod.GET)
-	public ModelAndView listByPosition(@RequestParam final int varId) {
-		final ModelAndView result;
-		final Collection<Company> companies;
-
-		//TODO cambiar esto por la query que da companies para una position
-		companies = this.companyService.findAll();
-
-		result = new ModelAndView("company/list");
-		result.addObject("companies", companies);
-		result.addObject("requestURI", "company/list.do");
-
-		return result;
-	}
-
 	//Display
-
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display(@RequestParam final int varId) {
 		final ModelAndView result;
 
 		final Company company = this.companyService.findOne(varId);
-		Assert.notNull(company);
+
+		if (company == null)
+			return new ModelAndView("redirect:/welcome/index.do");
 
 		result = new ModelAndView("company/display");
 		result.addObject("company", company);

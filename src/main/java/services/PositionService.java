@@ -21,7 +21,6 @@ import repositories.PositionRepository;
 import security.Authority;
 import domain.Company;
 import domain.Position;
-import domain.Problem;
 
 @Service
 @Transactional
@@ -83,7 +82,7 @@ public class PositionService {
 
 		//A position can only be final mode if it has at least 2 problems
 		if (p.getFinalMode() == true)
-			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsOfAPosition(p.getId()).size() >= 2);
+			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsInFinalModeByPosition(p.getId()).size() >= 2);
 
 		final Position saved = this.positionRepository.save(p);
 
@@ -100,11 +99,8 @@ public class PositionService {
 		//Assertion that the user deleting this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
 
-		final Collection<Problem> problems = this.problemService.problemsOfAPosition(p.getId());
-		//Deleting problems
-		if (!problems.isEmpty())
-			for (final Problem prob : problems)
-				this.problemService.delete(prob);
+		//Assertion to make sure that the entity is not final
+		Assert.isTrue(p.getFinalMode() == false);
 
 		this.positionRepository.delete(p);
 	}
@@ -138,7 +134,7 @@ public class PositionService {
 
 		//A position can only be final mode if it has at least 2 problems
 		if (p.getFinalMode() == true)
-			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsOfAPosition(p.getId()).size() >= 2);
+			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsInFinalModeByPosition(p.getId()).size() >= 2);
 
 		result.setTitle(p.getTitle());
 		result.setDescription(p.getDescription());
@@ -173,9 +169,20 @@ public class PositionService {
 
 	//Generates the first half of the unique tickers.
 	private String generateName(final Position p) {
-		return p.getCompany().getCommercialName().substring(0, 4);
+		final String name = p.getCompany().getCommercialName();
+		final int length = name.length();
+		if (length > 0) {
+			if (length >= 4)
+				return name.substring(0, 4);
+			if (length == 3)
+				return name + "X";
+			if (length == 2)
+				return name + "XX";
+			if (length == 1)
+				return name + "XXX";
+		}
+		return name;
 	}
-
 	//Generates the numeric part of the unique tickers.
 	private String generateNumber() {
 		final Random c = new Random();

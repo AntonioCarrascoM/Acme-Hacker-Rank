@@ -59,22 +59,14 @@ public class ProblemService {
 		return this.problemRepository.findAll();
 	}
 
-	public Problem save(final Problem p, final boolean b) {
+	public Problem save(final Problem p) {
 		Assert.notNull(p);
 
 		//Assertion to make sure that the problem is not on final mode.
 		Assert.isTrue(p.getFinalMode() == false);
 
-		//TODO Antonio, podemos hacer que solo se muestren las position no canceladas, porque siino comprobar esto aqui es un ffffollonito
-		//Assertion to make sure that the position associated with the problem is not cancelled.
-		//Assert.isTrue(p.getPosition().getCancelled() == false);
-
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
-
-		//A problem can only be final mode if it has at least 2 problems
-		if (b == true)
-			p.setFinalMode(true);
 
 		final Problem saved = this.problemRepository.save(p);
 
@@ -86,6 +78,9 @@ public class ProblemService {
 
 		//Assertion that the user deleting this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
+
+		//Assertion to make sure that the entity is not final
+		Assert.isTrue(p.getFinalMode() == false);
 
 		this.problemRepository.delete(p);
 	}
@@ -102,6 +97,10 @@ public class ProblemService {
 			result = this.create();
 		else
 			result = this.problemRepository.findOne(p.getId());
+
+		//Assertion that the user modifying this task has the correct privilege.
+		Assert.isTrue(result.getFinalMode() == false);
+
 		result.setTitle(p.getTitle());
 		result.setPositions(p.getPositions());
 		result.setStatement(p.getStatement());
@@ -114,10 +113,6 @@ public class ProblemService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
-		//TODO Antonio, podemos hacer que solo se muestren las position no canceladas, porque siino comprobar esto aqui es un ffffollonito
-		//Assertion to make sure that the position associated with the problem is not cancelled.
-		//Assert.isTrue(p.getPosition().getCancelled() == false);
-
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getCompany().getId());
 
@@ -125,6 +120,11 @@ public class ProblemService {
 
 	}
 	//Other methods
+
+	//Retrieves the problems for a certain company
+	public Collection<Problem> problemsOfACompany(final int id) {
+		return this.problemRepository.problemsOfACompany(id);
+	}
 
 	//Retrieves the problems for a certain problem
 	public Collection<Problem> problemsOfAPosition(final int id) {
