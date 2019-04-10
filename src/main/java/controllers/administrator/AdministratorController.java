@@ -8,7 +8,7 @@
  * http://www.tdg-seville.info/License.html
  */
 
-package administrator;
+package controllers.administrator;
 
 import java.util.Collection;
 

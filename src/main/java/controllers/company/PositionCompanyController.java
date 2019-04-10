@@ -78,6 +78,30 @@ public class PositionCompanyController extends AbstractController {
 		return result;
 	}
 
+	//Delete
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int varId) {
+		final ModelAndView result;
+		Position position;
+		Collection<Position> positions;
+
+		position = this.positionService.findOne(varId);
+
+		if (position == null || position.getFinalMode() == true || position.getCompany().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		this.positionService.delete(position);
+
+		result = new ModelAndView("position/list");
+
+		positions = this.positionService.getAllPositionsForCompany(this.actorService.findByPrincipal().getId());
+
+		result.addObject("positions", positions);
+		result.addObject("requestURI", "position/company/list");
+
+		return result;
+	}
+
 	//Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")

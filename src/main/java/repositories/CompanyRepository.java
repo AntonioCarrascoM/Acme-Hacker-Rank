@@ -16,8 +16,4 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 	@Query("select c from Company c order by ((select count(p) from Position p where p.finalMode=true and p.company.id=c.id)*1.) desc")
 	Collection<Company> companiesWithMoreOfferedPossitions();
 
-	//TODO query que de las companies de una position
-	//	//Retrieves a list of all positions for a certain company
-	//		@Query("select c from Company c where c.position.id=?1")
-	//		Collection<Company> getCompaniesForPosition(int id);
 }

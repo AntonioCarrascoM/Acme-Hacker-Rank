@@ -31,6 +31,8 @@ public class Problem extends DomainEntity {
 	private Collection<Position>	positions;
 
 
+	//TODO @Luis -> hacer lo de asignar problems a las positions, multiple select?, edit.jsp de problem???
+
 	//Getters
 	@NotBlank
 	public String getTitle() {
