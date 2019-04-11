@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+ * tiles.xml
+ *
+ * Copyright (C) 2018 Universidad de Sevilla
+ * 
+ * The use of this project is hereby constrained to the conditions of the 
+ * TDG Licence, a copy of which you may download from 
+ * http://www.tdg-seville.info/License.html
+ -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="educationData/display" extends="master.page">
+		<put-attribute name="title" value="Información de educación" />
+		<put-attribute name="body" value="/views/educationData/display.jsp" />
+	</definition>
+
+	<definition name="educationData/list" extends="master.page">
+		<put-attribute name="title" value="Lista de información de educación" />
+		<put-attribute name="body" value="/views/educationData/list.jsp" />
+	</definition>
+	
+	<definition name="educationData/create" extends="master.page">	
+		<put-attribute name="title" value="Crear información de educación" />
+		<put-attribute name="body" value="/views/educationData/edit.jsp" />
+	</definition>
+	
+	<definition name="educationData/edit" extends="master.page">
+		<put-attribute name="title" value="Editar información de educación" />
+		<put-attribute name="body" value="/views/educationData/edit.jsp" />
+	</definition>
+
+
+</tiles-definitions>
