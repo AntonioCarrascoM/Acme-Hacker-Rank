@@ -166,4 +166,10 @@ public class CurriculumService {
 	public Collection<MiscellaneousData> getMiscellaneousDataForCurriculum(final int id) {
 		return this.curriculumRepository.getMiscellaneousDataForCurriculum(id);
 	}
+
+	//The minimum, the maximum, the average, and the standard deviation of the number of curricula per hacker
+	public Double[] minMaxAvgStddevCurriculaPerHacker() {
+		return this.curriculumRepository.minMaxAvgStddevCurriculaPerHacker();
+	}
+
 }

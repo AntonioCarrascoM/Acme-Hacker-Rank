@@ -178,25 +178,16 @@ public class HackerService {
 		return this.hackerRepository.hackerByFinder(id);
 	}
 
-	//The average, the minimum, the maximum, and the standard deviation of the number of applications per hacker
-	public Double[] avgMinMaxStddevApplicationsPerHacker() {
-		return this.hackerRepository.avgMinMaxStddevApplicationsPerHacker();
-	}
-
 	//The hackers who have made more applications
-	public Collection<Hacker> hackersWithMoreApplications() {
-		Collection<Hacker> results = new ArrayList<>();
-		final Collection<Hacker> hackers = this.hackerRepository.hackersWithMoreApplications();
+	public Collection<String> hackersWithMoreApplications() {
+		Collection<String> results = new ArrayList<>();
+		final Collection<String> hackers = this.hackerRepository.hackersWithMoreApplications();
 		final int maxResults = 1;
 		if (hackers.size() > maxResults)
-			results = new ArrayList<Hacker>(((ArrayList<Hacker>) hackers).subList(0, maxResults));
+			results = new ArrayList<String>(((ArrayList<String>) hackers).subList(0, maxResults));
 		else
 			results = hackers;
 		return results;
 	}
 
-	//The minimum, the maximum, the average, and the standard deviation of the number of curricula per hacker
-	public Double[] minMaxAvgStddevCurriculaPerHacker() {
-		return this.hackerRepository.minMaxAvgStddevCurriculaPerHacker();
-	}
 }
