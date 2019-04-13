@@ -178,12 +178,12 @@ public class CompanyService {
 	}
 
 	//The companies that have offered more positions
-	public Collection<Company> companiesWithMoreOfferedPossitions() {
-		Collection<Company> results = new ArrayList<>();
-		final Collection<Company> companies = this.companyRepository.companiesWithMoreOfferedPossitions();
+	public Collection<String> companiesWithMoreOfferedPossitions() {
+		Collection<String> results = new ArrayList<>();
+		final Collection<String> companies = this.companyRepository.companiesWithMoreOfferedPossitions();
 		final int maxResults = 1;
 		if (companies.size() > maxResults)
-			results = new ArrayList<Company>(((ArrayList<Company>) companies).subList(0, maxResults));
+			results = new ArrayList<String>(((ArrayList<String>) companies).subList(0, maxResults));
 		else
 			results = companies;
 		return results;

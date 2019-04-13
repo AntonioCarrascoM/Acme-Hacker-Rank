@@ -25,9 +25,14 @@
 <%@ attribute name="path" required="true" %>
 <%@ attribute name="code" required="true" %>
 <%@ attribute name="readonly" required="false" %>
+<%@ attribute name="placeholder" required="false" %>
 
 <jstl:if test="${readonly == null}">
 	<jstl:set var="readonly" value="false" />
+</jstl:if>
+
+<jstl:if test="${not empty placeholder}">
+	<spring:message var="ph" code="${placeholder}" />
 </jstl:if>
 
 <%-- Definition --%>

@@ -179,12 +179,12 @@ public class HackerService {
 	}
 
 	//The hackers who have made more applications
-	public Collection<Hacker> hackersWithMoreApplications() {
-		Collection<Hacker> results = new ArrayList<>();
-		final Collection<Hacker> hackers = this.hackerRepository.hackersWithMoreApplications();
+	public Collection<String> hackersWithMoreApplications() {
+		Collection<String> results = new ArrayList<>();
+		final Collection<String> hackers = this.hackerRepository.hackersWithMoreApplications();
 		final int maxResults = 1;
 		if (hackers.size() > maxResults)
-			results = new ArrayList<Hacker>(((ArrayList<Hacker>) hackers).subList(0, maxResults));
+			results = new ArrayList<String>(((ArrayList<String>) hackers).subList(0, maxResults));
 		else
 			results = hackers;
 		return results;

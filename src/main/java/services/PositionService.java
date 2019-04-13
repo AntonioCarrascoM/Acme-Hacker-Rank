@@ -240,6 +240,6 @@ public class PositionService {
 		final Collection<String> bestPositions = this.positionRepository.bestPositions();
 		final Collection<String> worstPositions = this.positionRepository.worstPositions();
 
-		return ((ArrayList<String>) bestPositions).get(0) + ((ArrayList<String>) worstPositions).get(0);
+		return "[" + ((ArrayList<String>) bestPositions).get(0) + ", " + ((ArrayList<String>) worstPositions).get(0) + "]";
 	}
 }

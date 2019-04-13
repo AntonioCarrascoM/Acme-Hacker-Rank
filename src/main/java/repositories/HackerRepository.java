@@ -16,7 +16,7 @@ public interface HackerRepository extends JpaRepository<Hacker, Integer> {
 	Hacker hackerByFinder(int id);
 
 	//The hackers who have made more applications
-	@Query("select h from Hacker h order by ((select count(a) from Application a where a.hacker.id=h.id)*1.) desc")
-	Collection<Hacker> hackersWithMoreApplications();
+	@Query("select u.username from Hacker h join h.userAccount u order by ((select count(a) from Application a where a.hacker.id=h.id)*1.) desc")
+	Collection<String> hackersWithMoreApplications();
 
 }
