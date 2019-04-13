@@ -205,4 +205,9 @@ public class ApplicationService {
 		return this.applicationRepository.applicationsOfAHacker(id);
 	}
 
+	//The average, the minimum, the maximum, and the standard deviation of the number of applications per hacker
+	public Double[] avgMinMaxStddevApplicationsPerHacker() {
+		return this.applicationRepository.avgMinMaxStddevApplicationsPerHacker();
+	}
+
 }

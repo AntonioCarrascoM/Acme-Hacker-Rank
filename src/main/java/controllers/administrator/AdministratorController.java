@@ -10,6 +10,7 @@
 
 package controllers.administrator;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.validation.ValidationException;
@@ -25,7 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.AdministratorService;
+import services.ApplicationService;
+import services.CompanyService;
 import services.ConfigurationService;
+import services.CurriculumService;
+import services.FinderService;
+import services.HackerService;
+import services.PositionService;
 import controllers.AbstractController;
 import domain.Actor;
 import domain.Administrator;
@@ -44,11 +51,23 @@ public class AdministratorController extends AbstractController {
 	@Autowired
 	private AdministratorService	administratorService;
 
-	//	@Autowired
-	//	private PositionService			positionService;
-	//
-	//	@Autowired
-	//	private FinderService			finderService;
+	@Autowired
+	private PositionService			positionService;
+
+	@Autowired
+	private ApplicationService		applicationService;
+
+	@Autowired
+	private CompanyService			companyService;
+
+	@Autowired
+	private HackerService			hackerService;
+
+	@Autowired
+	private CurriculumService		curriculumService;
+
+	@Autowired
+	private FinderService			finderService;
 
 	@Autowired
 	private ConfigurationService	configurationService;
@@ -127,41 +146,26 @@ public class AdministratorController extends AbstractController {
 
 	//Dashboard
 
-	//	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	//	public ModelAndView dashboard() {
-	//		ModelAndView result;
-	//
-	//		result = new ModelAndView("administrator/dashboard");
-	//
-	//		result.addObject("minMaxAvgStddevMemberPerBrotherhood", Arrays.toString(this.memberService.minMaxAvgStddevMemberPerBrotherhood()));
-	//		result.addObject("membersWithApprovedRequestsThanAvg", this.memberService.membersWithApprovedRequestsThanAvg());
-	//		result.addObject("largestBrotherhoods", this.brotherhoodService.largestBrotherhoods());
-	//		result.addObject("smallestBrotherhoods", this.brotherhoodService.smallestBrotherhoods());
-	//		result.addObject("ratioRequestsByStatus", this.requestService.ratioRequestsByStatus());
-	//		result.addObject("paradesBefore30Days", this.paradeService.paradesBefore30Days());
-	//		result.addObject("histogramOfPositions1", this.positionService.histogramOfPositions1());
-	//		result.addObject("histogramOfPositions2", this.positionService.histogramOfPositions2());
-	//		result.addObject("ratioOfBrotherhoodsByArea", this.areaService.ratioOfBrotherhoodsByArea());
-	//		result.addObject("countOfBrotherhoodsByArea", this.areaService.countOfBrotherhoodsByArea());
-	//		result.addObject("minMaxAvgAndStddevOfBrotherhoodsByArea", Arrays.toString(this.areaService.minMaxAvgAndStddevOfBrotherhoodsByArea()));
-	//		result.addObject("minMaxAvgStddevResultsFinders", Arrays.toString(this.finderService.minMaxAvgStddevResultsFinders()));
-	//		result.addObject("ratioEmptyVersusNonEmptyFinders", this.finderService.ratioEmptyVersusNonEmptyFinders());
-	//		result.addObject("avgMinMaxStddevOfRecordsPerHistory", Arrays.toString(this.recordService.avgMinMaxStddevRecordsForHistory()));
-	//		result.addObject("largestBrotherhoodsByHistory", this.brotherhoodService.largestBrotherhoodsByHistory());
-	//		result.addObject("largestBrotherhoodsByHistoryThanAvg", this.brotherhoodService.largestBrotherhoodsByHistoryThanAvg());
-	//		result.addObject("ratioAreasNotCoordinated", this.areaService.ratioAreasNotCoordinated());
-	//		result.addObject("avgMinMaxStddevParadesCoordinatedByChapter", Arrays.toString(this.chapterService.avgMinMaxStddevParadesCoordinatedByChapter()));
-	//		result.addObject("chaptersWith10PerCentParadesCoordinateThanAvg", this.chapterService.chaptersWith10PerCentParadesCoordinateThanAvg());
-	//		result.addObject("ratioParadesInDraftModeVsFinalMode", this.paradeService.ratioParadesInDraftModeVsFinalMode());
-	//		result.addObject("ratioParadesInFinalModeGroupByStatus", this.paradeService.ratioParadesInFinalModeGroupByStatus());
-	//		result.addObject("ratioOfActiveSponsorships", this.sponsorshipService.ratioOfActiveSponsorships());
-	//		result.addObject("avgMinMaxAndStddevOfActiveSponsorshipsPerSponsor", Arrays.toString(this.sponsorService.avgMinMaxAndStddevOfActiveSponsorshipsPerSponsor()));
-	//		result.addObject("top5SponsorsByActiveSponsorships", this.sponsorService.top5SponsorsByActiveSponsorships());
-	//
-	//		result.addObject("requestURI", "administrator/dashboard.do");
-	//
-	//		return result;
-	//	}
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public ModelAndView dashboard() {
+		ModelAndView result;
+
+		result = new ModelAndView("administrator/dashboard");
+
+		result.addObject("avgMinMaxStddevPositionsPerCompany", Arrays.toString(this.positionService.avgMinMaxStddevPositionsPerCompany()));
+		result.addObject("avgMinMaxStddevApplicationsPerHacker", Arrays.toString(this.applicationService.avgMinMaxStddevApplicationsPerHacker()));
+		result.addObject("companiesWithMoreOfferedPossitions", this.companyService.companiesWithMoreOfferedPossitions());
+		result.addObject("hackersWithMoreApplications", this.hackerService.hackersWithMoreApplications());
+		result.addObject("avgMinMaxStddevOfferedSalaries", Arrays.toString(this.positionService.avgMinMaxStddevOfferedSalaries()));
+		result.addObject("bestAndWorstPositions", this.positionService.bestAndWorstPositions());
+		result.addObject("minMaxAvgStddevCurriculaPerHacker", Arrays.toString(this.curriculumService.minMaxAvgStddevCurriculaPerHacker()));
+		result.addObject("minMaxAvgStddevResultsFinders", Arrays.toString(this.finderService.minMaxAvgStddevResultsFinders()));
+		result.addObject("ratioEmptyVersusNonEmptyFinders", this.finderService.ratioEmptyVersusNonEmptyFinders());
+
+		result.addObject("requestURI", "administrator/dashboard.do");
+
+		return result;
+	}
 	//Listing suspicious actors
 
 	@RequestMapping(value = "/bannableList", method = RequestMethod.GET)

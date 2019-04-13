@@ -236,15 +236,10 @@ public class PositionService {
 	}
 
 	//The best and the worst position in terms of salary
-	public String[] bestAndWorstPositions() {
-		final String[] results = new String[2];
+	public String bestAndWorstPositions() {
 		final Collection<String> bestPositions = this.positionRepository.bestPositions();
 		final Collection<String> worstPositions = this.positionRepository.worstPositions();
 
-		results[0] = ((ArrayList<String>) bestPositions).get(0);
-		results[1] = ((ArrayList<String>) worstPositions).get(0);
-
-		return results;
-
+		return ((ArrayList<String>) bestPositions).get(0) + ((ArrayList<String>) worstPositions).get(0);
 	}
 }
