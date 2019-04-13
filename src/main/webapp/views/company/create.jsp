@@ -50,10 +50,9 @@
 <spring:message code="company.secondPassword" var="secondPassword" />
 
 
-<security:authorize access="hasRole('ADMIN')">
-
+<security:authorize access="isAnonymous() or hasRole('COMPANY')">
 	<form:form id="form" action="${requestURI}"
-		modelAttribute="foa">
+		modelAttribute="foc">
 
 		<%-- Forms --%>
 

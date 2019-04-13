@@ -41,6 +41,13 @@
 		<security:intercept-url pattern="/position/**" access="permitAll" />
 		<security:intercept-url pattern="/hacker/**" access="permitAll" />
 		
+		<security:intercept-url pattern="/curriculum/**" access="permitAll" />
+		<security:intercept-url pattern="/personalData/**" access="permitAll" />
+		<security:intercept-url pattern="/positionData/**" access="permitAll" />
+		<security:intercept-url pattern="/educationData/**" access="permitAll" />
+		<security:intercept-url pattern="/miscellaneousData/**" access="permitAll" />
+		
+				
 		
 		<security:intercept-url pattern="/message/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/socialProfile/**" access="isAuthenticated()" />
@@ -53,6 +60,11 @@
 
 		<security:intercept-url pattern="/position/company/**" access="hasRole('COMPANY')" />
 		<security:intercept-url pattern="/problem/company/**" access="hasRole('COMPANY')" />
+		
+		
+		
+		
+				
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 
