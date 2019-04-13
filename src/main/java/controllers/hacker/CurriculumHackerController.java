@@ -123,7 +123,7 @@ public class CurriculumHackerController extends AbstractController {
 	//Listing
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int varId) {
+	public ModelAndView list() {
 		final ModelAndView result;
 		Collection<Curriculum> curriculums;
 

@@ -44,11 +44,11 @@ public class PersonalDataHackerController extends AbstractController {
 	//Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int personalDataId) {
+	public ModelAndView edit(@RequestParam final int varId) {
 		final ModelAndView result;
 		PersonalData personalData;
 
-		personalData = this.personalDataService.findOne(personalDataId);
+		personalData = this.personalDataService.findOne(varId);
 		Assert.notNull(personalData);
 		result = this.createEditModelAndView(personalData);
 

@@ -61,8 +61,26 @@
 			</li>
 		</security:authorize>
 		
+		<security:authorize access="hasRole('HACKER')">
+			<li><a href="curriculum/hacker/list.do"><spring:message
+					code="master.page.curriculum.list" /></a></li>
+		</security:authorize>
+		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv" href="security/login.do"><spring:message code="master.page.login" /></a></li>
+			
+			<li><a class="fNiv"><spring:message
+						code="master.page.register" /></a>
+				<ul>
+					<li class="arrow"></li>
+
+					<li><a href="company/create.do"><spring:message
+								code="master.page.register.company" /></a></li>
+					<li><a href="hacker/create.do"><spring:message
+								code="master.page.register.hacker" /></a></li>
+
+				</ul>
+		
 		</security:authorize>
 		
 		
