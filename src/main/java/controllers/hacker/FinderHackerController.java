@@ -92,6 +92,34 @@ public class FinderHackerController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "clear")
+	public ModelAndView clear(@Valid final Finder finder, final BindingResult binding) {
+		ModelAndView result;
+		Collection<Position> positions = new ArrayList<Position>();
+		final Hacker h = this.hackerService.hackerByFinder(finder.getId());
+
+		try {
+			finder.setKeyWord(null);
+			finder.setSpecificDeadline(null);
+			finder.setMinSalary(null);
+			finder.setMaxSalary(null);
+
+			positions = this.finderService.find(finder);
+
+			finder.setPositions(positions);
+
+			final Finder saved = this.finderService.save(finder);
+			h.setFinder(saved);
+			this.hackerService.save(h);
+
+			return this.edit();
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(finder, "finder.commit.error");
+		}
+		return result;
+	}
+
 	//Ancillary methods
 
 	protected ModelAndView createEditModelAndView(final Finder finder) {
