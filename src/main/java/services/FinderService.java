@@ -35,6 +35,9 @@ public class FinderService {
 	private HackerService			hackerService;
 
 	@Autowired
+	private PositionService			positionService;
+
+	@Autowired
 	private ConfigurationService	configurationService;
 
 
@@ -58,10 +61,14 @@ public class FinderService {
 	public Finder save(final Finder f) {
 		Assert.notNull(f);
 		//Assertion that the user modifying this finder has the correct privilege.
-		Assert.isTrue(f.getId() == this.findPrincipalFinder().getId());//this.findPrincipalFinder().getId()
+		//Assert.isTrue(f.getId() == this.findPrincipalFinder().getId());//this.findPrincipalFinder().getId()
 		//If all fields of the finder are null, the finder returns the entire listing of available tasks.
+		f.setPositions(f.getPositions());
 		f.setMoment(new Date(System.currentTimeMillis() - 1));
 		final Finder saved = this.finderRepository.save(f);
+		final Hacker h = this.hackerService.hackerByFinder(f.getId());
+		h.setFinder(f);
+		this.hackerService.save(h);
 
 		return saved;
 	}
@@ -85,6 +92,7 @@ public class FinderService {
 		Finder fd = new Finder();
 		if (h.getFinder() == null) {
 			fd = this.create();
+			fd.setPositions(this.find(fd));
 			final Finder saved = this.finderRepository.save(fd);
 			h.setFinder(saved);
 			this.hackerService.save(h);
@@ -96,24 +104,31 @@ public class FinderService {
 	public Collection<Position> find(final Finder finder) {
 		Assert.notNull(finder);
 
+		Collection<Position> positions = new ArrayList<>();
 		Collection<Position> results = new ArrayList<>();
 
 		String keyWord = finder.getKeyWord();
 		Date specificDeadline = finder.getSpecificDeadline();
 		Double minSalary = finder.getMinSalary(), maxSalary = finder.getMaxSalary();
 
-		if (finder.getKeyWord() == null)
-			keyWord = "";
-		if (specificDeadline == null)
-			specificDeadline = new Date(631152000L);
-		if (minSalary == null)
-			minSalary = 0.;
-		if (maxSalary == null)
-			maxSalary = 0.;
+		if (keyWord == null && specificDeadline == null && minSalary == null && maxSalary == null)
+			positions.addAll(this.positionService.findAll());
+		else {
 
-		final Collection<Position> positions = this.finderRepository.findPosition(keyWord, specificDeadline, minSalary, maxSalary);
+			if (keyWord == null)
+				keyWord = "";
+			if (specificDeadline == null)
+				specificDeadline = new Date(2524694400000L);
+			if (minSalary == null)
+				minSalary = 0.;
+			if (maxSalary == null)
+				maxSalary = 99999999.;
+
+			positions = this.finderRepository.findPosition(keyWord, specificDeadline, minSalary, maxSalary);
+		}
 
 		results = this.limitResults(positions);
+
 		return results;
 	}
 
