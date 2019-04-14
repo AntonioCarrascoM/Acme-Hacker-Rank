@@ -1,10 +1,11 @@
 
 package services;
 
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Random;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.validation.Validator;
 import repositories.ProblemRepository;
 import security.Authority;
 import domain.Company;
-import domain.Position;
 import domain.Problem;
 
 @Service
@@ -43,7 +43,6 @@ public class ProblemService {
 	public Problem create() {
 		final Problem p = new Problem();
 
-		p.setPositions(new ArrayList<Position>());
 		p.setCompany((Company) this.actorService.findByPrincipal());
 		p.setFinalMode(false);
 
@@ -61,9 +60,6 @@ public class ProblemService {
 
 	public Problem save(final Problem p) {
 		Assert.notNull(p);
-
-		//Assertion to make sure that the problem is not on final mode.
-		Assert.isTrue(p.getFinalMode() == false);
 
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == p.getCompany().getId());
@@ -102,7 +98,6 @@ public class ProblemService {
 		Assert.isTrue(result.getFinalMode() == false);
 
 		result.setTitle(p.getTitle());
-		result.setPositions(p.getPositions());
 		result.setStatement(p.getStatement());
 		result.setHint(p.getHint());
 		result.setAttachments(p.getAttachments());
@@ -113,17 +108,49 @@ public class ProblemService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
+		//Assertion to make sure that the attachments are URLs
+		if (result.getAttachments() != null && !result.getAttachments().isEmpty())
+			if (this.checkPictures(result.getAttachments()) == false)
+				throw new ConstraintDefinitionException();
+
 		//Assertion that the user modifying this task has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getCompany().getId());
 
 		return result;
 
 	}
+
+	//CheckPictures method
+	public boolean checkPictures(final String pictures) {
+		boolean result = true;
+		if (pictures != null)
+			if (!pictures.isEmpty()) {
+				final String[] splited = pictures.split(";");
+				for (final String s : splited)
+					if (!this.isURL(s))
+						result = false;
+			}
+		return result;
+	}
+	public boolean isURL(final String url) {
+		try {
+			new URL(url);
+			return true;
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+
 	//Other methods
 
 	//Retrieves the problems for a certain company
 	public Collection<Problem> problemsOfACompany(final int id) {
 		return this.problemRepository.problemsOfACompany(id);
+	}
+
+	//Retrieves the final problems for a certain company
+	public Collection<Problem> finalProblemsOfACompany(final int id) {
+		return this.problemRepository.finalProblemsOfACompany(id);
 	}
 
 	//Retrieves the problems for a certain problem

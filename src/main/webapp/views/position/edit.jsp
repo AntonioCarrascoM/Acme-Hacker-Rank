@@ -31,6 +31,9 @@
 <spring:message code="position.requiredTech" var="requiredTech" />
 <spring:message code="position.offeredSalary" var="offeredSalary" />
 <spring:message code="position.finalMode" var="finalMode" />
+<spring:message code="position.formatDate" var="formatDate" />
+<spring:message code="position.problems" var="problemsMsg" />
+<spring:message code="position.save" var="save" />
 <spring:message code="position.return" var="returnMsg" />
 
 <security:authorize access="hasRole('COMPANY')">
@@ -44,11 +47,17 @@
 		
 		<acme:textbox code="position.title" path="title"/>
 		<acme:textbox code="position.description" path="description"/>
-		<acme:textbox code="position.deadline" path="deadline" placeholder="dd/MM/yyyy HH:mm"/>
+		<acme:textbox code="position.deadline" path="deadline" placeholder="position.formatDate"/>
 		<acme:textbox code="position.requiredProfile" path="requiredProfile" />
 		<acme:textbox code="position.requiredSkills" path="requiredSkills" />
 		<acme:textbox code="position.requiredTech" path="requiredTech" />
-		<acme:textbox code="position.offeredSalary" path="offeredSalary" />
+		
+		<form:label path="offeredSalary">
+			<jstl:out value="${offeredSalary}"/>
+		</form:label>	
+		<form:input path="offeredSalary" pattern="(\d*)|(\d*.\d*)" placeholder="num."/>
+		<form:errors path="offeredSalary" cssClass="error" />
+		<br>
 		
 		<form:label path="finalMode">
 			<jstl:out value="${finalMode}" />:
@@ -61,12 +70,19 @@
 					label="YES"
 					value="true" />
 			</form:select>
+		<br>
+		<br>
+		<form:label path="problems">
+			<jstl:out value="${problemsMsg}" />:
+		</form:label>
+		<jstl:forEach items="${problems}" var = "item">
+          <form:checkbox path="problems" value="${item}"/><jstl:out value="${item.title}"/>
+      	</jstl:forEach>
 		<br><br>
 
 		<%-- Buttons --%>
 
-		<input type="submit" name="save" value="${save}"
-			onclick="return confirm('${confirm}')" />&nbsp;
+		<input type="submit" name="save" value="${save}"/>&nbsp;
 		
 		<acme:cancel url="welcome/index.do" code="position.cancel" />
 	</form:form>

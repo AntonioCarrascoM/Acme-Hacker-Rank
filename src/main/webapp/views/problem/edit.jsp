@@ -30,6 +30,7 @@
 <spring:message code="problem.company" var="company" />
 <spring:message code="problem.positions" var="positions" />
 <spring:message code="problem.return" var="returnMsg" />
+<spring:message code="problem.save" var="save" />
 
 <security:authorize access="hasRole('COMPANY')">
 
@@ -42,9 +43,8 @@
 		
 		<acme:textbox code="problem.title" path="title"/>
 		<acme:textbox code="problem.statement" path="statement"/>
-		<acme:textbox code="problem.vatNumber" path="vatNumber"/>
 		<acme:textbox code="problem.hint" path="hint" />
-		<acme:textbox code="problem.attachments" path="attachments" />
+		<acme:textarea code="problem.attachments" path="attachments" placeholder="problem.attachments.warning"/>
 		
 		<form:label path="finalMode">
 			<jstl:out value="${finalMode}" />:
@@ -59,14 +59,9 @@
 			</form:select>
 		<br><br>
 		
-		<acme:textbox code="problem.positions" path="positions" />
-		
-		<br />
-
 		<%-- Buttons --%>
 
-		<input type="submit" name="save" value="${save}"
-			onclick="return confirm('${confirm}')" />&nbsp;
+		<input type="submit" name="save" value="${save}"/>&nbsp;
 		
 		<acme:cancel url="welcome/index.do" code="problem.cancel" />
 	</form:form>
