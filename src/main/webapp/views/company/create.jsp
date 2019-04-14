@@ -28,6 +28,7 @@
 <spring:message code="company.name" var="name" />
 <spring:message code="company.surnames" var="surnames" />
 <spring:message code="company.vatNumber" var="vatNumber"/>
+<spring:message code="company.creditCard" var="creditCard" />
 <spring:message code="company.creditCard.holder" var="holder" />
 <spring:message code="company.creditCard.make" var="make" />
 <spring:message code="company.creditCard.number" var="number" />
@@ -77,17 +78,21 @@
 			<form:errors cssClass="error" path="secondPassword" />
 			<br />
 		
+		<acme:textbox code="company.commercialName" path="commercialName"/>
 		<acme:textbox code="company.name" path="name"/>
 		<acme:textbox code="company.surnames" path="surnames"/>
 		<acme:textbox code="company.vatNumber" path="vatNumber"/>
+		<fieldset>
+		<legend><jstl:out value="${creditCard}"/></legend>
 		<acme:textbox code="company.creditCard.holder" path="creditCard.holder" />
 		<acme:textbox code="company.creditCard.make" path="creditCard.make" />
 		<acme:textbox code="company.creditCard.number" path="creditCard.number" />
-		<acme:textbox code="company.creditCard.expMonth" path="creditCard.expMonth" />
-		<acme:textbox code="company.creditCard.expYear" path="creditCard.expYear" />
+		<acme:textbox code="company.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
+		<acme:textbox code="company.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
 		<acme:textbox code="company.creditCard.cvv" path="creditCard.cvv" />
+		</fieldset>
 		<acme:textbox code="company.photo" path="photo"/>
-		<acme:textbox code="company.email" path="email" placeholder="mail.ph"/>
+		<acme:textbox code="company.email" path="email" placeholder="company.mail.ph"/>
 		<acme:textbox code="company.phone" path="phone" placeholder="phone.ph"/>
 		<acme:textbox code="company.address" path="address"/>
 		<br>

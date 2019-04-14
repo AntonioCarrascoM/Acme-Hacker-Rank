@@ -81,10 +81,9 @@
 	
 	<br />
 	
-	<jstl:out value="${creditCard}" />
-	<br />
-	<br />
-		
+	<fieldset>
+	<legend><jstl:out value="${creditCard}" /></legend>
+	
 	<jstl:out value="${holder}" />:
 	<jstl:out value="${company.creditCard.holder}"/>
 	<br />
@@ -104,7 +103,7 @@
 	<jstl:out value="${cvv}" />:
 	<jstl:out value="${company.creditCard.cvv}"/>
 	<br />
-	
+	</fieldset>
   		
 	<a href="welcome/index.do"><jstl:out value="${returnMsg}" /></a>
 

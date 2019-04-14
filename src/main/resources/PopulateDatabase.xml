@@ -320,6 +320,12 @@
 		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="true"/>
  		<property name="company" ref="company1" />
+ 		<property name="problems">
+			<list>
+				<ref bean="problem1" />
+				<ref bean="problem2" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position2" class="domain.Position">
@@ -334,6 +340,11 @@
 		<property name="cancelled" value="false"/> 
 		<property name="finalMode" value="false"/>
  		<property name="company" ref="company1" />
+		<property name="problems">
+			<list>
+				<ref bean="problem3" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position3" class="domain.Position">
@@ -348,6 +359,12 @@
 		<property name="cancelled" value="true"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company2" />
+		<property name="problems">
+			<list>
+				<ref bean="problem4" />
+				<ref bean="problem5" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position4" class="domain.Position">
@@ -362,6 +379,10 @@
 		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="false"/>
 		<property name="company" ref="company1" />
+		<property name="problems">
+			<list>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position5" class="domain.Position">
@@ -376,6 +397,12 @@
 		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company3" />
+		<property name="problems">
+			<list>
+				<ref bean="problem6" />
+				<ref bean="problem7" />
+			</list>
+		</property>
 	</bean>
 	
 	<!-- Application beans -->
@@ -437,11 +464,6 @@
 		<property name="attachments" value="Here is the library: http://stringtopdf.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position1" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem2" class="domain.Problem">
@@ -451,11 +473,6 @@
 		<property name="attachments" value="Here is the code: http://codecreate.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position1" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem3" class="domain.Problem">
@@ -465,11 +482,6 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position2" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem4" class="domain.Problem">
@@ -479,11 +491,6 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="positions">
-			<list>
-				<ref bean="position3" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem5" class="domain.Problem">
@@ -493,11 +500,6 @@
 		<property name="attachments" value="Here is the git account: http://gitaccount.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="positions">
-			<list>
-				<ref bean="position3" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem6" class="domain.Problem">
@@ -507,11 +509,6 @@
 		<property name="attachments" value="Here is the image: http://imagelocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-				<ref bean="position5" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem7" class="domain.Problem">
@@ -521,11 +518,6 @@
 		<property name="attachments" value="Here is the pom link: http://pomlocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-				<ref bean="position5" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem8" class="domain.Problem">
@@ -535,10 +527,6 @@
 		<property name="attachments" value="Here is the link: I'm a link"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-			</list>
-		</property>
 	</bean>
 	
 	
@@ -700,9 +688,9 @@
 		<property name="banner"
 			value="https://i.imgur.com/7b8lu4b.png" />
 		<property name="welcomeES"
-			value="¡Bien-venidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
+			value="¡Bienvenidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		<property name="welcomeEN"
-			value="Welcome to Acme hacker Rank! We’re IT hacker’s favourite job marketplace!" />
+			value="Welcome to Acme hacker Rank! We're IT hacker's favourite job marketplace!" />
 		<property name="spamWords">
 			<list>
 				<value>sex</value>

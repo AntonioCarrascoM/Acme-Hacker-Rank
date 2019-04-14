@@ -31,7 +31,7 @@ public class PositionController extends AbstractController {
 		final ModelAndView result;
 		final Collection<Position> positions;
 
-		positions = this.positionService.findAll();
+		positions = this.positionService.getPublicPositions();
 
 		result = new ModelAndView("position/list");
 		result.addObject("positions", positions);
