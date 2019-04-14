@@ -28,6 +28,7 @@
 <spring:message code="administrator.name" var="name" />
 <spring:message code="administrator.surnames" var="surnames" />
 <spring:message code="administrator.vatNumber" var="vatNumber"/>
+<spring:message code="administrator.creditCard" var="creditCard" />
 <spring:message code="administrator.creditCard.holder" var="holder" />
 <spring:message code="administrator.creditCard.make" var="make" />
 <spring:message code="administrator.creditCard.number" var="number" />
@@ -81,12 +82,15 @@
 		<acme:textbox code="administrator.name" path="name"/>
 		<acme:textbox code="administrator.surnames" path="surnames"/>
 		<acme:textbox code="administrator.vatNumber" path="vatNumber"/>
+		<fieldset>
+		<legend><jstl:out value="${creditCard}"/></legend>
 		<acme:textbox code="administrator.creditCard.holder" path="creditCard.holder" />
 		<acme:textbox code="administrator.creditCard.make" path="creditCard.make" />
 		<acme:textbox code="administrator.creditCard.number" path="creditCard.number" />
-		<acme:textbox code="administrator.creditCard.expMonth" path="creditCard.expMonth" />
-		<acme:textbox code="administrator.creditCard.expYear" path="creditCard.expYear" />
+		<acme:textbox code="administrator.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
+		<acme:textbox code="administrator.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
 		<acme:textbox code="administrator.creditCard.cvv" path="creditCard.cvv" />
+		</fieldset>
 		<acme:textbox code="administrator.photo" path="photo"/>
 		<acme:textbox code="administrator.email" path="email" placeholder="mail.ph"/>
 		<acme:textbox code="administrator.phone" path="phone" placeholder="phone.ph"/>

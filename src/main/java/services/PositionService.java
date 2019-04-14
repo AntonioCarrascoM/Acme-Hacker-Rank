@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import repositories.PositionRepository;
 import security.Authority;
 import domain.Company;
 import domain.Position;
+import domain.Problem;
 
 @Service
 @Transactional
@@ -37,9 +39,6 @@ public class PositionService {
 	private ActorService		actorService;
 
 	@Autowired
-	private ProblemService		problemService;
-
-	@Autowired
 	private Validator			validator;
 
 
@@ -51,6 +50,7 @@ public class PositionService {
 		final Company c = (Company) this.actorService.findByPrincipal();
 		p.setCompany(c);
 		p.setTicker(this.generateTicker(p));
+		p.setProblems(new ArrayList<Problem>());
 		p.setFinalMode(false);
 		p.setCancelled(false);
 
@@ -82,7 +82,7 @@ public class PositionService {
 
 		//A position can only be final mode if it has at least 2 problems
 		if (p.getFinalMode() == true)
-			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsInFinalModeByPosition(p.getId()).size() >= 2);
+			Assert.isTrue(p.getFinalMode() == true && this.checkFinalProblems(p) == true);
 
 		final Position saved = this.positionRepository.save(p);
 
@@ -133,8 +133,8 @@ public class PositionService {
 		Assert.isTrue(result.getFinalMode() == false);
 
 		//A position can only be final mode if it has at least 2 problems
-		if (p.getFinalMode() == true)
-			Assert.isTrue(p.getFinalMode() == true && this.problemService.problemsInFinalModeByPosition(p.getId()).size() >= 2);
+		if (p.getFinalMode() == true && this.checkFinalProblems(p) == false)
+			throw new ConstraintDefinitionException();
 
 		result.setTitle(p.getTitle());
 		result.setDescription(p.getDescription());
@@ -144,6 +144,7 @@ public class PositionService {
 		result.setRequiredTech(p.getRequiredTech());
 		result.setOfferedSalary(p.getOfferedSalary());
 		result.setFinalMode(p.getFinalMode());
+		result.setProblems(p.getProblems());
 
 		this.validator.validate(result, binding);
 
@@ -199,6 +200,24 @@ public class PositionService {
 	//Generates both halves of the unique ticker and joins them with a dash.
 	public String generateTicker(final Position p) {
 		final String res = this.generateName(p) + "-" + this.generateNumber();
+		return res;
+	}
+
+	//Check final problems
+	public Boolean checkFinalProblems(final Position p) {
+		int count = 0;
+		Boolean res = false;
+		if (p.getProblems() == null || p.getProblems().isEmpty())
+			return res;
+		else
+			for (final Problem pr : p.getProblems()) {
+				if (pr.getFinalMode() == true)
+					count++;
+				if (count >= 2) {
+					res = true;
+					break;
+				}
+			}
 		return res;
 	}
 

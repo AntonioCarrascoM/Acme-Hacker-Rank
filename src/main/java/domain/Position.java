@@ -1,12 +1,14 @@
 
 package domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,20 +26,21 @@ public class Position extends DomainEntity {
 
 	//Attributes
 
-	private String	ticker;
-	private String	title;
-	private String	description;
-	private Date	deadline;
-	private String	requiredProfile;
-	private String	requiredSkills;
-	private String	requiredTech;
-	private Double	offeredSalary;
-	private Boolean	cancelled;
-	private Boolean	finalMode;
+	private String				ticker;
+	private String				title;
+	private String				description;
+	private Date				deadline;
+	private String				requiredProfile;
+	private String				requiredSkills;
+	private String				requiredTech;
+	private Double				offeredSalary;
+	private Boolean				cancelled;
+	private Boolean				finalMode;
 
 	//Relationships
 
-	private Company	company;
+	private Company				company;
+	private Collection<Problem>	problems;
 
 
 	//Getters
@@ -81,6 +84,7 @@ public class Position extends DomainEntity {
 	}
 
 	@Min(0)
+	@NotNull
 	public Double getOfferedSalary() {
 		return this.offeredSalary;
 	}
@@ -100,6 +104,12 @@ public class Position extends DomainEntity {
 	@ManyToOne(optional = false)
 	public Company getCompany() {
 		return this.company;
+	}
+
+	@Valid
+	@ManyToMany
+	public Collection<Problem> getProblems() {
+		return this.problems;
 	}
 
 	//Setters
@@ -145,5 +155,9 @@ public class Position extends DomainEntity {
 
 	public void setCancelled(final Boolean cancelled) {
 		this.cancelled = cancelled;
+	}
+
+	public void setProblems(final Collection<Problem> problems) {
+		this.problems = problems;
 	}
 }

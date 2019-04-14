@@ -16,11 +16,15 @@ public interface ProblemRepository extends JpaRepository<Problem, Integer> {
 	@Query("select pr from Problem pr where pr.company.id=?1")
 	Collection<Problem> problemsOfACompany(int id);
 
+	//Retrieves the final problems for a certain company
+	@Query("select pr from Problem pr where pr.company.id=?1 and pr.finalMode='1'")
+	Collection<Problem> finalProblemsOfACompany(int id);
+
 	//Retrieves the problems for a certain position
-	@Query("select pr from Problem pr join pr.positions p where pr.id=?1")
+	@Query("select p.problems from Position p where p.id=?1")
 	Collection<Problem> problemsOfAPosition(int id);
 
 	//Problems in final mode by position
-	@Query("select pr from Problem pr join pr.positions p where pr.finalMode='1' and p.id=?1")
+	@Query("select distinct p.problems from Position p join p.problems pr where pr.finalMode='1' and p.id=?1")
 	Collection<Problem> problemsInFinalModeByPosition(int id);
 }

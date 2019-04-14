@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 
 import javax.validation.ValidationException;
@@ -125,6 +126,17 @@ public class HackerService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
+		final int year = Calendar.getInstance().get(Calendar.YEAR);
+		final int month = Calendar.getInstance().get(Calendar.MONTH);
+
+		//Assertion to make sure that the credit card has a valid expiration date.
+		if (result.getCreditCard() != null) {
+			Assert.isTrue(result.getCreditCard().getExpYear() >= year);
+
+			if (result.getCreditCard().getExpYear() == year)
+				Assert.isTrue(result.getCreditCard().getExpMonth() >= month);
+		}
+
 		//Assertion that the email is valid according to the checkAdminEmail method.
 		Assert.isTrue(this.actorService.checkUserEmail(result.getEmail()));
 
@@ -154,6 +166,21 @@ public class HackerService {
 
 		this.validator.validate(result, binding);
 
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		final int year = Calendar.getInstance().get(Calendar.YEAR);
+		final int month = Calendar.getInstance().get(Calendar.MONTH);
+
+		//Assertion to make sure that the credit card has a valid expiration date.
+		if (result.getCreditCard() != null) {
+			Assert.isTrue(result.getCreditCard().getExpYear() >= year);
+
+			if (result.getCreditCard().getExpYear() == year)
+				Assert.isTrue(result.getCreditCard().getExpMonth() >= month);
+		}
+
+		//Assertion the user has the correct privilege
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getId());
 
 		//Assertion that the email is valid according to the checkAdminEmail method.

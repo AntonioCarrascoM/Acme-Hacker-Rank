@@ -28,6 +28,7 @@
 <spring:message code="problem.display" var="display" />
 <spring:message code="problem.return" var="msgReturn" />
 <spring:message code="problem.confirm" var="msgConfirm" />
+<spring:message code="problem.create" var="msgCreate" />
 <spring:message code="problem.edit" var="edit" />
 <spring:message code="problem.delete" var="delete" />
 
@@ -60,27 +61,36 @@
 	</spring:url>
 	
 	<spring:url var="displayUrl"
-		value="problem/display.do">
+		value="problem/company/display.do">
 		<spring:param name="varId"
 			value="${row.id}"/>
 	</spring:url>
 	
-	<display:column>
+	<display:column title="${edit}">
 		<jstl:if test="${row.finalMode eq false}">
 			<a href="${editUrl}"><jstl:out value="${edit}" /></a>
 		</jstl:if>
 	</display:column>
 	
-	<display:column>
+	<display:column title="${delete}">
 		<jstl:if test="${row.finalMode eq false}">
 			<a href="${deleteUrl}" onclick="return confirm('${msgConfirm}')"><jstl:out value="${delete}" /></a>
 		</jstl:if>
 	</display:column>
 	
-	<display:column>
+	<display:column title="${display}">
 			<a href="${displayUrl}"><jstl:out value="${display}" /></a>
 	</display:column>
 
 </display:table>
+
+<security:authorize access="hasRole('COMPANY')">
+<spring:url var="createUrl"
+		value="problem/company/create.do">
+	</spring:url>
+	<a href="${createUrl}"><jstl:out value="${msgCreate}" /></a>
+	<br>
+	</security:authorize>
+	
 <a href="welcome/index.do"><jstl:out value="${msgReturn}" /></a>
 
