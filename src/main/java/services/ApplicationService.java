@@ -210,4 +210,8 @@ public class ApplicationService {
 		return this.applicationRepository.avgMinMaxStddevApplicationsPerHacker();
 	}
 
+	public void flush() {
+		this.applicationRepository.flush();
+	}
+
 }
