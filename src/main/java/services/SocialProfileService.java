@@ -97,4 +97,7 @@ public class SocialProfileService {
 	public Collection<SocialProfile> socialProfilesFromActor(final int actorId) {
 		return this.socialProfileRepository.socialProfilesFromActor(actorId);
 	}
+	public void flush() {
+		this.socialProfileRepository.flush();
+	}
 }

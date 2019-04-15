@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import controllers.AbstractController;
-
 import services.ActorService;
 import services.SocialProfileService;
+import controllers.AbstractController;
 import domain.SocialProfile;
 
 @Controller
@@ -30,6 +29,22 @@ public class SocialProfileController extends AbstractController {
 	@Autowired
 	private ActorService			actorService;
 
+
+	//Display
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int varId) {
+		ModelAndView result;
+		SocialProfile socialProfile;
+
+		socialProfile = this.socialProfileService.findOne(varId);
+
+		result = new ModelAndView("socialProfile/display");
+		result.addObject("socialProfile", socialProfile);
+		result.addObject("requestURI", "socialProfile/display.do");
+
+		return result;
+	}
 
 	//Listing
 
@@ -63,11 +78,11 @@ public class SocialProfileController extends AbstractController {
 	//Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int socialProfileId) {
+	public ModelAndView edit(@RequestParam final int varId) {
 		final ModelAndView result;
 		SocialProfile socialProfile;
 
-		socialProfile = this.socialProfileService.findOne(socialProfileId);
+		socialProfile = this.socialProfileService.findOne(varId);
 		Assert.notNull(socialProfile);
 		result = this.createEditModelAndView(socialProfile);
 
@@ -117,7 +132,7 @@ public class SocialProfileController extends AbstractController {
 	//Delete
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam final int socialProfileId) {
+	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
 		Collection<SocialProfile> socialProfiles;
 		SocialProfile socialProfile;
@@ -125,7 +140,7 @@ public class SocialProfileController extends AbstractController {
 		result = new ModelAndView("socialProfile/list");
 		socialProfiles = this.socialProfileService.socialProfilesFromActor(this.actorService.findByPrincipal().getId());
 
-		socialProfile = this.socialProfileService.findOne(socialProfileId);
+		socialProfile = this.socialProfileService.findOne(varId);
 		if (socialProfile.getActor().getId() != this.actorService.findByPrincipal().getId())
 			result.addObject("message", "socialProfile.delete.error");
 		else
