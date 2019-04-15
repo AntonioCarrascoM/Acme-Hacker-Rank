@@ -17,7 +17,7 @@
 <tiles-definitions>
 
 	<definition name="positionData/display" extends="master.page">	
-		<put-attribute name="title" value="Position data" />
+		<put-attribute name="title" value="Display position data" />
 		<put-attribute name="body" value="/views/positionData/display.jsp" />
 	</definition>
 	
@@ -32,7 +32,7 @@
 	</definition>
 	
 	<definition name="positionData/edit" extends="master.page">
-		<put-attribute name="title" value="Position data edit" />
+		<put-attribute name="title" value="Edit position data " />
 		<put-attribute name="body" value="/views/positionData/edit.jsp" />
 	</definition>
 	

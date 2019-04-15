@@ -26,6 +26,7 @@
 <spring:message code="message.sent" var="sent" />
 <spring:message code="message.recipient" var="recipient" />
 <spring:message code="message.sender" var="sender" />
+<spring:message code="message.tags" var="tags" />
 <spring:message code="message.subject" var="subject" />
 <spring:message code="message.display" var="display" />
 <spring:message code="message.confirm.delete" var="confirm" />
@@ -49,10 +50,11 @@
 			<fmt:formatDate value="${row.sent}" pattern="${formatDate}"/>
 	</display:column>
 	
-	<display:column property="subject" title="${subject}" sortable="true" />
+	<display:column property="subject" title="${subject}" />
 
-	<display:column property="sender.name" title="${sender}"
-		sortable="true" />
+	<display:column property="sender.name" title="${sender}"/>
+	
+	<display:column property="tags" title="${tags}"/>
 
 	<%-- Links towards display, apply, edit and cancel views --%>
 

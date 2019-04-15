@@ -23,12 +23,13 @@
 
 <spring:message code="positionData.title" var="title" />
 <spring:message code="positionData.description" var="description" />
-
+<spring:message code="positionData.edit" var="edit" />
+<spring:message code="positionData.create" var="create" />
 <spring:message code="positionData.return" var="return" />
 <spring:message code="positionData.details" var="details" />
-<spring:message code="positionData.create" var="msgCreate" />
 
 <%-- Listing grid --%>
+<security:authorize access="hasRole('HACKER')">
 
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="positionDatas" requestURI="${requestURI}" id="row">
@@ -36,12 +37,22 @@
 	<%-- Attributes --%>
 	
 	
-	<display:column property="title" title="${title}" sortable="true" />
+	<display:column property="title" title="${title}"/>
 	
-	<display:column property="description" title="${description}" sortable="true" />
+	<display:column property="description" title="${description}"  />
 
 
 	<%-- Links towards display, apply, edit and cancel views --%>
+	
+	<spring:url var="editUrl"
+		value="positionData/hacker/edit.do">
+		<spring:param name="varId"
+			value="${row.id}"/>
+	</spring:url>
+
+	<display:column title="${edit}">
+	<a href="${editUrl}"><jstl:out value="${edit}" /></a>
+	</display:column>
 	
 	<spring:url var="displayUrl"
 		value="positionData/hacker/display.do">
@@ -52,12 +63,14 @@
 	<display:column title="${details}">
 	<a href="${displayUrl}"><jstl:out value="${details}" /></a>
 	</display:column>
+	
+	
 
 </display:table>
 
-<security:authorize access="hasRole('HACKER')">
-	<spring:url var="createUrl"
-		value="positionData/hacker/create.do">
+	<spring:url var="createUrl" value="positionData/hacker/create.do">
+		<spring:param name="varId" value="${curriculum.id}" />
 	</spring:url>
-	<a href="${createUrl}"><jstl:out value="${msgCreate}" /></a>
+	<a href="${createUrl}"><jstl:out value="${create}"/></a>
+	
 </security:authorize>

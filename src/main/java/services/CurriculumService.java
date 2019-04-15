@@ -90,7 +90,7 @@ public class CurriculumService {
 
 		if (this.getPersonalDataForCurriculum(c.getId()) != null)
 			this.personalDataService.delete(this.getPersonalDataForCurriculum(c.getId()));
-		//
+
 		if (!(this.getPositionDataForCurriculum(c.getId()).isEmpty()))
 			for (final PositionData pd : this.getPositionDataForCurriculum(c.getId()))
 				this.positionDataService.delete(pd);

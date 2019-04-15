@@ -28,7 +28,7 @@
 <spring:message code="positionData.return" var="msgReturn" />
 <spring:message code="positionData.formatDate" var="formatDate"/>
 
-
+<security:authorize access="hasRole('HACKER')">
 
 	<%-- For the curriculum in the list received as model, display the following information: --%>
 	<jstl:out value="${msgTitle}" />:
@@ -47,16 +47,5 @@
 	<fmt:formatDate value="${positionData.endDate}" pattern="${formatDate}"/>
 	<br />
 	
-	
-	
-	
-<security:authorize access="hasRole('HACKER')">
-	<spring:url var="editUrl"
-		value="positionData/hacker/edit.do">
-		<spring:param name="positionDataId"
-			value="${positionData.id}"/>
-	</spring:url>
-	<a href="${editUrl}"><jstl:out value="${msgEdit}" /></a>
-</security:authorize>
 
-<a href="#"><jstl:out value="${msgReturn}" /></a>
+</security:authorize>
