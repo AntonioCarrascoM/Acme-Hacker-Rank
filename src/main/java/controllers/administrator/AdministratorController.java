@@ -13,6 +13,7 @@ package controllers.administrator;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,6 +110,8 @@ public class AdministratorController extends AbstractController {
 
 		try {
 			administrator = this.administratorService.reconstructPruned(administrator, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.editModelAndView(administrator, "administrator.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.editModelAndView(administrator);
 		} catch (final Throwable oops) {
@@ -130,6 +133,8 @@ public class AdministratorController extends AbstractController {
 
 		try {
 			administrator = this.administratorService.reconstruct(foa, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.createEditModelAndView(foa, "administrator.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(foa, "administrator.validation.error");
 		} catch (final Throwable oops) {

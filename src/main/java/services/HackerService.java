@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,14 +128,14 @@ public class HackerService {
 			throw new ValidationException();
 
 		final int year = Calendar.getInstance().get(Calendar.YEAR);
-		final int month = Calendar.getInstance().get(Calendar.MONTH);
+		final int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 
 		//Assertion to make sure that the credit card has a valid expiration date.
 		if (result.getCreditCard() != null) {
-			Assert.isTrue(result.getCreditCard().getExpYear() >= year);
-
-			if (result.getCreditCard().getExpYear() == year)
-				Assert.isTrue(result.getCreditCard().getExpMonth() >= month);
+			if (result.getCreditCard().getExpYear() < year)
+				throw new ConstraintDefinitionException();
+			if (result.getCreditCard().getExpYear() == year && result.getCreditCard().getExpMonth() < month)
+				throw new ConstraintDefinitionException();
 		}
 
 		//Assertion that the email is valid according to the checkAdminEmail method.
@@ -170,14 +171,14 @@ public class HackerService {
 			throw new ValidationException();
 
 		final int year = Calendar.getInstance().get(Calendar.YEAR);
-		final int month = Calendar.getInstance().get(Calendar.MONTH);
+		final int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 
 		//Assertion to make sure that the credit card has a valid expiration date.
 		if (result.getCreditCard() != null) {
-			Assert.isTrue(result.getCreditCard().getExpYear() >= year);
-
-			if (result.getCreditCard().getExpYear() == year)
-				Assert.isTrue(result.getCreditCard().getExpMonth() >= month);
+			if (result.getCreditCard().getExpYear() < year)
+				throw new ConstraintDefinitionException();
+			if (result.getCreditCard().getExpYear() == year && result.getCreditCard().getExpMonth() < month)
+				throw new ConstraintDefinitionException();
 		}
 
 		//Assertion the user has the correct privilege

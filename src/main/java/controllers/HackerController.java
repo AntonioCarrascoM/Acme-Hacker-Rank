@@ -3,6 +3,7 @@ package controllers;
 
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,8 @@ public class HackerController extends AbstractController {
 
 		try {
 			hacker = this.hackerService.reconstruct(foh, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.createEditModelAndView(foh, "hacker.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(foh, "hacker.validation.error");
 		} catch (final Throwable oops) {
@@ -92,6 +95,8 @@ public class HackerController extends AbstractController {
 
 		try {
 			hacker = this.hackerService.reconstructPruned(hacker, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.editModelAndView(hacker, "hacker.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.editModelAndView(hacker);
 		} catch (final Throwable oops) {

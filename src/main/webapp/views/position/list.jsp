@@ -33,7 +33,7 @@
 <spring:message code="position.confirm" var="msgConfirm" />
 <spring:message code="position.create" var="msgCreate" />
 <spring:message code="position.cancel" var="cancel" />
-<spring:message code="position.formatDate" var="formatDate" />
+<spring:message code="position.formatDate.pattern" var="formatDate" />
 
 <jsp:useBean id="now" class="java.util.Date"/>
 
