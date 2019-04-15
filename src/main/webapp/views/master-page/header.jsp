@@ -47,6 +47,9 @@
 									code="master.page.actor.edit" /></a></li>
 					</security:authorize>
 					
+					<li><a href="message/list.do"><spring:message
+								code="master.page.message.list" /> </a></li>
+					
 					<li><a href="socialProfile/list.do"><spring:message
 								code="master.page.socialProfile" /> </a></li>
 								
