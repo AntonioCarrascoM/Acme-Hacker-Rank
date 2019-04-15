@@ -216,6 +216,8 @@ public class MessageService {
 		result.setSubject(m.getSubject());
 		result.setBody(m.getBody());
 		result.setTags(m.getTags());
+		if (!this.actorService.findAll().isEmpty())
+			result.setRecipient(this.actorService.findAll().iterator().next());
 
 		this.validator.validate(result, binding);
 
@@ -228,7 +230,6 @@ public class MessageService {
 		return result;
 
 	}
-
 	//Listing of the messages sent by a certain actor.
 	public Collection<Message> sentMessagesForActor(final int id) {
 		return this.messageRepository.sentMessagesForActor(id);
