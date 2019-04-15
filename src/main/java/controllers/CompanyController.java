@@ -3,6 +3,7 @@ package controllers;
 
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,8 @@ public class CompanyController extends AbstractController {
 
 		try {
 			company = this.companyService.reconstruct(foc, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.createEditModelAndView(foc, "company.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(foc, "company.validation.error");
 		} catch (final Throwable oops) {
@@ -126,6 +129,8 @@ public class CompanyController extends AbstractController {
 
 		try {
 			company = this.companyService.reconstructPruned(company, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.editModelAndView(company, "company.expirationDate.error");
 		} catch (final ValidationException oops) {
 			return this.editModelAndView(company);
 		} catch (final Throwable oops) {
