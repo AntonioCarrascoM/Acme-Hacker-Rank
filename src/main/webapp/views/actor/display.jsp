@@ -19,58 +19,58 @@
 
 <%-- Stored message variables --%>
 
-<spring:message code="hacker.name" var="name" />
-<spring:message code="hacker.surnames" var="surnames" />
-<spring:message code="hacker.vatNumber" var="vatNumber" />
-<spring:message code="hacker.creditCard" var="creditCard" />
-<spring:message code="hacker.creditCard.holder" var="holder" />
-<spring:message code="hacker.creditCard.make" var="make" />
-<spring:message code="hacker.creditCard.expMonth" var="expMonth" />
-<spring:message code="hacker.creditCard.expYear" var="expYear" />
-<spring:message code="hacker.creditCard.cvv" var="cvv" />
-<spring:message code="hacker.photo" var="photo" />
-<spring:message code="hacker.email" var="email" />
-<spring:message code="hacker.phone" var="phone" />
-<spring:message code="hacker.address" var="address" />
-<spring:message code="hacker.spammer" var="spammer" />
-<spring:message code="hacker.Tspammer" var="Tspammer" />
-<spring:message code="hacker.Fspammer" var="Fspammer" />
+<spring:message code="actor.name" var="name" />
+<spring:message code="actor.surnames" var="surnames" />
+<spring:message code="actor.vatNumber" var="vatNumber" />
+<spring:message code="actor.creditCard" var="creditCard" />
+<spring:message code="actor.creditCard.holder" var="holder" />
+<spring:message code="actor.creditCard.make" var="make" />
+<spring:message code="actor.creditCard.expMonth" var="expMonth" />
+<spring:message code="actor.creditCard.expYear" var="expYear" />
+<spring:message code="actor.creditCard.cvv" var="cvv" />
+<spring:message code="actor.photo" var="photo" />
+<spring:message code="actor.email" var="email" />
+<spring:message code="actor.phone" var="phone" />
+<spring:message code="actor.address" var="address" />
+<spring:message code="actor.spammer" var="spammer" />
+<spring:message code="actor.Tspammer" var="Tspammer" />
+<spring:message code="actor.Fspammer" var="Fspammer" />
 
-<spring:message code="hacker.return" var="returnMsg" />
+<spring:message code="actor.return" var="returnMsg" />
 
-
+	<security:authorize access="hasRole('ADMIN')" >
 	
-	<%-- Displays the information of the selected hacker --%>
+	<%-- Displays the information of the selected actor --%>
 	
 	<jstl:out value="${name}" />:
-	<jstl:out value="${hacker.name}"/>
+	<jstl:out value="${actor.name}"/>
 	<br />
 	
 	<jstl:out value="${surnames}" />:
-	<jstl:out value="${hacker.surnames}"/>
+	<jstl:out value="${actor.surnames}"/>
 	<br />
 	
 	<jstl:out value="${vatNumber}" />:
-	<jstl:out value="${hacker.vatNumber}"/>
+	<jstl:out value="${actor.vatNumber}"/>
 	<br />
 	
 	<jstl:out value="${photo}" />:
-	<a href="${hacker.photo}"><jstl:out value="${hacker.photo}"/></a>
+	<a href="${actor.photo}"><jstl:out value="${actor.photo}"/></a>
 	<br />
 	
 	<jstl:out value="${email}" />:
-	<jstl:out value="${hacker.email}"/>
+	<jstl:out value="${actor.email}"/>
 	<br />
 	
 	<jstl:out value="${phone}" />:
-	<jstl:out value="${hacker.phone}"/>
+	<jstl:out value="${actor.phone}"/>
 	<br />
 	
 	<jstl:out value="${address}" />:
-	<jstl:out value="${hacker.address}"/>
+	<jstl:out value="${actor.address}"/>
 	<br />
 	
-	<security:authorize access="hasRole('ADMIN')" >
+
 	<jstl:if test="${actor.evaluated eq true}">
 	<jstl:out value="${spammer}" />:
 	<jstl:if test="${actor.spammer eq true}">
@@ -86,7 +86,7 @@
 	<jstl:out value="N/A"/>
 	<br />
 	</jstl:if>
-  	</security:authorize>
+  	
 	
 	<br />
 	
@@ -94,25 +94,26 @@
 	<legend><jstl:out value="${creditCard}" /></legend>
 	
 	<jstl:out value="${holder}" />:
-	<jstl:out value="${hacker.creditCard.holder}"/>
+	<jstl:out value="${actor.creditCard.holder}"/>
 	<br />
 	
 	<jstl:out value="${make}" />:
-	<jstl:out value="${hacker.creditCard.make}"/>
+	<jstl:out value="${actor.creditCard.make}"/>
 	<br />
 	
 	<jstl:out value="${expMonth}" />:
-	<jstl:out value="${hacker.creditCard.expMonth}"/>
+	<jstl:out value="${actor.creditCard.expMonth}"/>
 	<br />
 	
 	<jstl:out value="${expYear}" />:
-	<jstl:out value="${hacker.creditCard.expYear}"/>
+	<jstl:out value="${actor.creditCard.expYear}"/>
 	<br />
 	
 	<jstl:out value="${cvv}" />:
-	<jstl:out value="${hacker.creditCard.cvv}"/>
+	<jstl:out value="${actor.creditCard.cvv}"/>
 	<br />
 	</fieldset>
   		
-	<a href="welcome/index.do"><jstl:out value="${returnMsg}" /></a>
+	<a href="administrator/bannableList.do"><jstl:out value="${returnMsg}" /></a>
 
+</security:authorize>

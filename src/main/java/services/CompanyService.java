@@ -52,6 +52,7 @@ public class CompanyService {
 
 		final Company company = new Company();
 		company.setSpammer(false);
+		company.setEvaluated(false);
 		company.setUserAccount(account);
 
 		return company;

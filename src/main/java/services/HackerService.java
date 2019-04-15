@@ -52,6 +52,7 @@ public class HackerService {
 
 		final Hacker hacker = new Hacker();
 		hacker.setSpammer(false);
+		hacker.setEvaluated(false);
 		hacker.setUserAccount(account);
 
 		return hacker;
