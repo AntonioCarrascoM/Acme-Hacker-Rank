@@ -151,6 +151,7 @@
 		<property name="phone" value="639854163" />
 		<property name="address" value="c/Sevilla 34" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount1" />
 	</bean>
 	
@@ -166,6 +167,8 @@
 		<property name="email" value="luigargal@gmail.com" />
 		<property name="phone" value="637754163" />
 		<property name="address" value="c/Tabladilla 12" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="CodeLuis" />
 		<property name="userAccount" ref="userAccount2" />
 	</bean>
@@ -181,6 +184,7 @@
 		<property name="phone" value="666654163" />
 		<property name="address" value="c/Almendro 13" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="Informatic Profesionals Marmor" />
 		<property name="userAccount" ref="userAccount3" />
 	</bean>
@@ -196,6 +200,7 @@
 		<property name="phone" value="639857821" />
 		<property name="address" value="c/Tarfia 63" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="High Mountain Computers" />
 		<property name="userAccount" ref="userAccount4" />
 	</bean>
@@ -212,6 +217,8 @@
 		<property name="email" value="kristocha@gmail.com" />
 		<property name="phone" value="637110163" />
 		<property name="address" value="c/Tabladilla 2" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount5" />
 	</bean>
 	
@@ -225,6 +232,8 @@
 		<property name="email" value="tammysully@gmail.com" />
 		<property name="phone" value="600110163" />
 		<property name="address" value="c/America 27" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount6" />
 	</bean>
 	
@@ -238,6 +247,8 @@
 		<property name="email" value="kevinmene@gmail.com" />
 		<property name="phone" value="637690163" />
 		<property name="address" value="c/Pakistan 8" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount7" />
 	</bean>
 	
