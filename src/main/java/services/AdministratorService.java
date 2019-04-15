@@ -51,6 +51,7 @@ public class AdministratorService {
 
 		final Administrator administrator = new Administrator();
 		administrator.setSpammer(false);
+		administrator.setEvaluated(false);
 		administrator.setUserAccount(account);
 
 		return administrator;

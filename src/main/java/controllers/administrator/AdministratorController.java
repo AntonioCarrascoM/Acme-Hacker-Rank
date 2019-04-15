@@ -171,13 +171,38 @@ public class AdministratorController extends AbstractController {
 
 		return result;
 	}
-	//Listing suspicious actors
 
+	//Flag spam
+	@RequestMapping(value = "/flagSpam", method = RequestMethod.GET)
+	public ModelAndView flagSpam() {
+		final ModelAndView result;
+
+		this.actorService.flagSpammers();
+
+		result = new ModelAndView("redirect:/administrator/bannableList.do");
+
+		return result;
+	}
+
+	//Display actor
+	@RequestMapping(value = "/actorDisplay", method = RequestMethod.GET)
+	public ModelAndView actorDisplay(@RequestParam final int varId) {
+		final ModelAndView result;
+
+		final Actor actor = this.actorService.findOne(varId);
+
+		result = new ModelAndView("actor/display");
+		result.addObject("actor", actor);
+
+		return result;
+	}
+
+	//Listing suspicious actors
 	@RequestMapping(value = "/bannableList", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
 
-		final Collection<Actor> actors = this.actorService.bannableActors();
+		final Collection<Actor> actors = this.actorService.spammerActors();
 
 		result = new ModelAndView("administrator/bannableList");
 		result.addObject("actors", actors);

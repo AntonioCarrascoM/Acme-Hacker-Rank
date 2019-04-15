@@ -34,6 +34,8 @@
 <spring:message code="company.phone" var="phone" />
 <spring:message code="company.address" var="address" />
 <spring:message code="company.spammer" var="spammer" />
+<spring:message code="company.Tspammer" var="Tspammer" />
+<spring:message code="company.Fspammer" var="Fspammer" />
 
 <spring:message code="company.return" var="returnMsg" />
 
@@ -74,9 +76,21 @@
 	<br />
 	
 	<security:authorize access="hasRole('ADMIN')" >
+	<jstl:if test="${actor.evaluated eq true}">
 	<jstl:out value="${spammer}" />:
-	<jstl:out value="${company.spammer}"/>
+	<jstl:if test="${actor.spammer eq true}">
+	<jstl:out value="${Tspammer}"/>
+	</jstl:if>
+	<jstl:if test="${actor.spammer eq false}">
+	<jstl:out value="${Fspammer}"/>
+	</jstl:if>
 	<br />
+	</jstl:if>
+	<jstl:if test="${actor.evaluated eq false}">
+	<jstl:out value="${spammer}" />:
+	<jstl:out value="N/A"/>
+	<br />
+	</jstl:if>
   	</security:authorize>
 	
 	<br />

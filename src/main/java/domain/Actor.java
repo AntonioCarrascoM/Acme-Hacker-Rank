@@ -30,6 +30,7 @@ public class Actor extends DomainEntity {
 	private String		phone;
 	private String		address;
 	private boolean		spammer;
+	private boolean		evaluated;
 
 	//Relationships
 
@@ -81,6 +82,10 @@ public class Actor extends DomainEntity {
 		return this.spammer;
 	}
 
+	public boolean isEvaluated() {
+		return this.evaluated;
+	}
+
 	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
 	public UserAccount getUserAccount() {
@@ -127,5 +132,9 @@ public class Actor extends DomainEntity {
 
 	public void setSpammer(final boolean spammer) {
 		this.spammer = spammer;
+	}
+
+	public void setEvaluated(final boolean evaluated) {
+		this.evaluated = evaluated;
 	}
 }
