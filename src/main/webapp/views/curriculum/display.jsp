@@ -236,7 +236,7 @@
 	<spring:url var="createMiscellaneousDataUrl" value="miscellaneousData/hacker/create.do">
 		<spring:param name="varId" value="${curriculum.id}" />
 	</spring:url>
-	<a href="${createMiscellaneousDataUrl}" onclick="return confirm('${confirm}')" ><jstl:out value="${createMiscellaneousData}"/></a>
+	<a href="${createMiscellaneousDataUrl}"><jstl:out value="${createMiscellaneousData}"/></a>
 	
 	<br>
 

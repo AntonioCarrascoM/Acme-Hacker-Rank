@@ -5,13 +5,13 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.ApplicationService;
 import services.CurriculumService;
 import controllers.AbstractController;
 import domain.Curriculum;
@@ -33,6 +33,9 @@ public class CurriculumHackerController extends AbstractController {
 	@Autowired
 	private ActorService		actorService;
 
+	@Autowired
+	private ApplicationService	applicationService;
+
 
 	//Creation
 
@@ -44,80 +47,33 @@ public class CurriculumHackerController extends AbstractController {
 		return new ModelAndView("redirect:list.do");
 	}
 
-	//Edition
-
-	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int curriculumId) {
-		final ModelAndView result;
-		Curriculum curriculum;
-
-		curriculum = this.curriculumService.findOne(curriculumId);
-
-		if (curriculum == null || curriculum.getHacker().getId() != this.actorService.findByPrincipal().getId())
-			return new ModelAndView("redirect:/welcome/index.do");
-
-		result = this.createEditModelAndView(curriculum);
-
-		return result;
-	}
-	//Edit POST
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(Curriculum curriculum, final BindingResult binding) {
-		ModelAndView result;
-
-		try {
-			curriculum = this.curriculumService.reconstruct(curriculum, binding);
-		} catch (final Throwable oops) {
-			return result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
-		}
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(curriculum);
-		else
-			try {
-				this.curriculumService.save(curriculum);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
-			}
-		return result;
-	}
-
-	//Delete POST
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(Curriculum curriculum, final BindingResult binding) {
-		ModelAndView result;
-
-		curriculum = this.curriculumService.findOne(curriculum.getId());
-
-		try {
-			this.curriculumService.delete(curriculum);
-			result = new ModelAndView("redirect:list.do");
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
-		}
-		return result;
-	}
-
 	//Deleting
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int varId) {
-		ModelAndView result;
+		ModelAndView result = new ModelAndView("curriculum/list");
+
+		final Hacker h = (Hacker) this.actorService.findByPrincipal();
+		final Collection<Curriculum> curriculums = this.curriculumService.getCurriculumsForHacker(h.getId());
+
 		final Curriculum curriculum = this.curriculumService.findOne(varId);
 
 		if (curriculum == null || curriculum.getHacker().getId() != this.actorService.findByPrincipal().getId())
 			return new ModelAndView("redirect:/welcome/index.do");
 
+		if (!this.applicationService.applicationsWithCurriculum(curriculum.getId()).isEmpty()) {
+			result.addObject("curriculums", curriculums);
+			result.addObject("message", "curriculum.delete.error");
+			return result;
+		}
 		try {
 			this.curriculumService.delete(curriculum);
-			result = new ModelAndView("redirect:/curriculum/list.do");
-
+			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
+			result.addObject("curriculums", curriculums);
+			result.addObject("message", "curriculum.commit.error");
 		}
 		return result;
 	}
-
 	//Listing
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -167,25 +123,4 @@ public class CurriculumHackerController extends AbstractController {
 		return result;
 	}
 
-	//Ancillary methods
-
-	protected ModelAndView createEditModelAndView(final Curriculum curriculum) {
-		ModelAndView result;
-
-		result = this.createEditModelAndView(curriculum, null);
-
-		return result;
-	}
-
-	protected ModelAndView createEditModelAndView(final Curriculum curriculum, final String messageCode) {
-		ModelAndView result;
-
-		result = new ModelAndView("curriculum/edit");
-		result.addObject("curriculum", curriculum);
-		result.addObject("message", messageCode);
-		result.addObject("requestURI", "curriculum/edit.do");
-
-		return result;
-
-	}
 }
