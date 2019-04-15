@@ -17,22 +17,22 @@
 <tiles-definitions>
 
 	<definition name="educationData/display" extends="master.page">
-		<put-attribute name="title" value="Información de educación" />
+		<put-attribute name="title" value="Mostrar título académico" />
 		<put-attribute name="body" value="/views/educationData/display.jsp" />
 	</definition>
 
 	<definition name="educationData/list" extends="master.page">
-		<put-attribute name="title" value="Lista de información de educación" />
+		<put-attribute name="title" value="Lista de títulos académicos" />
 		<put-attribute name="body" value="/views/educationData/list.jsp" />
 	</definition>
 	
 	<definition name="educationData/create" extends="master.page">	
-		<put-attribute name="title" value="Crear información de educación" />
+		<put-attribute name="title" value="Crear título académico" />
 		<put-attribute name="body" value="/views/educationData/edit.jsp" />
 	</definition>
 	
 	<definition name="educationData/edit" extends="master.page">
-		<put-attribute name="title" value="Editar información de educación" />
+		<put-attribute name="title" value="Editar título académico" />
 		<put-attribute name="body" value="/views/educationData/edit.jsp" />
 	</definition>
 

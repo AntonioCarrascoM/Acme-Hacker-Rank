@@ -17,7 +17,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
-	
+
 
 
 <%-- Stored message variables --%>
@@ -26,7 +26,11 @@
 <spring:message code="personalData.statement" var="statement" />
 <spring:message code="personalData.phoneNumber" var="phoneNumber" />
 <spring:message code="personalData.gitHubProfile" var="gitHubProfile" />
-<spring:message code="personalData.linkedInProfile" var="linkedInProfile" />
+<spring:message code="personalData.linkedInProfile"
+	var="linkedInProfile" />
+	<spring:message code="personalData.phone.pattern1" var="phonePattern1" />
+<spring:message code="personalData.phone.pattern2" var="phonePattern2" />
+<spring:message code="personalData.phone.warning" var="phoneWarning" />
 <spring:message code="personalData.save" var="save" />
 <spring:message code="personalData.delete" var="delete" />
 <spring:message code="personalData.cancel" var="cancel" />
@@ -39,53 +43,46 @@
 		<%-- Forms --%>
 
 		<form:hidden path="id" />
-		<form:hidden path="version" />
 		<form:hidden path="curriculum" />
 		
+		<acme:textbox code="personalData.fullName" path="fullName" />
+		<br />
 		
-		<acme:textbox code="personalData.fullName" path="fullName"/>
-		<acme:textbox code="personalData.statement" path="statement"/>
-		
-		<acme:textbox 
-	     placeholder="personalData.phnumber"
-		 code = "personalData.phoneNumber" 
-		 path="phoneNumber"/>
-		 <br/>
-		 
-		 
-		 <acme:textbox 
-	     placeholder="personalData.phgithub"
-		 code = "personalData.gitHubProfile" 
-		 path="gitHubProfile"/>
-		 <br/>
-		 
-		 <acme:textbox 
-	     placeholder="personalData.phlinkedIn"
-		 code = "personalData.linkedInProfile" 
-		 path="linkedInProfile"/>
-		 <br/>
-		
-			
+		<acme:textarea code="personalData.statement" path="statement" />
+		<br />
 
-	
+		<acme:textbox placeholder="personalData.phnumber"
+			code="personalData.phoneNumber" path="phoneNumber" />*
+		<br />
 
 
+		<acme:textbox code="personalData.gitHubProfile" path="gitHubProfile" />
+		<br />
+
+		<acme:textbox code="personalData.linkedInProfile"
+			path="linkedInProfile" />
+		<br />
+		
+		<jstl:out value="${phoneWarning}" />
+		<br />
+		<jstl:out value="${phonePattern1}" />
+		<br />
+		<jstl:out value="${phonePattern2}" />
+		<br />
+		<br />
 
 		<%-- Buttons --%>
 
-		<acme:submit code="personalData.save" name="save" />
+		<acme:submit  name="save" code="personalData.save"/>
 
-		
-	<jstl:if test="${personalData.id!=0}">
+		<jstl:if test="${personalData.id!=0}">
 			<input type="submit" name="delete" value="${delete}"
 				onclick="return confirm('${confirm}')" />&nbsp;
 	</jstl:if>
 
-	<acme:cancel url="welcome/index.do" code="personalData.cancel" />
+		<acme:cancel url="curriculum/hacker/list.do" code="personalData.cancel" />
 
-		
-
-</form:form>
+	</form:form>
 
 </security:authorize>
 

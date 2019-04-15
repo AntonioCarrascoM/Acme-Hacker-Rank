@@ -17,22 +17,22 @@
 <tiles-definitions>
 
 		<definition name="curriculum/create" extends="master.page">	
-		<put-attribute name="title" value="Create a curriculum" />
+		<put-attribute name="title" value="Create curriculum" />
 		<put-attribute name="body" value="/views/curriculum/edit.jsp" />
 	</definition>
 	
 	<definition name="curriculum/edit" extends="master.page">	
-		<put-attribute name="title" value="Edit curriculum data" />
+		<put-attribute name="title" value="Edit curriculum" />
 		<put-attribute name="body" value="/views/curriculum/edit.jsp" />
 	</definition>
 	
 	<definition name="curriculum/list" extends="master.page">	
-		<put-attribute name="title" value="Curriculum's data" />
+		<put-attribute name="title" value="Curriculum list" />
 		<put-attribute name="body" value="/views/curriculum/list.jsp" />
 	</definition>
 	
 	<definition name="curriculum/display" extends="master.page">	
-		<put-attribute name="title" value="Curriculum details" />
+		<put-attribute name="title" value="Display curriculum" />
 		<put-attribute name="body" value="/views/curriculum/display.jsp" />
 	</definition>
 	

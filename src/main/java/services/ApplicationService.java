@@ -210,8 +210,14 @@ public class ApplicationService {
 		return this.applicationRepository.avgMinMaxStddevApplicationsPerHacker();
 	}
 
+
 	public void flush() {
 		this.applicationRepository.flush();
+  }
+	//Returns applications given a certain curriculum
+	public Collection<Application> applicationsWithCurriculum(final int curriculumId) {
+		return this.applicationRepository.applicationsWithCurriculum(curriculumId);
+
 	}
 
 }

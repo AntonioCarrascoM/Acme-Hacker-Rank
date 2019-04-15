@@ -77,6 +77,8 @@
 	
 </display:table>
 
-<spring:url var="createUrl" value="socialProfile/create.do"/>
+<spring:url var="createUrl" value="socialProfile/create.do">
+<spring:param name="varId" value="${curriculum.id}" />
+</spring:url>
 	<a href="${createUrl}"><jstl:out value="${create}"/></a>
 		
