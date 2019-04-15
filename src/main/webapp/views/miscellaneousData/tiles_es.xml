@@ -17,12 +17,12 @@
 <tiles-definitions>
 
 	<definition name="miscellaneousData/display" extends="master.page">
-		<put-attribute name="title" value="Información miscelánea" />
+		<put-attribute name="title" value="Mostrar dato misceláneo" />
 		<put-attribute name="body" value="/views/miscellaneousData/display.jsp" />
 	</definition>
 
 	<definition name="miscellaneousData/list" extends="master.page">
-		<put-attribute name="title" value="Lista de información miscelánea" />
+		<put-attribute name="title" value="Lista de datos misceláneos" />
 		<put-attribute name="body" value="/views/miscellaneousData/list.jsp" />
 	</definition>
 	
@@ -32,7 +32,7 @@
 	</definition>
 	
 	<definition name="miscellaneousData/edit" extends="master.page">
-		<put-attribute name="title" value="Editar información miscelánea" />
+		<put-attribute name="title" value="Editar dato misceláneo" />
 		<put-attribute name="body" value="/views/miscellaneousData/edit.jsp" />
 	</definition>
 

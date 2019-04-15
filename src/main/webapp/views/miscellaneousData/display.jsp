@@ -22,11 +22,10 @@
 
 <spring:message code="miscellaneousData.text"  var="msgText"/>
 <spring:message code="miscellaneousData.attachments" var="msgAttachments" />
-
 <spring:message code="miscellaneousData.edit" var="msgEdit" />
 <spring:message code="miscellaneousData.return" var="msgReturn" />
 
-
+<security:authorize access="hasRole('HACKER')">
 
 	<%-- For the curriculum in the list received as model, display the following information: --%>
 	<jstl:out value="${msgText}" />:
@@ -37,18 +36,4 @@
 	<jstl:out value="${miscellaneousData.attachments}" />
 	<br />
 	
-
-	
-	
-	
-	
-<security:authorize access="hasRole('HACKER')">
-	<spring:url var="editUrl"
-		value="miscellaneousData/hacker/edit.do">
-		<spring:param name="miscellaneousDataId"
-			value="${miscellaneousData.id}"/>
-	</spring:url>
-	<a href="${editUrl}"><jstl:out value="${msgEdit}" /></a>
 </security:authorize>
-
-<a href="#"><jstl:out value="${msgReturn}" /></a>

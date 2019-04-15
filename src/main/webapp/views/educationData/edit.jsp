@@ -29,7 +29,6 @@
 <spring:message code="educationData.endDate" var="endDate" />
 <spring:message code="educationData.save" var="save" />
 <spring:message code="educationData.delete" var="delete" />
-<spring:message code="educationData.cancel" var="cancel" />
 <spring:message code="educationData.confirm" var="confirm" />
 
 <security:authorize access="hasRole('HACKER')">
@@ -39,15 +38,14 @@
 		<%-- Forms --%>
 
 		<form:hidden path="id" />
-		<form:hidden path="version" />
 		<form:hidden path="curriculum" />
 		
-		
-		
 		<acme:textbox code="educationData.degree" path="degree"/>
+		<br>
 		<acme:textbox code="educationData.institution" path="institution"/>
+		<br>
 		<acme:textbox code="educationData.mark" path="mark"/>
-		
+		<br>
 		
 		 <acme:textbox 
 	     placeholder="educationData.ph"
@@ -60,7 +58,6 @@
 		 code = "educationData.endDate" 
 		 path="endDate"/>
 		 <br/>
-	
 
 		<%-- Buttons --%>
 
@@ -72,7 +69,7 @@
 				onclick="return confirm('${confirm}')" />&nbsp;
 	</jstl:if>
 
-	<acme:cancel url="welcome/index.do" code="educationData.cancel" />
+	<acme:cancel url="curriculum/hacker/list.do" code="educationData.cancel" />
 
 
 </form:form>

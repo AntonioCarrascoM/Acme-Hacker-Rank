@@ -3,6 +3,8 @@ package controllers.hacker;
 
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -38,11 +40,15 @@ public class EducationDataHackerController extends AbstractController {
 	//Creation
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final int curriculumId) {
+	public ModelAndView create(@RequestParam final int varId) {
 		final ModelAndView result;
 		EducationData educationData;
+		final Curriculum c = this.curriculumService.findOne(varId);
 
-		educationData = this.educationDataService.create(curriculumId);
+		if (this.actorService.findByPrincipal().getId() != c.getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		educationData = this.educationDataService.create(varId);
 		result = this.createEditModelAndView(educationData);
 
 		return result;
@@ -51,68 +57,77 @@ public class EducationDataHackerController extends AbstractController {
 	//Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int educationDataId) {
+	public ModelAndView edit(@RequestParam final int varId) {
 		final ModelAndView result;
-		EducationData educationData;
+		final EducationData educationData = this.educationDataService.findOne(varId);
 
-		educationData = this.educationDataService.findOne(educationDataId);
+		if (this.actorService.findByPrincipal().getId() != educationData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		Assert.notNull(educationData);
 		result = this.createEditModelAndView(educationData);
 
 		return result;
 	}
 
-	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(EducationData educationData, final int curriculumId, final BindingResult binding) {
+	public ModelAndView save(EducationData educationData, final BindingResult binding) {
 		ModelAndView result;
+
+		final Collection<Curriculum> curriculums = this.curriculumService.getCurriculumsForHacker(this.actorService.findByPrincipal().getId());
+
+		if (!curriculums.contains(educationData.getCurriculum()))
+			return new ModelAndView("redirect:/welcome/index.do");
 
 		try {
 			educationData = this.educationDataService.reconstruct(educationData, binding);
+		} catch (final ValidationException oops) {
+			return this.createEditModelAndView(educationData);
 		} catch (final Throwable oops) {
-			return result = this.createEditModelAndView(educationData, "educationData.commit.error");
+			return this.createEditModelAndView(educationData, "educationData.commit.error");
 		}
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(educationData);
-		else
-			try {
-				this.educationDataService.save(educationData);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(educationData, "educationData.commit.error");
-			}
-		return result;
-	}
-
-	//Delete POST
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(EducationData educationData, final BindingResult binding) {
-		ModelAndView result;
-
-		educationData = this.educationDataService.findOne(educationData.getId());
-
-		if (educationData.getCurriculum().getHacker().getId() != this.actorService.findByPrincipal().getId())
-			result = this.createEditModelAndView(educationData, "educationData.delete.error");
-		else
-			try {
-				this.educationDataService.delete(educationData);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(educationData, "educationData.commit.error");
-			}
+		try {
+			final EducationData saved = this.educationDataService.save(educationData);
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + saved.getCurriculum().getId());
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(educationData, "educationData.commit.error");
+		}
 		return result;
 	}
 
 	//Deleting
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(EducationData educationData, final BindingResult binding) {
+		ModelAndView result;
+
+		final Collection<Curriculum> curriculums = this.curriculumService.getCurriculumsForHacker(this.actorService.findByPrincipal().getId());
+
+		if (!curriculums.contains(educationData.getCurriculum()))
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		educationData = this.educationDataService.findOne(educationData.getId());
+
+		try {
+			this.educationDataService.delete(educationData);
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + educationData.getCurriculum().getId());
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(educationData, "educationData.commit.error");
+		}
+		return result;
+	}
+
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
 		final EducationData educationData = this.educationDataService.findOne(varId);
 
+		if (this.actorService.findByPrincipal().getId() != educationData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		try {
 			this.educationDataService.delete(educationData);
-			result = new ModelAndView("redirect:/educationData/list.do");
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + educationData.getCurriculum().getId());
 
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(educationData, "educationData.commit.error");
@@ -128,9 +143,14 @@ public class EducationDataHackerController extends AbstractController {
 		Collection<EducationData> educationDatas;
 
 		final Curriculum c = this.curriculumService.findOne(varId);
+
+		if (this.actorService.findByPrincipal().getId() != c.getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		educationDatas = this.curriculumService.getEducationDataForCurriculum(c.getId());
 
 		result = new ModelAndView("educationData/list");
+		result.addObject("curriculum", c);
 		result.addObject("educationDatas", educationDatas);
 		result.addObject("requestURI", "educationData/list.do");
 
@@ -145,6 +165,9 @@ public class EducationDataHackerController extends AbstractController {
 		EducationData educationData;
 
 		educationData = this.educationDataService.findOne(varId);
+
+		if (this.actorService.findByPrincipal().getId() != educationData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
 
 		result = new ModelAndView("educationData/display");
 		result.addObject("educationData", educationData);
@@ -169,7 +192,7 @@ public class EducationDataHackerController extends AbstractController {
 		result = new ModelAndView("educationData/edit");
 		result.addObject("educationData", educationData);
 		result.addObject("message", messageCode);
-		result.addObject("requestURI", "educationData/edit.do");
+		result.addObject("requestURI", "educationData/hacker/edit.do");
 
 		return result;
 

@@ -3,6 +3,8 @@ package controllers.hacker;
 
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -38,11 +40,15 @@ public class MiscellaneousDataHackerController extends AbstractController {
 	//Creation
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final int curriculumId) {
+	public ModelAndView create(@RequestParam final int varId) {
 		final ModelAndView result;
 		MiscellaneousData miscellaneousData;
+		final Curriculum c = this.curriculumService.findOne(varId);
 
-		miscellaneousData = this.miscellaneousDataService.create(curriculumId);
+		if (this.actorService.findByPrincipal().getId() != c.getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		miscellaneousData = this.miscellaneousDataService.create(varId);
 		result = this.createEditModelAndView(miscellaneousData);
 
 		return result;
@@ -51,69 +57,77 @@ public class MiscellaneousDataHackerController extends AbstractController {
 	//Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int miscellaneousDataId) {
+	public ModelAndView edit(@RequestParam final int varId) {
 		final ModelAndView result;
-		MiscellaneousData miscellaneousData;
+		final MiscellaneousData miscellaneousData = this.miscellaneousDataService.findOne(varId);
 
-		miscellaneousData = this.miscellaneousDataService.findOne(miscellaneousDataId);
+		if (this.actorService.findByPrincipal().getId() != miscellaneousData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		Assert.notNull(miscellaneousData);
 		result = this.createEditModelAndView(miscellaneousData);
 
 		return result;
 	}
 
-	//Edit POST
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(MiscellaneousData miscellaneousData, final BindingResult binding) {
 		ModelAndView result;
 
+		final Collection<Curriculum> curriculums = this.curriculumService.getCurriculumsForHacker(this.actorService.findByPrincipal().getId());
+
+		if (!curriculums.contains(miscellaneousData.getCurriculum()))
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		try {
 			miscellaneousData = this.miscellaneousDataService.reconstruct(miscellaneousData, binding);
+		} catch (final ValidationException oops) {
+			return this.createEditModelAndView(miscellaneousData);
 		} catch (final Throwable oops) {
-			return result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
+			return this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
 		}
-
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(miscellaneousData);
-		else
-			try {
-				this.miscellaneousDataService.save(miscellaneousData);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
-			}
-		return result;
-	}
-
-	//Delete POST
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(MiscellaneousData miscellaneousData, final BindingResult binding) {
-		ModelAndView result;
-
-		miscellaneousData = this.miscellaneousDataService.findOne(miscellaneousData.getId());
-
-		if (miscellaneousData.getCurriculum().getHacker().getId() != this.actorService.findByPrincipal().getId())
-			result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.delete.error");
-		else
-			try {
-				this.miscellaneousDataService.delete(miscellaneousData);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
-			}
+		try {
+			final MiscellaneousData saved = this.miscellaneousDataService.save(miscellaneousData);
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + saved.getCurriculum().getId());
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
+		}
 		return result;
 	}
 
 	//Deleting
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(MiscellaneousData miscellaneousData, final BindingResult binding) {
+		ModelAndView result;
+
+		final Collection<Curriculum> curriculums = this.curriculumService.getCurriculumsForHacker(this.actorService.findByPrincipal().getId());
+
+		if (!curriculums.contains(miscellaneousData.getCurriculum()))
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		miscellaneousData = this.miscellaneousDataService.findOne(miscellaneousData.getId());
+
+		try {
+			this.miscellaneousDataService.delete(miscellaneousData);
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + miscellaneousData.getCurriculum().getId());
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
+		}
+		return result;
+	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
 		final MiscellaneousData miscellaneousData = this.miscellaneousDataService.findOne(varId);
 
+		if (this.actorService.findByPrincipal().getId() != miscellaneousData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		try {
 			this.miscellaneousDataService.delete(miscellaneousData);
-			result = new ModelAndView("redirect:/miscellaneousData/list.do");
+			result = new ModelAndView("redirect:/curriculum/hacker/display.do?varId=" + miscellaneousData.getCurriculum().getId());
 
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(miscellaneousData, "miscellaneousData.commit.error");
@@ -129,9 +143,14 @@ public class MiscellaneousDataHackerController extends AbstractController {
 		Collection<MiscellaneousData> miscellaneousDatas;
 
 		final Curriculum c = this.curriculumService.findOne(varId);
+
+		if (this.actorService.findByPrincipal().getId() != c.getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		miscellaneousDatas = this.curriculumService.getMiscellaneousDataForCurriculum(c.getId());
 
 		result = new ModelAndView("miscellaneousData/list");
+		result.addObject("curriculum", c);
 		result.addObject("miscellaneousDatas", miscellaneousDatas);
 		result.addObject("requestURI", "miscellaneousData/list.do");
 
@@ -146,6 +165,9 @@ public class MiscellaneousDataHackerController extends AbstractController {
 		MiscellaneousData miscellaneousData;
 
 		miscellaneousData = this.miscellaneousDataService.findOne(varId);
+
+		if (this.actorService.findByPrincipal().getId() != miscellaneousData.getCurriculum().getHacker().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
 
 		result = new ModelAndView("miscellaneousData/display");
 		result.addObject("miscellaneousData", miscellaneousData);
@@ -170,7 +192,7 @@ public class MiscellaneousDataHackerController extends AbstractController {
 		result = new ModelAndView("miscellaneousData/edit");
 		result.addObject("miscellaneousData", miscellaneousData);
 		result.addObject("message", messageCode);
-		result.addObject("requestURI", "miscellaneousData/edit.do");
+		result.addObject("requestURI", "miscellaneousData/hacker/edit.do");
 
 		return result;
 

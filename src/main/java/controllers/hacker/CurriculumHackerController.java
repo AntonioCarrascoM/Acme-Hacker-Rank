@@ -15,7 +15,11 @@ import services.ActorService;
 import services.CurriculumService;
 import controllers.AbstractController;
 import domain.Curriculum;
+import domain.EducationData;
 import domain.Hacker;
+import domain.MiscellaneousData;
+import domain.PersonalData;
+import domain.PositionData;
 
 @Controller
 @RequestMapping("curriculum/hacker")
@@ -34,13 +38,10 @@ public class CurriculumHackerController extends AbstractController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		final ModelAndView result;
-		Curriculum curriculum;
 
-		curriculum = this.curriculumService.create();
-		result = this.createEditModelAndView(curriculum);
-
-		return result;
+		final Curriculum c = this.curriculumService.create();
+		this.curriculumService.save(c);
+		return new ModelAndView("redirect:list.do");
 	}
 
 	//Edition
@@ -89,15 +90,12 @@ public class CurriculumHackerController extends AbstractController {
 
 		curriculum = this.curriculumService.findOne(curriculum.getId());
 
-		if (curriculum.getHacker().getId() != this.actorService.findByPrincipal().getId())
-			result = this.createEditModelAndView(curriculum, "curriculum.delete.error");
-		else
-			try {
-				this.curriculumService.delete(curriculum);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
-			}
+		try {
+			this.curriculumService.delete(curriculum);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(curriculum, "curriculum.commit.error");
+		}
 		return result;
 	}
 
@@ -130,9 +128,6 @@ public class CurriculumHackerController extends AbstractController {
 		final Hacker h = (Hacker) this.actorService.findByPrincipal();
 		curriculums = this.curriculumService.getCurriculumsForHacker(h.getId());
 
-		if (curriculums == null || h.getId() != this.actorService.findByPrincipal().getId())
-			return new ModelAndView("redirect:/welcome/index.do");
-
 		result = new ModelAndView("curriculum/list");
 		result.addObject("curriculums", curriculums);
 		result.addObject("requestURI", "curriculum/list.do");
@@ -146,14 +141,27 @@ public class CurriculumHackerController extends AbstractController {
 	public ModelAndView display(@RequestParam final int varId) {
 		ModelAndView result;
 		Curriculum curriculum;
+		Boolean hasPersonalData = true;
 
 		curriculum = this.curriculumService.findOne(varId);
+		final PersonalData personalData = this.curriculumService.getPersonalDataForCurriculum(curriculum.getId());
+		if (personalData == null)
+			hasPersonalData = false;
+
+		final Collection<PositionData> pd = this.curriculumService.getPositionDataForCurriculum(curriculum.getId());
+		final Collection<EducationData> ed = this.curriculumService.getEducationDataForCurriculum(curriculum.getId());
+		final Collection<MiscellaneousData> md = this.curriculumService.getMiscellaneousDataForCurriculum(curriculum.getId());
 
 		if (curriculum == null || curriculum.getHacker().getId() != this.actorService.findByPrincipal().getId())
 			return new ModelAndView("redirect:/welcome/index.do");
 
 		result = new ModelAndView("curriculum/display");
 		result.addObject("curriculum", curriculum);
+		result.addObject("miscellaneousDatas", md);
+		result.addObject("hasPersonalData", hasPersonalData);
+		result.addObject("personalData", personalData);
+		result.addObject("educationDatas", ed);
+		result.addObject("positionDatas", pd);
 		result.addObject("requestURI", "curriculum/display.do");
 
 		return result;

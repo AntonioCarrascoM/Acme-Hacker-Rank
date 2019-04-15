@@ -17,22 +17,22 @@
 <tiles-definitions>
 
 	<definition name="positionData/display" extends="master.page">
-		<put-attribute name="title" value="Información de posición" />
+		<put-attribute name="title" value="Mostrar información sobre puesto de trabajo" />
 		<put-attribute name="body" value="/views/positionData/display.jsp" />
 	</definition>
 
 	<definition name="positionData/list" extends="master.page">
-		<put-attribute name="title" value="Lista de información de posición" />
+		<put-attribute name="title" value="Lista de puestos de trabajo" />
 		<put-attribute name="body" value="/views/positionData/list.jsp" />
 	</definition>
 	
 	<definition name="positionData/create" extends="master.page">	
-		<put-attribute name="title" value="Crear información de posición" />
+		<put-attribute name="title" value="Crear información sobre puestos de trabajo" />
 		<put-attribute name="body" value="/views/positionData/edit.jsp" />
 	</definition>
 	
 	<definition name="positionData/edit" extends="master.page">
-		<put-attribute name="title" value="Editar información de posición" />
+		<put-attribute name="title" value="Editar información sobre puesto de trabajo" />
 		<put-attribute name="body" value="/views/positionData/edit.jsp" />
 	</definition>
 
