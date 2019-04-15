@@ -31,6 +31,7 @@
 	<spring:message code="finder.specificDeadline" var="msgSpecificDeadline" />
 	<spring:message code="finder.save" var="msgSave" />
 	<spring:message code="finder.cancel" var="msgCancel" />
+	<spring:message code="finder.clear" var="msgClear" />
 	
 	<spring:message code="finder.position.ticker" var="ticker" />
 	<spring:message code="finder.position.title" var="title" />
@@ -52,26 +53,23 @@
 
 	
 	<acme:textbox code="finder.keyWord" path="keyWord" />
-	<br />
 	
 	<acme:textbox code="finder.specificDeadline" path="specificDeadline" placeholder="finder.ph"/>
-	<br />
 	
 	<acme:textbox code="finder.minSalary" path="minSalary" />
-	<br />
 	
 	<acme:textbox code="finder.maxSalary" path="maxSalary" />
+	
 	<br />
-	
-	
 	
 	<%-- Buttons --%>
 	
 	<acme:submit name="save" code="finder.save" />
+	<acme:submit name="clear" code="finder.clear" />
 	<acme:cancel url="welcome/index.do" code="finder.cancel" />
 
 	</form:form>
-	<br /><br />
+	<br />
 	
 	
 	<%--   ---------------------------------RESULTS-----------------------------------------  --%>
