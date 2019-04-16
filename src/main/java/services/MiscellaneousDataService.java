@@ -105,6 +105,10 @@ public class MiscellaneousDataService {
 
 	}
 
+	public void flush() {
+		this.miscellaneousDataRepository.flush();
+	}
+
 	//Copy
 
 	public void copy(final Curriculum orig, final Curriculum copy) {

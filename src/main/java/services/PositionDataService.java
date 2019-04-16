@@ -113,6 +113,10 @@ public class PositionDataService {
 
 	}
 
+	public void flush() {
+		this.positionDataRepository.flush();
+	}
+
 	//Copy
 
 	public void copy(final Curriculum orig, final Curriculum copy) {
