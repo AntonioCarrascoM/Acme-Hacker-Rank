@@ -155,6 +155,18 @@
 		<property name="userAccount" ref="userAccount1" />
 	</bean>
 	
+	<!-- Messages beans (for tests) -->
+	<bean id="message1" class="domain.Message">
+		<property name="sent" value="10/10/2010 10:00" />
+		<property name="subject" value="Prueba" />
+		<property name="body" value="Me gusta bailar pene dick Nigeria malo no me gusta bad" />
+		<property name="spam" value="true" />
+		<property name="tags" value="hola que tal" />
+		<property name="sender" ref="company3" />
+		<property name="recipient" ref="company2" />
+		
+	</bean>
+
 	<!-- Company beans -->
 	
 	<bean id="company1" class="domain.Company">
