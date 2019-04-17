@@ -30,6 +30,7 @@
 <spring:message code="position.return" var="msgReturn" />
 <spring:message code="position.edit" var="edit" />
 <spring:message code="position.delete" var="delete" />
+<spring:message code="position.applications" var="applications" />
 <spring:message code="position.confirm" var="msgConfirm" />
 <spring:message code="position.create" var="msgCreate" />
 <spring:message code="position.cancel" var="cancel" />
@@ -114,6 +115,17 @@
 	</jstl:if>
 	</security:authorize>
 	
+	<security:authorize access="hasRole('COMPANY')">
+	<spring:url var="listApplicationsUrl"
+		value="application/company/list.do">
+		<spring:param name="varId"
+			value="${row.id}"/>
+	</spring:url>
+
+	<display:column title="${applications}">
+			<a href="${listApplicationsUrl}"><jstl:out value="${applications}" /></a>
+	</display:column>
+	</security:authorize>
 </display:table>
 
 <security:authorize access="hasRole('COMPANY')">

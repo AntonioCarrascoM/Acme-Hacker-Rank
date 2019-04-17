@@ -131,7 +131,12 @@ public class CurriculumService {
 	//Copy method
 
 	public Curriculum copy(final Curriculum orig) {
-		final Curriculum copy = this.create();
+
+		//Assertion the user copying this curriculum has the correct privilege
+		Assert.isTrue(orig.getHacker().getId() == this.actorService.findByPrincipal().getId());
+
+		final Curriculum ini = this.create();
+		final Curriculum copy = this.save(ini);
 
 		this.educationDataService.copy(orig, copy);
 		this.miscellaneousDataService.copy(orig, copy);

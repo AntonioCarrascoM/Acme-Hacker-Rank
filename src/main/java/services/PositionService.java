@@ -254,6 +254,11 @@ public class PositionService {
 		return this.positionRepository.avgMinMaxStddevOfferedSalaries();
 	}
 
+	//Positions which a hacker can do applications
+	public Collection<Position> positionsForRequestsByHacker(final int id) {
+		return this.positionRepository.positionsForRequestsByHacker(id);
+	}
+
 	//The best and the worst position in terms of salary
 	public String bestAndWorstPositions() {
 		final Collection<String> bestPositions = this.positionRepository.bestPositions();

@@ -3,6 +3,8 @@ package controllers.actor;
 
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -38,6 +40,9 @@ public class SocialProfileController extends AbstractController {
 		SocialProfile socialProfile;
 
 		socialProfile = this.socialProfileService.findOne(varId);
+
+		if (socialProfile.getActor().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
 
 		result = new ModelAndView("socialProfile/display");
 		result.addObject("socialProfile", socialProfile);
@@ -84,6 +89,10 @@ public class SocialProfileController extends AbstractController {
 
 		socialProfile = this.socialProfileService.findOne(varId);
 		Assert.notNull(socialProfile);
+
+		if (socialProfile.getActor().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
 		result = this.createEditModelAndView(socialProfile);
 
 		return result;
@@ -95,21 +104,22 @@ public class SocialProfileController extends AbstractController {
 
 		try {
 			socialProfile = this.socialProfileService.reconstruct(socialProfile, binding);
+		} catch (final ValidationException oops) {
+			return this.createEditModelAndView(socialProfile);
 		} catch (final Throwable oops) {
 			return result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
 		}
 
-		if (binding.hasErrors())
-			result = this.createEditModelAndView(socialProfile);
-		else
-			try {
-				this.socialProfileService.save(socialProfile);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
-			}
+		try {
+			this.socialProfileService.save(socialProfile);
+			result = new ModelAndView("redirect:list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(socialProfile, "socialProfile.commit.error");
+		}
 		return result;
 	}
+
+	//Delete
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(SocialProfile socialProfile, final BindingResult binding) {
@@ -129,8 +139,6 @@ public class SocialProfileController extends AbstractController {
 		return result;
 	}
 
-	//Delete
-
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
@@ -141,18 +149,19 @@ public class SocialProfileController extends AbstractController {
 		socialProfiles = this.socialProfileService.socialProfilesFromActor(this.actorService.findByPrincipal().getId());
 
 		socialProfile = this.socialProfileService.findOne(varId);
-		if (socialProfile.getActor().getId() != this.actorService.findByPrincipal().getId())
-			result.addObject("message", "socialProfile.delete.error");
-		else
-			try {
-				this.socialProfileService.delete(socialProfile);
-				socialProfiles = this.socialProfileService.socialProfilesFromActor(this.actorService.findByPrincipal().getId());
 
-				result.addObject("socialProfiles", socialProfiles);
-				result.addObject("requestURI", "socialProfile/list.do");
-			} catch (final Throwable oops) {
-				result = this.listModelAndView(socialProfile, "socialProfile.delete.error");
-			}
+		if (socialProfile.getActor().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		try {
+			this.socialProfileService.delete(socialProfile);
+			socialProfiles = this.socialProfileService.socialProfilesFromActor(this.actorService.findByPrincipal().getId());
+
+			result.addObject("socialProfiles", socialProfiles);
+			result.addObject("requestURI", "socialProfile/list.do");
+		} catch (final Throwable oops) {
+			result = this.listModelAndView(socialProfile, "socialProfile.delete.error");
+		}
 
 		return result;
 	}

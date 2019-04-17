@@ -35,6 +35,7 @@
 		<value>/views/socialProfile/tiles.xml</value>
 		<value>/views/hacker/tiles.xml</value>
 		<value>/views/curriculum/tiles.xml</value>
+		<value>/views/application/tiles.xml</value>
 		<value>/views/personalData/tiles.xml</value>
 		<value>/views/positionData/tiles.xml</value>
 		<value>/views/educationData/tiles.xml</value>

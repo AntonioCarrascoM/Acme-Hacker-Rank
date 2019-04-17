@@ -14,12 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.ApplicationRepository;
-import security.Authority;
 import domain.Application;
 import domain.Curriculum;
 import domain.Hacker;
-import domain.Position;
-import domain.Problem;
 import domain.Status;
 
 @Service
@@ -34,9 +31,6 @@ public class ApplicationService {
 	//Supporting services --------------------------------
 
 	@Autowired
-	private PositionService			positionService;
-
-	@Autowired
 	private ProblemService			problemService;
 
 	@Autowired
@@ -49,29 +43,27 @@ public class ApplicationService {
 	private MessageService			messageService;
 
 	@Autowired
+	private PositionService			positionService;
+
+	@Autowired
 	private Validator				validator;
 
 
 	//Simple CRUD Methods --------------------------------
 
-	public Application create(final int id) {
+	public Application create() {
 
 		final Application a = new Application();
 
 		a.setStatus(Status.PENDING);
-
-		final Position position = this.positionService.findOne(id);
-		a.setPosition(position);
-		final Problem problem = this.problemService.randomProblemInFinalModeByPosition(position.getId());
-		a.setProblem(problem);
 
 		final Hacker hacker = (Hacker) this.actorService.findByPrincipal();
 		a.setHacker(hacker);
 		a.setMoment(new Date(System.currentTimeMillis() - 1));
 		return a;
 	}
-	public Collection<Application> findAll() {
 
+	public Collection<Application> findAll() {
 		return this.applicationRepository.findAll();
 	}
 
@@ -86,63 +78,53 @@ public class ApplicationService {
 
 		Application saved;
 
-		//Sending message to actors involved if application status has changed
-		if ((application.getStatus().equals(Status.ACCEPTED) || application.getStatus().equals(Status.SUBMITTED) || application.getStatus().equals(Status.REJECTED)))
-			this.messageService.applicationStatusNotification(application);
-
 		//Assertion that the user modifying this application has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == application.getHacker().getId() || this.actorService.findByPrincipal().getId() == application.getPosition().getCompany().getId());
 
-		Assert.isTrue(application.getCurriculum() != null);
 		if (application.getId() == 0) {
 			final Curriculum orig = application.getCurriculum();
-
 			final Curriculum copy = this.curriculumService.copy(orig);
 			application.setCurriculum(copy);
 		}
-
-		if (this.actorService.findByPrincipal().getId() == application.getHacker().getId() && application.getStatus().equals(Status.PENDING))
-			application.setStatus(Status.SUBMITTED);
-
-		if (application.getMoment() == null)
-			application.setMoment(new Date(System.currentTimeMillis() - 1));
 
 		saved = this.applicationRepository.save(application);
 
 		return saved;
 	}
-
-	//	public void delete(final Application application) {
-	//		Assert.notNull(application);
-	//
-	//		//Assertion that the user deleting this application has the correct privilege.
-	//		Assert.isTrue(this.actorService.findByPrincipal().getId() == application.getHacker().getId());
-	//
-	//		this.applicationRepository.delete(application);
-	//	}
-
 	//Reject method
+
 	public void reject(final Application app) {
 		Assert.notNull(app);
 
-		//Assertion that the user deleting this task has the correct privilege.
+		//Assertion that the user rejecting this app has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == app.getPosition().getCompany().getId());
+
+		//Assertion that application is submitted.
+		Assert.isTrue(app.getStatus() == Status.SUBMITTED);
 
 		app.setStatus(Status.REJECTED);
 
-		this.applicationRepository.save(app);
+		final Application saved = this.applicationRepository.save(app);
+
+		this.messageService.applicationStatusNotification(saved);
 	}
 
 	//Accept method
+
 	public void accept(final Application app) {
 		Assert.notNull(app);
 
-		//Assertion that the user deleting this task has the correct privilege.
+		//Assertion that the user accepting this app has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == app.getPosition().getCompany().getId());
+
+		//Assertion that application is submitted.
+		Assert.isTrue(app.getStatus() == Status.SUBMITTED);
 
 		app.setStatus(Status.ACCEPTED);
 
-		this.applicationRepository.save(app);
+		final Application saved = this.applicationRepository.save(app);
+
+		this.messageService.applicationStatusNotification(saved);
 	}
 
 	//Reconstruct
@@ -150,42 +132,22 @@ public class ApplicationService {
 	public Application reconstruct(final Application app, final BindingResult binding) {
 		Application result;
 
-		final Authority authCompany = new Authority();
-		authCompany.setAuthority(Authority.COMPANY);
+		if (app.getId() == 0) {
+			result = this.create();
+			result.setCurriculum(app.getCurriculum());
+			result.setPosition(app.getPosition());
 
-		final Authority authHacker = new Authority();
-		authHacker.setAuthority(Authority.HACKER);
+			//Assertion that the position provided is valid
+			Assert.isTrue(this.positionService.positionsForRequestsByHacker(this.actorService.findByPrincipal().getId()).contains(result.getPosition()));
 
-		if (app.getId() == 0)
-			result = this.create(app.getPosition().getId());
-		else {
+			result.setProblem(this.problemService.randomProblemInFinalModeByPosition(app.getPosition().getId()));
+		} else {
 			result = this.applicationRepository.findOne(app.getId());
-
-			if (this.actorService.findByPrincipal().getUserAccount().getAuthorities().contains(authCompany) && result.getStatus() == Status.SUBMITTED) {
-				if (app.getStatus().equals(Status.ACCEPTED)) {
-					result.setStatus(app.getStatus());
-					this.messageService.applicationStatusNotification(result);
-				}
-				if (app.getStatus().equals(Status.REJECTED)) {
-					result.setStatus(app.getStatus());
-					this.messageService.applicationStatusNotification(result);
-				}
-				//				result.setAnswerDescription(app.getAnswerDescription());
-				//				result.setAnswerLink(app.getAnswerLink());
-				//				result.setAnswerMoment(app.getAnswerMoment());
-				//				result.setProblem(app.getProblem());
-				//				result.setMoment(app.getMoment());
-			}
-			//TODO revisar esta cacota dura
-			if (this.actorService.findByPrincipal().getUserAccount().getAuthorities().contains(authHacker) && result.getStatus() == Status.PENDING)
-				result.setStatus(Status.SUBMITTED);
+			result.setStatus(Status.SUBMITTED);
 			result.setAnswerDescription(app.getAnswerDescription());
 			result.setAnswerLink(app.getAnswerLink());
 			result.setAnswerMoment(new Date(System.currentTimeMillis() - 1));
-			this.messageService.applicationStatusNotification(result);
 		}
-		//				result.setProblem(app.getProblem());
-		//				result.setMoment(app.getMoment());
 
 		this.validator.validate(result, binding);
 
@@ -195,14 +157,23 @@ public class ApplicationService {
 		//Assertion that the user modifying this request has the correct privilege.
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getHacker().getId() || this.actorService.findByPrincipal().getId() == result.getPosition().getCompany().getId());
 
+		//Assertion the user copying this curriculum has the correct privilege
+		Assert.isTrue(result.getCurriculum().getHacker().getId() == this.actorService.findByPrincipal().getId());
+
 		return result;
 
 	}
-	//Time for motion and queries
+
+	//Other methods
 
 	//The applications given a hacker id
 	public Collection<Application> applicationsOfAHacker(final int id) {
 		return this.applicationRepository.applicationsOfAHacker(id);
+	}
+
+	//The applications given a hacker id ordered by status
+	public Collection<Application> applicationsOfAHackerOrderedByStatus(final int id) {
+		return this.applicationRepository.applicationsOfAHackerOrderedByStatus(id);
 	}
 
 	//The average, the minimum, the maximum, and the standard deviation of the number of applications per hacker
@@ -210,10 +181,20 @@ public class ApplicationService {
 		return this.applicationRepository.avgMinMaxStddevApplicationsPerHacker();
 	}
 
+	//The applications given a position id
+	public Collection<Application> applicationsOfAPosition(final int id) {
+		return this.applicationRepository.applicationsOfAPosition(id);
+	}
+
+	//The applications given a position id ordered by status
+	public Collection<Application> applicationsOfAPositionOrderedByStatus(final int id) {
+		return this.applicationRepository.applicationsOfAPositionOrderedByStatus(id);
+	}
 
 	public void flush() {
 		this.applicationRepository.flush();
-  }
+	}
+
 	//Returns applications given a certain curriculum
 	public Collection<Application> applicationsWithCurriculum(final int curriculumId) {
 		return this.applicationRepository.applicationsWithCurriculum(curriculumId);
