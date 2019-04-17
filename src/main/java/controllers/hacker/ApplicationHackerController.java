@@ -115,6 +115,7 @@ public class ApplicationHackerController extends AbstractController {
 	public ModelAndView save(Application application, final BindingResult binding) {
 		ModelAndView result;
 
+		//Assertion the application has changed its status from pending to submitted to send the message notification
 		Boolean pending = false;
 		final Application app = this.applicationService.findOne(application.getId());
 		if (application.getId() != 0 && app.getStatus() == Status.PENDING)
