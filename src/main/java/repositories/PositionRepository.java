@@ -44,4 +44,8 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 	@Query("select p.title from Position p where p.finalMode=true order by p.offeredSalary asc")
 	Collection<String> worstPositions();
 
+	//Search positions 
+	@Query("select p from Position p join p.company c where p.finalMode='1' and p.cancelled='0' and (p.title like %?1% or p.description like %?1% or p.requiredSkills like %?1% or p.requiredTech like %?1% or p.requiredProfile like %?1% or p.description like %?1% or c.commercialName like %?1%)")
+	Collection<Position> searchPosition(String keyWord);
+
 }

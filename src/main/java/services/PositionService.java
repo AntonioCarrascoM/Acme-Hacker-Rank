@@ -266,4 +266,9 @@ public class PositionService {
 
 		return "[" + ((ArrayList<String>) bestPositions).get(0) + ", " + ((ArrayList<String>) worstPositions).get(0) + "]";
 	}
+
+	//Search positions 
+	public Collection<Position> searchPosition(final String keyWord) {
+		return this.positionRepository.searchPosition(keyWord);
+	}
 }

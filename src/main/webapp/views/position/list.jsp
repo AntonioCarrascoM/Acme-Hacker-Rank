@@ -33,12 +33,21 @@
 <spring:message code="position.applications" var="applications" />
 <spring:message code="position.confirm" var="msgConfirm" />
 <spring:message code="position.create" var="msgCreate" />
+<spring:message code="position.search" var="msgSearch" />
+<spring:message code="position.clear" var="msgClear" />
+<spring:message code="position.keyword" var="msgKeyword" />
 <spring:message code="position.cancel" var="cancel" />
 <spring:message code="position.formatDate.pattern" var="formatDate" />
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <jsp:useBean id="now" class="java.util.Date"/>
 
 <%-- Listing grid --%>
+
+<form action="${requestURI}" method="get">
+	<input type="search" name="keyword" value="${keyword}" placeholder="${msgKeyword}">
+	<input type="submit" value="${msgSearch}">
+</form>
 
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="positions" requestURI="${requestURI}" id="row">
