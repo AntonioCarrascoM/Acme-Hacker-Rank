@@ -63,7 +63,6 @@ public class Application extends DomainEntity {
 		return this.answerLink;
 	}
 
-	@NotNull
 	@Past
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")

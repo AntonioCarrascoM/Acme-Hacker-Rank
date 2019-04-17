@@ -41,14 +41,14 @@
 		<security:intercept-url pattern="/position/**" access="permitAll" />
 		<security:intercept-url pattern="/hacker/**" access="permitAll" />
 		
-		<security:intercept-url pattern="/curriculum/**" access="permitAll" />
-		<security:intercept-url pattern="/personalData/**" access="permitAll" />
-		<security:intercept-url pattern="/positionData/**" access="permitAll" />
-		<security:intercept-url pattern="/educationData/**" access="permitAll" />
-		<security:intercept-url pattern="/miscellaneousData/**" access="permitAll" />
-		
-				
-		
+		<security:intercept-url pattern="/curriculum/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/personalData/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/positionData/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/educationData/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/miscellaneousData/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/application/hacker/**" access="hasRole('HACKER')" />
+		<security:intercept-url pattern="/finder/hacker/**" access="hasRole('HACKER')" />
+			
 		<security:intercept-url pattern="/message/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/socialProfile/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/actor/deactivate.do" access="isAuthenticated()" />
@@ -60,14 +60,11 @@
 
 		<security:intercept-url pattern="/position/company/**" access="hasRole('COMPANY')" />
 		<security:intercept-url pattern="/problem/company/**" access="hasRole('COMPANY')" />
-		
-		<security:intercept-url pattern="/finder/hacker/**" access="hasRole('HACKER')" />
-		
+		<security:intercept-url pattern="/application/company/**" access="hasRole('COMPANY')" />
 		
 		
 		
-				
-
+		
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 
 		<security:form-login
