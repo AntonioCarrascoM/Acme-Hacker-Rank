@@ -27,26 +27,12 @@ public class PositionController extends AbstractController {
 	//Listing all
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
-		final ModelAndView result;
-		final Collection<Position> positions;
-
-		positions = this.positionService.getPublicPositions();
-
-		result = new ModelAndView("position/list");
-		result.addObject("positions", positions);
-		result.addObject("requestURI", "position/list.do");
-
-		return result;
-	}
-
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ModelAndView search(@RequestParam final String keyword) {
+	public ModelAndView list(@RequestParam(required = false) final String keyword) {
 		final ModelAndView result;
 		final Collection<Position> positions;
 
 		if (keyword == null || keyword.isEmpty())
-			return this.list();
+			positions = this.positionService.getPublicPositions();
 		else
 			positions = this.positionService.searchPosition(keyword);
 
