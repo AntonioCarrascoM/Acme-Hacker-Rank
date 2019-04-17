@@ -39,6 +39,10 @@
 
 <%-- Listing grid --%>
 
+<form>
+	<input type="submit" name="keyword" value="${save}"/>&nbsp;
+</form>
+
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="positions" requestURI="${requestURI}" id="row">
 	
