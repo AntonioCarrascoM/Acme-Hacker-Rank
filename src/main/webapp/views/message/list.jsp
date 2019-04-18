@@ -90,7 +90,8 @@
 		
 	<display:column property="recipient.name" title="${recipient}"
 		sortable="true" />
-	
+		
+	<display:column property="tags" title="${tags}"/>
 
 	<%-- Links towards display, apply, edit and cancel views --%>
 

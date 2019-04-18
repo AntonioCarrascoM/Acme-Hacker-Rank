@@ -219,7 +219,7 @@ public class MessageService {
 
 		result.setSubject(m.getSubject());
 		result.setBody(m.getBody());
-		result.setTags(m.getTags());
+		result.setTags(m.getTags() + ", SYSTEM");
 		if (!this.actorService.findAll().isEmpty())
 			result.setRecipient(this.actorService.findAll().iterator().next());
 
