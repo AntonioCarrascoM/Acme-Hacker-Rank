@@ -116,6 +116,11 @@ public class PositionService {
 		this.positionRepository.save(p);
 	}
 
+	public Position saveFromProblem(final Position p) {
+		final Position saved = this.positionRepository.save(p);
+		return saved;
+	}
+
 	//Reconstruct
 
 	public Position reconstruct(final Position p, final BindingResult binding) {
@@ -236,6 +241,11 @@ public class PositionService {
 	//Retrieves a list of positions with final mode = true and not cancelled
 	public Collection<Position> getPublicPositions() {
 		return this.positionRepository.getPublicPositions();
+	}
+
+	//Retrieves a list of positions given a certain problem
+	public Collection<Position> getPositionsOfAProblem(final int id) {
+		return this.positionRepository.getPositionsOfAProblem(id);
 	}
 
 	//Other methods´

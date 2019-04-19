@@ -18,6 +18,7 @@ import org.springframework.validation.Validator;
 import repositories.ProblemRepository;
 import security.Authority;
 import domain.Company;
+import domain.Position;
 import domain.Problem;
 
 @Service
@@ -33,6 +34,9 @@ public class ProblemService {
 
 	@Autowired
 	private ActorService		actorService;
+
+	@Autowired
+	private PositionService		positionService;
 
 	@Autowired
 	private Validator			validator;
@@ -77,6 +81,16 @@ public class ProblemService {
 
 		//Assertion to make sure that the entity is not final
 		Assert.isTrue(p.getFinalMode() == false);
+
+		final Collection<Position> positions = this.positionService.getPositionsOfAProblem(p.getId());
+
+		if (!positions.isEmpty())
+			for (final Position pos : positions) {
+				final Collection<Problem> problems = pos.getProblems();
+				problems.remove(p);
+				pos.setProblems(problems);
+				this.positionService.saveFromProblem(pos);
+			}
 
 		this.problemRepository.delete(p);
 	}
