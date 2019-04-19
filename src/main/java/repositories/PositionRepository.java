@@ -20,6 +20,10 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0'")
 	Collection<Position> getPublicPositions();
 
+	//Retrieves a list of positions given a certain problem
+	@Query("select distinct p from Position p join p.problems pr where pr.id=?1")
+	Collection<Position> getPositionsOfAProblem(int id);
+
 	//Positions which a hacker can do applications
 	@Query("select p from Position p where p.finalMode=true and p.cancelled=false and p not in (select a.position from Application a where a.hacker.id=?1 and a.status!='3')")
 	Collection<Position> positionsForRequestsByHacker(int id);
