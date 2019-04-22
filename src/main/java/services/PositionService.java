@@ -21,6 +21,8 @@ import org.springframework.validation.Validator;
 import repositories.PositionRepository;
 import security.Authority;
 import domain.Company;
+import domain.Finder;
+import domain.Message;
 import domain.Position;
 import domain.Problem;
 
@@ -40,6 +42,12 @@ public class PositionService {
 
 	@Autowired
 	private Validator			validator;
+
+	@Autowired
+	private FinderService		finderService;
+
+	@Autowired
+	private MessageService		messageService;
 
 
 	//Simple CRUD methods
@@ -90,7 +98,10 @@ public class PositionService {
 		//		if (saved.getFinalMode() == true)
 		//			this.messageService.positionPublished(saved);
 
+		this.notificationForHacker(saved);
+
 		return saved;
+
 	}
 
 	public void delete(final Position p) {
@@ -224,6 +235,34 @@ public class PositionService {
 				}
 			}
 		return res;
+	}
+
+	public void notificationForHacker(final Position p) {
+		Assert.notNull(p);
+
+		final Collection<Finder> finders = this.finderService.findAll();
+		final Message msg = this.messageService.create();
+
+		msg.setSubject("New position / Nuevo puesto de trabajo");
+		msg.setBody("A new offer that matches your finder search criteria is published  / Un nuevo puesto de trabajo coincide con tus parametros de busqueda");
+		msg.setTags("New position / Nuevo puesto de trabajo");
+		msg.setSent(new Date(System.currentTimeMillis() - 1));
+
+		for (final Finder f : finders)
+			if (this.checkParamsIsNulls(f) == false) {
+				Collection<Position> positions = new ArrayList<>();
+				positions = this.finderService.find(f);
+
+				if (positions.contains(p))
+					this.messageService.send(msg, this.finderService.getHackerByFinder(f.getId()));
+			}
+
+	}
+
+	public Boolean checkParamsIsNulls(final Finder f) {
+		if (f.getKeyWord() == null && f.getSpecificDeadline() == null && f.getMinSalary() == null && f.getMaxSalary() == null)
+			return true;
+		return false;
 	}
 
 	//Time for motion and queries

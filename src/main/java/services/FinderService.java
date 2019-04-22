@@ -105,14 +105,13 @@ public class FinderService {
 		Assert.notNull(finder);
 
 		Collection<Position> positions = new ArrayList<>();
-		Collection<Position> results = new ArrayList<>();
 
 		String keyWord = finder.getKeyWord();
 		Date specificDeadline = finder.getSpecificDeadline();
 		Double minSalary = finder.getMinSalary(), maxSalary = finder.getMaxSalary();
 
 		if (keyWord == null && specificDeadline == null && minSalary == null && maxSalary == null)
-			positions.addAll(this.positionService.findAll());
+			positions = this.positionService.getPublicPositions();
 		else {
 
 			if (keyWord == null)
@@ -127,9 +126,7 @@ public class FinderService {
 			positions = this.finderRepository.findPosition(keyWord, specificDeadline, minSalary, maxSalary);
 		}
 
-		results = this.limitResults(positions);
-
-		return results;
+		return positions;
 	}
 
 	public Collection<Position> limitResults(final Collection<Position> positions) {
