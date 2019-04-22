@@ -45,7 +45,7 @@
 <spring:message code="curriculum.miscellaneousData.attachments" var="attachments" />
 <spring:message code="curriculum.miscellaneousData.create" var="createMiscellaneousData" />
 
-<spring:message code="curriculum.createPersonalData" var="msgCreatePersonalData" />
+<spring:message code="curriculum.personalData.create" var="msgCreatePersonalData" />
 <spring:message code="curriculum.return" var="msgReturn" />
 <spring:message code="curriculum.delete" var="delete" />
 <spring:message code="curriculum.details" var="details" />
