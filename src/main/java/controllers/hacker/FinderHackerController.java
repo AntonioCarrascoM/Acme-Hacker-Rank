@@ -47,7 +47,7 @@ public class FinderHackerController extends AbstractController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
-		final ModelAndView result;
+		ModelAndView result = new ModelAndView();
 		Finder finder;
 
 		finder = this.finderService.findPrincipalFinder();
@@ -58,7 +58,7 @@ public class FinderHackerController extends AbstractController {
 		final Long millis = this.configurationService.findAll().iterator().next().getExpireFinderMinutes() * 60000L;
 
 		if (finder.getMoment() == null || (new Date(System.currentTimeMillis()).getTime() - finder.getMoment().getTime()) > millis)
-			positions = this.finderService.limitResults(this.positionService.findAll());
+			positions = this.finderService.limitResults(this.positionService.getPublicPositions());
 
 		result = this.createEditModelAndView(finder);
 		result.addObject("positions", positions);
@@ -77,6 +77,7 @@ public class FinderHackerController extends AbstractController {
 		else
 			try {
 				positions = this.finderService.find(finder);
+				positions = this.finderService.limitResults(positions);
 
 				finder.setPositions(positions);
 
@@ -105,6 +106,7 @@ public class FinderHackerController extends AbstractController {
 			finder.setMaxSalary(null);
 
 			positions = this.finderService.find(finder);
+			positions = this.finderService.limitResults(positions);
 
 			finder.setPositions(positions);
 
