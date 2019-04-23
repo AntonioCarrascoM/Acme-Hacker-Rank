@@ -30,6 +30,11 @@ public class ApplicationServiceTest extends AbstractTest {
 	private ApplicationService	applicationService;
 
 
+	//	@Autowired
+	//	private PositionService		positionService;
+	//	@Autowired
+	//	private ProblemService		problemService;
+
 	@Test
 	public void ApplicationPositiveTest() {
 		final Object testingData[][] = {
@@ -38,33 +43,25 @@ public class ApplicationServiceTest extends AbstractTest {
 				"hacker1", null, "application1", "edit", null
 
 			},
+
+			/*
+			 * Positive test: A hacker edits his application.
+			 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
+			 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
+			 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (answerDescription) with valid data.
+			 * Exception expected: None. A Hacker can edit his applications.
+			 */
+
+			{
+				"hacker1", "position1", "problem1", "create", null
+			},
+
 		/*
-		 * Positive test: A hacker edits his application.
-		 * Requisite tested: Functional requirement - 3. An actor who is authenticated as a hacker must be able to
-		 * manage their history, which includes listing, displaying, creating, updating, and deleting its records.
-		 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (description) with valid data.
-		 * Exception expected: None. A Brotherhood can edit his applications.
-		 */
-		//
-		//			{
-		//				"company1", null, "application1", "delete", null
-		//			}
-		//			/*
-		//			 * Positive: A hacker tries to delete a application.
-		//			 * Requisite tested: Functional requirement - 3. An actor who is authenticated as a hacker must be able to
-		//			 * manage their history, which includes listing, displaying, creating, updating, and deleting its records.
-		//			 * Data coverage : We deleted an application.
-		//			 * Exception expected: None. A Brotherhood can delete his applications.
-		//			 */
-		//			{
-		//				"hacker1", null, null, "create", null
-		//			}
-		/*
-		 * Positive: A hacker tries to create a Miscellaneous Record.
-		 * Requisite tested: Functional requirement - 3. An actor who is authenticated as a hacker must be able to
-		 * manage their history, which includes listing, displaying, creating, updating, and deleting its records.
+		 * Positive: A hacker tries to create an Application.
+		 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
+		 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
 		 * Data coverage : We created a application with 2 out of 2 valid parameters.
-		 * Exception expected: None. A Brotherhood can create applications.
+		 * Exception expected: None. A Hacker can create applications.
 		 */
 
 		};
@@ -83,16 +80,16 @@ public class ApplicationServiceTest extends AbstractTest {
 	@Test
 	public void ApplicationNegativeTest() {
 		final Object testingData[][] = {
-		//Total sentence coverage : Coverage 92.1% | Covered Instructions 70 | Missed Instructions 6 | Total Instructions 76
-		//			{
-		//				"hacker2", null, "application2", "edit2", IllegalArgumentException.class
-		//			},
+			//Total sentence coverage : Coverage 92.1% | Covered Instructions 70 | Missed Instructions 6 | Total Instructions 76
+			{
+				"hacker2", null, "application1", "edit", IllegalArgumentException.class
+			},
 		/*
-		 * Negative: A hacker tries to edit a application that not owns.
-		 * Requisite tested: Functional requirement - 3. An actor who is authenticated as a hacker must be able to
-		 * manage their history, which includes listing, displaying, creating, updating, and deleting its records.
-		 * Data coverage :We tried to edit 1 out of 2 miscellaneous record attributes with an user that is not the owner.
-		 * Exception expected: IllegalArgumentException. A Brotherhood can not edit applications from another hacker.
+		 * Positive: A hacker tries to create an Application.
+		 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
+		 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
+		 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (answerDescription) with a user that is not the owner.
+		 * Exception expected: IllegalArgumentException. A Hacker can not edit applications from another hacker.
 		 */
 
 		};
@@ -118,19 +115,30 @@ public class ApplicationServiceTest extends AbstractTest {
 				application.setAnswerDescription("Consider your problem solved");
 
 				this.applicationService.save(application);
-			}//else if (operation.equals("edit2")) {
-				//				final Application application = this.applicationService.findOne(this.getEntityId(id));
-			//				application.setTitle("Failing test");
-			//
-			//				this.applicationService.save(application);
-			//
-			//			} else if (operation.equals("create")) {
-			//				final Application mr = this.applicationService.create();
-			//				mr.setTitle("Positive create");
-			//				mr.setAnswerDescription("description");
-			//
-			//				this.applicationService.save(mr);
-			//}
+
+				//			} else if (operation.equals("create")) {
+				//
+				//				final Application application = this.applicationService.create();
+				//				final Position position = this.positionService.create();
+				//				final Position saved = this.positionService.save(position);
+				//				final Problem problem = this.problemService.create();
+				//				final Problem savedproblem = this.problemService.save(problem);
+				//
+				//				final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				//				final Date moment = sdf.parse("21/03/2019 12:34");
+				//
+				//				final SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				//				final Date moment1 = sdf1.parse("25/04/2019 12:34");
+				//				application.setMoment(moment);
+				//				application.setAnswerDescription("answerdescription");
+				//				application.setAnswerLink("https://www.link.es");
+				//				application.setAnswerMoment(moment1);
+				//				application.setStatus(Status.ACCEPTED);
+				//				application.setPosition(saved);
+				//				application.setProblem(savedproblem);
+
+				this.applicationService.save(application);
+			}
 
 			this.applicationService.flush();
 			super.unauthenticate();
