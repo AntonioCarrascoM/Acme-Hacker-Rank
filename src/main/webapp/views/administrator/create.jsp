@@ -49,6 +49,9 @@
 <spring:message code="administrator.terms" var="terms" />
 <spring:message code="administrator.acceptedTerms" var="acceptedTerms" />
 <spring:message code="administrator.secondPassword" var="secondPassword" />
+<spring:message code="cvv.ph" var="cvvPH" />
+<spring:message code="month.ph" var="monthPH" />
+<spring:message code="year.ph" var="yearPH" />
 
 
 <security:authorize access="hasRole('ADMIN')">
@@ -89,12 +92,28 @@
 		<form:label path="creditCard.number">
 			<jstl:out value="${number}"/>
 		</form:label>	
-		<form:input path="creditCard.number" pattern="(\d*)|(\d*.\d*)" placeholder="num."/>
+		<form:input path="creditCard.number" pattern="\d*" placeholder="num."/>
 		<form:errors path="creditCard.number" cssClass="error" />
 		<br>
-		<acme:textbox code="administrator.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
-		<acme:textbox code="administrator.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
-		<acme:textbox code="administrator.creditCard.cvv" path="creditCard.cvv" placeholder="cvv.ph"/>
+		<form:label path="creditCard.expMonth">
+			<jstl:out value="${expMonth}"/>
+		</form:label>	
+		<form:input path="creditCard.expMonth" pattern="\d{1,2}" placeholder="${monthPH}"/>
+		<form:errors path="creditCard.expMonth" cssClass="error" />
+		<br>
+		
+		<form:label path="creditCard.expYear">
+			<jstl:out value="${expYear}"/>
+		</form:label>	
+		<form:input path="creditCard.expYear" pattern="\d{4}" placeholder="${yearPH}"/>
+		<form:errors path="creditCard.expYear" cssClass="error" />
+		<br>
+		<form:label path="creditCard.cvv">
+			<jstl:out value="${cvv}"/>
+		</form:label>	
+		<form:input path="creditCard.cvv" pattern="\d{3}" placeholder="${cvvPH}"/>
+		<form:errors path="creditCard.cvv" cssClass="error" />
+		<br>
 		</fieldset>
 		<acme:textbox code="administrator.photo" path="photo" placeholder="link"/>
 		<acme:textbox code="administrator.email" path="email" placeholder="mail.ph"/>

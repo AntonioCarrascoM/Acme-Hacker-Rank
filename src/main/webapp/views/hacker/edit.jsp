@@ -46,6 +46,10 @@
 <spring:message code="hacker.phone.pattern2" var="phonePattern2" />
 <spring:message code="hacker.phone.warning" var="phoneWarning" />
 <spring:message code="hacker.phone.note" var="phoneNote" />
+<spring:message code="cvv.ph" var="cvvPH" />
+<spring:message code="month.ph" var="monthPH" />
+<spring:message code="year.ph" var="yearPH" />
+
 
 <security:authorize access="hasRole('HACKER')">
 
@@ -63,10 +67,31 @@
 		<legend><jstl:out value="${creditCard}"/></legend>
 		<acme:textbox code="hacker.creditCard.holder" path="creditCard.holder" />
 		<acme:textbox code="hacker.creditCard.make" path="creditCard.make" />
-		<acme:textbox code="hacker.creditCard.number" path="creditCard.number" />
-		<acme:textbox code="hacker.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
-		<acme:textbox code="hacker.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
-		<acme:textbox code="hacker.creditCard.cvv" path="creditCard.cvv" placeholder="cvv.ph"/>
+		<form:label path="creditCard.number">
+			<jstl:out value="${number}"/>
+		</form:label>	
+		<form:input path="creditCard.number" pattern="\d*" placeholder="num."/>
+		<form:errors path="creditCard.number" cssClass="error" />
+		<br>
+		<form:label path="creditCard.expMonth">
+			<jstl:out value="${expMonth}"/>
+		</form:label>	
+		<form:input path="creditCard.expMonth" pattern="\d{1,2}" placeholder="${monthPH}"/>
+		<form:errors path="creditCard.expMonth" cssClass="error" />
+		<br>
+		
+		<form:label path="creditCard.expYear">
+			<jstl:out value="${expYear}"/>
+		</form:label>	
+		<form:input path="creditCard.expYear" pattern="\d{4}" placeholder="${yearPH}"/>
+		<form:errors path="creditCard.expYear" cssClass="error" />
+		<br>
+		<form:label path="creditCard.cvv">
+			<jstl:out value="${cvv}"/>
+		</form:label>	
+		<form:input path="creditCard.cvv" pattern="\d{3}" placeholder="${cvvPH}"/>
+		<form:errors path="creditCard.cvv" cssClass="error" />
+		<br>
 		</fieldset>
 		<acme:textbox code="hacker.photo" path="photo" placeholder="link"/>
 		<acme:textbox code="hacker.email" path="email" placeholder="hacker.mail.ph"/>
