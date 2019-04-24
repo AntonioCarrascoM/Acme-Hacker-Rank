@@ -44,6 +44,6 @@
 		<spring:message code="${code}" />
 	</form:label>	
 	
-	<form:input path="${path}" placeholder="${ph}" type="number" />	
+	<form:input path="${path}" placeholder="${ph}" pattern="(\d*)|(\d*.\d*)" />	
 	<form:errors path="${path}" cssClass="error" />
 </div>	
