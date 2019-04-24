@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.GregorianCalendar;
+
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
@@ -34,7 +36,7 @@ public class EducationDataServiceTest extends AbstractTest {
 	@Test
 	public void EducationDataPositiveTest() {
 		final Object testingData[][] = {
-			//Total sentence coverage : Coverage 93.3% | Covered Instructions 83 | Missed Instructions 6 | Total Instructions 89
+			//Total sentence coverage : Coverage 94.3% | Covered Instructions 100 | Missed Instructions 6 | Total Instructions 106
 
 			{
 				"hacker1", null, "curriculum1", "create", null
@@ -44,18 +46,30 @@ public class EducationDataServiceTest extends AbstractTest {
 			 * Positive test: A hacker registers a new educationData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-			 * Data coverage : We created a new personalData with valid data.
-			 * Exception expected: None. A hacker can edit his educationData.
+			 * Data coverage : We created a new educationData with valid data.
+			 * Exception expected: None. A hacker can create an educationData.
 			 */{
-				"hacker1", null, "educationData1", "editPositive", null
-			}
+				"hacker1", null, "educationData1", "edit", null
+			},
 
+			/*
+			 * Positive test: A hacker edit his educationData.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (degree) with valid data.
+			 * Exception expected: None. A hacker can edit his educationDatas.
+			 */
+
+			{
+				"hacker1", null, "educationData1", "delete", null
+			},
 		/*
-		 * Positive test: A hacker edit his educationData.
+		 * 
+		 * Positive test: A hacker delete his educationData
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (degree) with valid data.
-		 * Exception expected: None. A hacker can edit his educationDatas.
+		 * Data coverage : We tried to delete a educationData.
+		 * Exception expected: None. A hacker can delete his educationData.
 		 */
 
 		};
@@ -74,17 +88,38 @@ public class EducationDataServiceTest extends AbstractTest {
 	@Test
 	public void EducationDataNegativeTest() {
 		final Object testingData[][] = {
-			//Total Sentence Coverage: Coverage 92.5% | Covered Instructions 74 | Missed Instructions 6 | Total Instructions 80
+			//Total Sentence Coverage: Coverage 95.1% | Covered Instructions 116 | Missed Instructions 6 | Total Instructions 122
 			{
-				"hacker1", "", "educationData1", "editNegative", ConstraintViolationException.class
+				"hacker1", "", "curriculum1", "createNegative", ConstraintViolationException.class
+			},
+			/*
+			 * Negative: A hacker tries to create a educationData
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage: We created a educationData with 4 out of 5 valid parameters.
+			 * Exception expected: ConstraintViolationException. Degree cannot be blank.
+			 */
+
+			{
+				"hacker2", null, "educationData1", "edit", IllegalArgumentException.class
 			},
 
+			/*
+			 * Negative test: A hacker tries to edit a educationData that not owns.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 4 editable attributes we tried to edit 1 attribute (Institution) with a user that is not the owner.
+			 * Exception expected: IllegalArgumentException. A Hacker can not edit educationDatas from another hacker.
+			 */
+			{
+				"hacker2", null, "educationData1", "delete", IllegalArgumentException.class
+			},
 		/*
-		 * Negative test: A hacker tries to edit the educationData with invalid data.
+		 * Negative test: A hacker tries to delete a educationData that not owns.
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage: From 5 editable attributes we tried to edit 1 attribute (institution).
-		 * Exception expected: IllegalArgumentException A hacker cannot edit an educationData with invalid data.
+		 * Data coverage : We tried to delete a educationData with a user that is not the owner.
+		 * Exception expected: IllegalArgumentException. A Hacker can not delete educationDatas from another hacker.
 		 */
 		};
 
@@ -105,33 +140,38 @@ public class EducationDataServiceTest extends AbstractTest {
 		try {
 			super.authenticate(username);
 
-			//			if (operation.equals("create")) {
-			//				//final Hacker hacker = this.hackerService.findOne(this.getEntityId(username));
-			//				final Curriculum c = this.curriculumService.findOne(this.getEntityId(id));
-			//				//c.setHacker(hacker);
-			//
-			//				final EducationData educationData = this.educationDataService.create(c.getId());
-			//				educationData.setCurriculum(c);
-			//				educationData.setDegree("Manuel Jesus");
-			//				educationData.setInstitution("This is a my curriculum");
-			//				educationData.setMark("666666666");
-			//				educationData.setStartDate("15/05/2019 12:30");
-			//				educationData.setEndDate("19/05/2019 13:00");
-			//
-			//				this.educationDataService.save(educationData);
-
-			//			} else 
-			if (operation.equals("editPositive")) {
+			if (operation.equals("edit")) {
 				final EducationData educationData = this.educationDataService.findOne(this.getEntityId(id));
-				educationData.setDegree("DegreeTest");
+				educationData.setDegree("Institution");
 
 				this.educationDataService.save(educationData);
 
-			} else if (operation.equals("editNegative")) {
-				final EducationData educationData = this.educationDataService.findOne(this.getEntityId(id));
-				educationData.setInstitution(st);
+			} else if (operation.equals("create")) {
+
+				final EducationData educationData = this.educationDataService.create(this.getEntityId(id));
+
+				educationData.setDegree("Degree");
+				educationData.setInstitution("institution");
+				educationData.setMark("mark");
+				educationData.setStartDate(new GregorianCalendar(2018, 11, 02).getTime());
+				educationData.setEndDate(new GregorianCalendar(2021, 11, 02).getTime());
+
 				this.educationDataService.save(educationData);
 
+			} else if (operation.equals("delete")) {
+				final EducationData educationData = this.educationDataService.findOne(this.getEntityId(id));
+				this.educationDataService.delete(educationData);
+
+			} else if (operation.equals("createNegative")) {
+				final EducationData educationData = this.educationDataService.create(this.getEntityId(id));
+
+				educationData.setDegree(st);
+				educationData.setInstitution("institution");
+				educationData.setMark("mark");
+				educationData.setStartDate(new GregorianCalendar(2018, 11, 02).getTime());
+				educationData.setEndDate(new GregorianCalendar(2021, 11, 02).getTime());
+
+				this.educationDataService.save(educationData);
 			}
 			this.educationDataService.flush();
 			super.unauthenticate();

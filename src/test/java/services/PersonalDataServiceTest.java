@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
+import domain.Curriculum;
 import domain.PersonalData;
 
 @ContextConfiguration(locations = {
@@ -29,15 +30,17 @@ public class PersonalDataServiceTest extends AbstractTest {
 
 	@Autowired
 	private PersonalDataService	personalDataService;
+	@Autowired
+	private CurriculumService	curriculumService;
 
 
 	@Test
 	public void PersonalDataPositiveTest() {
 		final Object testingData[][] = {
-			//Total sentence coverage : Coverage 93.3% | Covered Instructions 83 | Missed Instructions 6 | Total Instructions 89
+			//Total sentence coverage : Coverage 94.1% | Covered Instructions 96 | Missed Instructions 6 | Total Instructions 102
 
 			{
-				"hacker1", null, "curriculum1", "create", null
+				"hacker1", null, null, "create", null
 			},
 			/*
 			 * 
@@ -45,17 +48,29 @@ public class PersonalDataServiceTest extends AbstractTest {
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
 			 * Data coverage : We created a new personalData with valid data.
-			 * Exception expected: None. A hacker can edit his personalData.
+			 * Exception expected: None. A hacker can create his personalData.
 			 */{
-				"hacker1", null, "personalData1", "editPositive", null
-			}
+				"hacker1", null, "personalData1", "edit", null
+			},
+			/*
+			 * 
+			 * Positive test: A hacker edit his personalData
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : We created a new personalData with valid data.
+			 * Exception expected: None. A hacker can edit his personalData.
+			 */
 
+			{
+				"hacker1", null, "personalData1", "delete", null
+			},
 		/*
-		 * Positive test: A hacker edit his personalData
+		 * 
+		 * Positive test: A hacker delete his personalData
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (fullName) with valid data.
-		 * Exception expected: None. A hacker can edit his personalDatas.
+		 * Data coverage : We tried to delete a personalData.
+		 * Exception expected: None. A hacker can delete his personalData.
 		 */
 
 		};
@@ -74,18 +89,42 @@ public class PersonalDataServiceTest extends AbstractTest {
 	@Test
 	public void PersonalDataNegativeTest() {
 		final Object testingData[][] = {
-			//Total Sentence Coverage: Coverage 92.5% | Covered Instructions 74 | Missed Instructions 6 | Total Instructions 89
+			//Total Sentence Coverage: Coverage 94.9% | Covered Instructions 112 | Missed Instructions 6 | Total Instructions 118
+
 			{
-				"hacker1", "", "personalData1", "editNegative", ConstraintViolationException.class
+				"hacker1", "", null, "createNegative", ConstraintViolationException.class
+			},
+			/*
+			 * Positive: A hacker tries to create a personalData
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage: We created a personalData with 4 out of 5 valid parameters.
+			 * Exception expected: ConstraintViolationException. Full name cannot be blank.
+			 */
+
+			{
+				"hacker2", null, "personalData1", "edit", IllegalArgumentException.class
 			},
 
+			/*
+			 * Negative test: A hacker tries to edit a personalData that not owns.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (fullName) with a user that is not the owner.
+			 * Exception expected: IllegalArgumentException. A Hacker can not edit personalDatas from another hacker.
+			 */
+
+			{
+				"hacker2", null, "personalData1", "delete", IllegalArgumentException.class
+			},
 		/*
-		 * Negative test: A hacker tries to edit the personalData with invalid data.
+		 * Negative test: A hacker tries to delete a personalData that not owns.
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage: From 5 editable attributes we tried to edit 1 attribute (fullName).
-		 * Exception expected: IllegalArgumentException A hacker cannot edit a personalData with invalid data.
+		 * Data coverage : We tried to delete a personalData with a user that is not the owner.
+		 * Exception expected: IllegalArgumentException. A Hacker can not delete personalDatas from another hacker.
 		 */
+
 		};
 
 		for (int i = 0; i < testingData.length; i++)
@@ -105,33 +144,39 @@ public class PersonalDataServiceTest extends AbstractTest {
 		try {
 			super.authenticate(username);
 
-			//			if (operation.equals("create")) {
-			//				//final Hacker hacker = this.hackerService.findOne(this.getEntityId(username));
-			//				final Curriculum c = this.curriculumService.findOne(this.getEntityId(id));
-			//				//c.setHacker(hacker);
-			//
-			//				final PersonalData personalData = this.personalDataService.create(c.getId());
-			//				personalData.setCurriculum(c);
-			//				personalData.setFullName("Manuel Jesus");
-			//				personalData.setStatement("This is a my curriculum");
-			//				personalData.setPhoneNumber("666666666");
-			//				personalData.setGitHubProfile("https://www.github.com");
-			//				personalData.setLinkedInProfile("https://www.linkedin.com");
-			//
-			//				this.personalDataService.save(personalData);
-
-			//			} else 
-			if (operation.equals("editPositive")) {
+			if (operation.equals("edit")) {
 				final PersonalData personalData = this.personalDataService.findOne(this.getEntityId(id));
 				personalData.setFullName("Jose");
 
 				this.personalDataService.save(personalData);
 
-			} else if (operation.equals("editNegative")) {
-				final PersonalData personalData = this.personalDataService.findOne(this.getEntityId(id));
-				personalData.setFullName(st);
+			} else if (operation.equals("create")) {
+				final Curriculum c = this.curriculumService.create();
+				final Curriculum saved = this.curriculumService.save(c);
+				final PersonalData personalData = this.personalDataService.create(saved.getId());
+
+				personalData.setFullName("Manuel Jesus");
+				personalData.setStatement("This is a my curriculum");
+				personalData.setPhoneNumber("666666666");
+				personalData.setGitHubProfile("https://www.github.com");
+				personalData.setLinkedInProfile("https://www.linkedin.com");
 				this.personalDataService.save(personalData);
 
+			} else if (operation.equals("delete")) {
+				final PersonalData personalData = this.personalDataService.findOne(this.getEntityId(id));
+				this.personalDataService.delete(personalData);
+
+			} else if (operation.equals("createNegative")) {
+				final Curriculum c = this.curriculumService.create();
+				final Curriculum saved = this.curriculumService.save(c);
+				final PersonalData personalData = this.personalDataService.create(saved.getId());
+
+				personalData.setFullName(st);
+				personalData.setStatement("This is a my curriculum");
+				personalData.setPhoneNumber("666666666");
+				personalData.setGitHubProfile("https://www.github.com");
+				personalData.setLinkedInProfile("https://www.linkedin.com");
+				this.personalDataService.save(personalData);
 			}
 			this.personalDataService.flush();
 			super.unauthenticate();

@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.GregorianCalendar;
+
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
@@ -34,7 +36,7 @@ public class PositionDataServiceTest extends AbstractTest {
 	@Test
 	public void PositionDataPositiveTest() {
 		final Object testingData[][] = {
-			//Total sentence coverage : Coverage 93.3% | Covered Instructions 83 | Missed Instructions 6 | Total Instructions 89
+			//Total sentence coverage : Coverage 94.3% | Covered Instructions 100 | Missed Instructions 6 | Total Instructions 106
 
 			{
 				"hacker1", null, "curriculum1", "create", null
@@ -44,18 +46,30 @@ public class PositionDataServiceTest extends AbstractTest {
 			 * Positive test: A hacker registers a new positionData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-			 * Data coverage : We created a new personalData with valid data.
+			 * Data coverage : We created a new positionData with valid data.
 			 * Exception expected: None. A hacker can edit his positionData.
 			 */{
-				"hacker1", null, "positionData1", "editPositive", null
-			}
+				"hacker1", null, "positionData1", "edit", null
+			},
 
+			/*
+			 * Positive test: A hacker edit his positionData.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 4 editable attributes we tried to edit 1 attribute (title) with valid data.
+			 * Exception expected: None. A hacker can edit his positionDatas.
+			 */
+
+			{
+				"hacker1", null, "positionData1", "delete", null
+			},
 		/*
-		 * Positive test: A hacker edit his positionData.
+		 * 
+		 * Positive test: A hacker delete his positionData
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage : From 4 editable attributes we tried to edit 1 attribute (title) with valid data.
-		 * Exception expected: None. A hacker can edit his positionDatas.
+		 * Data coverage : We tried to delete a positionData.
+		 * Exception expected: None. A hacker can delete his positionData.
 		 */
 
 		};
@@ -70,21 +84,41 @@ public class PositionDataServiceTest extends AbstractTest {
 				super.rollbackTransaction();
 			}
 	}
-
 	@Test
 	public void PositionDataNegativeTest() {
 		final Object testingData[][] = {
-			//Total Sentence Coverage: Coverage 92.5% | Covered Instructions 74 | Missed Instructions 6 | Total Instructions 80
+			//Total Sentence Coverage: Coverage 95.1% | Covered Instructions 116 | Missed Instructions 6 | Total Instructions 122
 			{
-				"hacker1", "", "positionData1", "editNegative", ConstraintViolationException.class
+				"hacker1", "", "curriculum1", "createNegative", ConstraintViolationException.class
+			},
+			/*
+			 * Positive: A hacker tries to create a positionData
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage: We created a positionData with 3 out of 4 valid parameters.
+			 * Exception expected: ConstraintViolationException. Title cannot be blank.
+			 */
+
+			{
+				"hacker2", null, "positionData1", "edit", IllegalArgumentException.class
 			},
 
+			/*
+			 * Negative test: A hacker tries to edit a positionData that not owns.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (Description) with a user that is not the owner.
+			 * Exception expected: IllegalArgumentException. A Hacker can not edit positionDatas from another hacker.
+			 */
+			{
+				"hacker2", null, "positionData1", "delete", IllegalArgumentException.class
+			},
 		/*
-		 * Negative test: A hacker tries to edit the positionData with invalid data.
+		 * Negative test: A hacker tries to delete a positionData that not owns.
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage: From 4 editable attributes we tried to edit 1 attribute (description).
-		 * Exception expected: IllegalArgumentException A hacker cannot edit a positionData with invalid data.
+		 * Data coverage : We tried to delete a positionData with a user that is not the owner.
+		 * Exception expected: IllegalArgumentException. A Hacker can not delete positionDatas from another hacker.
 		 */
 		};
 
@@ -105,31 +139,37 @@ public class PositionDataServiceTest extends AbstractTest {
 		try {
 			super.authenticate(username);
 
-			//			if (operation.equals("create")) {
-			//				//final Hacker hacker = this.hackerService.findOne(this.getEntityId(username));
-			//				final Curriculum c = this.curriculumService.findOne(this.getEntityId(id));
-			//				//c.setHacker(hacker);
-			//
-			//				final PositionData positionData = this.positionDataService.create(c.getId());
-			//				positionData.setCurriculum(c);
-			//				positionData.setTitle("PositionDataTitle");
-			//				positionData.setStartDate(12/04/2019 12:30);
-			//				positionData.setEndDate(15/05/2019 13:00);
-			//
-			//				this.positionDataService.save(positionData);
-
-			//			} else 
-			if (operation.equals("editPositive")) {
+			if (operation.equals("edit")) {
 				final PositionData positionData = this.positionDataService.findOne(this.getEntityId(id));
-				positionData.setTitle("Titulo");
+				positionData.setDescription("Description");
 
 				this.positionDataService.save(positionData);
 
-			} else if (operation.equals("editNegative")) {
-				final PositionData positionData = this.positionDataService.findOne(this.getEntityId(id));
-				positionData.setDescription(st);
+			} else if (operation.equals("create")) {
+
+				final PositionData positionData = this.positionDataService.create(this.getEntityId(id));
+
+				positionData.setTitle("title");
+				positionData.setDescription("Description");
+
+				positionData.setStartDate(new GregorianCalendar(2018, 11, 02).getTime());
+				positionData.setEndDate(new GregorianCalendar(2021, 11, 02).getTime());
+
 				this.positionDataService.save(positionData);
 
+			} else if (operation.equals("delete")) {
+				final PositionData positionData = this.positionDataService.findOne(this.getEntityId(id));
+				this.positionDataService.delete(positionData);
+
+			} else if (operation.equals("createNegative")) {
+				final PositionData positionData = this.positionDataService.create(this.getEntityId(id));
+
+				positionData.setTitle(st);
+				positionData.setDescription("Description");
+				positionData.setStartDate(new GregorianCalendar(2018, 11, 02).getTime());
+				positionData.setEndDate(new GregorianCalendar(2021, 11, 02).getTime());
+
+				this.positionDataService.save(positionData);
 			}
 			this.positionDataService.flush();
 			super.unauthenticate();

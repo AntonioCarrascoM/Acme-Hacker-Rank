@@ -34,8 +34,7 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 	@Test
 	public void MiscellaneousDataPositiveTest() {
 		final Object testingData[][] = {
-			//Total sentence coverage : Coverage 93.3% | Covered Instructions 83 | Missed Instructions 6 | Total Instructions 89
-
+			//Total sentence coverage : Coverage 94.3% | Covered Instructions 100 | Missed Instructions 6 | Total Instructions 106
 			{
 				"hacker1", null, "curriculum1", "create", null
 			},
@@ -44,18 +43,30 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 			 * Positive test: A hacker registers a new miscellaneousData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-			 * Data coverage : We created a new personalData with valid data.
+			 * Data coverage : We created a new miscellaneousData with valid data.
 			 * Exception expected: None. A hacker can edit his miscellaneousData.
 			 */{
-				"hacker1", null, "miscellaneousData1", "editPositive", null
-			}
+				"hacker1", null, "miscellaneousData1", "edit", null
+			},
 
+			/*
+			 * Positive test: A hacker edit his miscellaneousData.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 2 editable attributes we tried to edit 1 attribute (text) with valid data.
+			 * Exception expected: None. A hacker can edit his miscellaneousDatas.
+			 */
+
+			{
+				"hacker1", null, "miscellaneousData1", "delete", null
+			},
 		/*
-		 * Positive test: A hacker edit his miscellaneousData.
+		 * 
+		 * Positive test: A hacker delete his miscellaneousData
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage : From 2 editable attributes we tried to edit 1 attribute (text) with valid data.
-		 * Exception expected: None. A hacker can edit his miscellaneousDatas.
+		 * Data coverage : We tried to delete a miscellaneousData.
+		 * Exception expected: None. A hacker can delete his miscellaneousData.
 		 */
 
 		};
@@ -74,17 +85,38 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 	@Test
 	public void MiscellaneousDataNegativeTest() {
 		final Object testingData[][] = {
-			//Total Sentence Coverage: Coverage 92.5% | Covered Instructions 74 | Missed Instructions 6 | Total Instructions 80
+			//Total Sentence Coverage: Coverage 95.1% | Covered Instructions 116 | Missed Instructions 6 | Total Instructions 122
 			{
-				"hacker1", "", "miscellaneousData1", "editNegative", ConstraintViolationException.class
+				"hacker1", "", "curriculum1", "createNegative", ConstraintViolationException.class
+			},
+			/*
+			 * Positive: A hacker tries to create a miscellaneousData
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage: We created a miscellaneousData with 1 out of 2 valid parameters.
+			 * Exception expected: ConstraintViolationException. Text cannot be blank.
+			 */
+
+			{
+				"hacker2", null, "miscellaneousData1", "edit", IllegalArgumentException.class
 			},
 
+			/*
+			 * Negative test: A hacker tries to edit a miscellaneousData that not owns.
+			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
+			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
+			 * Data coverage : From 2 editable attributes we tried to edit 1 attribute (Text) with a user that is not the owner.
+			 * Exception expected: IllegalArgumentException. A Hacker can not edit miscellaneousDatas from another hacker.
+			 */
+			{
+				"hacker2", null, "miscellaneousData1", "delete", IllegalArgumentException.class
+			},
 		/*
-		 * Negative test: A hacker tries to edit the miscellaneousData with invalid data.
+		 * Negative test: A hacker tries to delete a miscellaneousData that not owns.
 		 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 		 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
-		 * Data coverage: From 2 editable attributes we tried to edit 1 attribute (text).
-		 * Exception expected: IllegalArgumentException A hacker cannot edit an miscellaneousData with invalid data.
+		 * Data coverage : We tried to delete a miscellaneousData with a user that is not the owner.
+		 * Exception expected: IllegalArgumentException. A Hacker can not delete miscellaneousDatas from another hacker.
 		 */
 		};
 
@@ -105,29 +137,32 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 		try {
 			super.authenticate(username);
 
-			//			if (operation.equals("create")) {
-			//				//final Hacker hacker = this.hackerService.findOne(this.getEntityId(username));
-			//				final Curriculum c = this.curriculumService.findOne(this.getEntityId(id));
-			//				//c.setHacker(hacker);
-			//
-			//				final MiscellaneousData miscellaneousData = this.miscellaneousDataService.create(c.getId());
-			//				miscellaneousData.setCurriculum(c);
-			//				miscellaneousData.setText("MiscellaneousDataText");
-			//				miscellaneousData.setAttachments("attachments");
-			//				this.miscellaneousDataService.save(miscellaneousData);
-
-			//			} else 
-			if (operation.equals("editPositive")) {
+			if (operation.equals("edit")) {
 				final MiscellaneousData miscellaneousData = this.miscellaneousDataService.findOne(this.getEntityId(id));
-				miscellaneousData.setText("This is a text");
+				miscellaneousData.setText("Text");
 
 				this.miscellaneousDataService.save(miscellaneousData);
 
-			} else if (operation.equals("editNegative")) {
+			} else if (operation.equals("create")) {
+
+				final MiscellaneousData miscellaneousData = this.miscellaneousDataService.create(this.getEntityId(id));
+
+				miscellaneousData.setText("text");
+				miscellaneousData.setAttachments("attachments");
+
+				this.miscellaneousDataService.save(miscellaneousData);
+
+			} else if (operation.equals("delete")) {
 				final MiscellaneousData miscellaneousData = this.miscellaneousDataService.findOne(this.getEntityId(id));
+				this.miscellaneousDataService.delete(miscellaneousData);
+
+			} else if (operation.equals("createNegative")) {
+				final MiscellaneousData miscellaneousData = this.miscellaneousDataService.create(this.getEntityId(id));
+
 				miscellaneousData.setText(st);
-				this.miscellaneousDataService.save(miscellaneousData);
+				miscellaneousData.setAttachments("attachments");
 
+				this.miscellaneousDataService.save(miscellaneousData);
 			}
 			this.miscellaneousDataService.flush();
 			super.unauthenticate();
