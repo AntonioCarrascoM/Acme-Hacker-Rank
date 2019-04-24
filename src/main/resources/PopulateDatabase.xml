@@ -341,7 +341,7 @@
 		<property name="requiredTech" value="Java, MySQL, Spring" />
 		<property name="offeredSalary" value="1000.0" />
 		<property name="cancelled" value="false"/>
-		<property name="finalMode" value="true"/>
+		<property name="finalMode" value="false"/>
  		<property name="company" ref="company1" />
  		<property name="problems">
 			<list>
@@ -685,7 +685,6 @@
 		<property name="moment"><null /></property>
 		<property name="positions">
 			<list>
-				<ref bean="position2" />
 			</list>
 		</property>
 	</bean>
@@ -698,8 +697,6 @@
 		<property name="moment"><null /></property>
 		<property name="positions">
 			<list>
-				<ref bean="position4" />
-				<ref bean="position5" />
 			</list>
 		</property>
 	</bean>
