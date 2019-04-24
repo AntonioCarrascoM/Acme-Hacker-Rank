@@ -44,27 +44,18 @@ public class MessageServiceTest extends AbstractTest {
 				"company1", null, "company2", "create", null
 			},
 			/*
-			 * Positive: A company tries to create a Miscellaneous Record.
+			 * Positive test: A company tries to create a message.
 			 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
 			 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
 			 * Data coverage : We created a miscellaneousRecord with 5 out of 5 valid parameters.
 			 * Exception expected: None. A Company can create messages.
 			 */
 			{
-				"company3", null, "message1", "edit", null
-			},
-			/*
-			 * Positive test: A company edits his messages.
-			 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
-			 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
-			 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (body) with valid data.
-			 * Exception expected: None. A Company can edit his messages.
-			 */
-			{
+
 				"company3", null, "message1", "delete", null
 			},
 		/*
-		 * Positive test: A company edits his messages.
+		 * Positive test: A company delete his message.
 		 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
 		 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
 		 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (body) with valid data.
@@ -93,27 +84,18 @@ public class MessageServiceTest extends AbstractTest {
 				"company1", null, "company2", "createNegative", ConstraintViolationException.class
 			},
 			/*
-			 * Positive: A company tries to create a Miscellaneous Record.
+			 * Negative test: A company tries to create a message.
 			 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
 			 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
 			 * Data coverage : We created a message with 2 out of 2 valid parameters.
 			 * Exception expected: ConstraintViolationException. Subject cannot be blank.
 			 */
 			{
-				"company1", null, "message1", "edit", IllegalArgumentException.class
-			},
-			/*
-			 * Negative: A company tries to edit a message that not owns.
-			 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
-			 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
-			 * Data coverage : From 3 editable attributes we tried to edit 1 attribute (body) with a user that is not the owner.
-			 * Exception expected: IllegalArgumentException. A Company can not edit messages from another company.
-			 */
-			{
+
 				"company1", null, "message1", "delete", IllegalArgumentException.class
 			},
 		/*
-		 * Negative: A company tries to delete a message that not owns.
+		 * Negative test: A company tries to delete a message that not owns.
 		 * Requisite tested: Functional requirement - 23.2 An actor who is authenticated must be able to Manage his or her messages,
 		 * which includes listing them grouped by tag, showing them, sending a message to an actor, deleting a message that he or she got.
 		 * Data coverage :We tried to delete a message with an user that is not the owner.
@@ -150,12 +132,6 @@ public class MessageServiceTest extends AbstractTest {
 
 				this.messageService.save(message);
 
-			} else if (operation.equals("edit")) {
-				final Message message = this.messageService.findOne(this.getEntityId(id));
-				message.setBody("Testing body edition");
-
-				this.messageService.save(message);
-
 			} else if (operation.equals("delete")) {
 				final Message message = this.messageService.findOne(this.getEntityId(id));
 
@@ -174,6 +150,10 @@ public class MessageServiceTest extends AbstractTest {
 
 				this.messageService.save(message);
 
+			} else if (operation.equals("delete")) {
+				final Message message = this.messageService.findOne(this.getEntityId(id));
+
+				this.messageService.delete(message);
 			}
 
 			this.messageService.flush();

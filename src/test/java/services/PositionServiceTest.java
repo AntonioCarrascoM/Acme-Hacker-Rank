@@ -144,7 +144,7 @@ public class PositionServiceTest extends AbstractTest {
 				"company1", null, "position2", "editFinalMode", IllegalArgumentException.class
 			},
 			/*
-			 * Positive test: A company edits its position.
+			 * Negative: A company edits its position and it is on final mode.
 			 * Requisite tested: Functional requirement - 9.1. A position cannot be saved in final mode
 			 * unless there are at least two problems associated with it
 			 * Data coverage : We tried to save a position in final mode which has less than 2 problems associated.

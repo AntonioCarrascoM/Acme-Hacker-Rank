@@ -21,7 +21,7 @@ import domain.PersonalData;
 @Transactional
 public class PersonalDataServiceTest extends AbstractTest {
 
-	// System under test: Hacker ------------------------------------------------------
+	// System under test: PersonalData ------------------------------------------------------
 
 	// Tests ------------------------------------------------------------------
 	// PLEASE READ
@@ -30,6 +30,7 @@ public class PersonalDataServiceTest extends AbstractTest {
 
 	@Autowired
 	private PersonalDataService	personalDataService;
+
 	@Autowired
 	private CurriculumService	curriculumService;
 
@@ -95,7 +96,7 @@ public class PersonalDataServiceTest extends AbstractTest {
 				"hacker1", "", null, "createNegative", ConstraintViolationException.class
 			},
 			/*
-			 * Positive: A hacker tries to create a personalData
+			 * Negative test: A hacker tries to create a personalData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
 			 * Data coverage: We created a personalData with 4 out of 5 valid parameters.
