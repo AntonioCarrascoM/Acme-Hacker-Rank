@@ -22,7 +22,7 @@ import domain.EducationData;
 @Transactional
 public class EducationDataServiceTest extends AbstractTest {
 
-	// System under test: Hacker ------------------------------------------------------
+	// System under test: EducationData ------------------------------------------------------
 
 	// Tests ------------------------------------------------------------------
 	// PLEASE READ
@@ -101,7 +101,7 @@ public class EducationDataServiceTest extends AbstractTest {
 			 */
 
 			{
-				"hacker2", null, "educationData1", "edit", IllegalArgumentException.class
+				"hacker2", null, "educationData1", "editNegative", IllegalArgumentException.class
 			},
 
 			/*
@@ -112,7 +112,7 @@ public class EducationDataServiceTest extends AbstractTest {
 			 * Exception expected: IllegalArgumentException. A Hacker can not edit educationDatas from another hacker.
 			 */
 			{
-				"hacker2", null, "educationData1", "delete", IllegalArgumentException.class
+				"hacker2", null, "educationData1", "deleteNegative", IllegalArgumentException.class
 			},
 		/*
 		 * Negative test: A hacker tries to delete a educationData that not owns.
@@ -172,7 +172,17 @@ public class EducationDataServiceTest extends AbstractTest {
 				educationData.setEndDate(new GregorianCalendar(2021, 11, 02).getTime());
 
 				this.educationDataService.save(educationData);
+			} else if (operation.equals("editNegative")) {
+				final EducationData educationData = this.educationDataService.findOne(this.getEntityId(id));
+				educationData.setDegree("Institution");
+
+				this.educationDataService.save(educationData);
+
+			} else if (operation.equals("deleteNegative")) {
+				final EducationData educationData = this.educationDataService.findOne(this.getEntityId(id));
+				this.educationDataService.delete(educationData);
 			}
+
 			this.educationDataService.flush();
 			super.unauthenticate();
 		} catch (final Throwable oops) {

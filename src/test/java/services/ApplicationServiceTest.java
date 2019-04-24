@@ -11,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
 import domain.Application;
+import domain.Curriculum;
+import domain.Position;
 
 @ContextConfiguration(locations = {
 	"classpath:spring/junit.xml"
@@ -29,11 +31,15 @@ public class ApplicationServiceTest extends AbstractTest {
 	@Autowired
 	private ApplicationService	applicationService;
 
+	@Autowired
+	private PositionService		positionService;
 
-	//	@Autowired
-	//	private PositionService		positionService;
-	//	@Autowired
-	//	private ProblemService		problemService;
+	@Autowired
+	private ProblemService		problemService;
+
+	@Autowired
+	private CurriculumService	curriculumService;
+
 
 	@Test
 	public void ApplicationPositiveTest() {
@@ -45,7 +51,7 @@ public class ApplicationServiceTest extends AbstractTest {
 			},
 
 			/*
-			 * Positive test: A hacker edits his application.
+			 * Positive test: A hacker dits his application.
 			 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
 			 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
 			 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (answerDescription) with valid data.
@@ -53,11 +59,11 @@ public class ApplicationServiceTest extends AbstractTest {
 			 */
 
 			{
-				"hacker1", "position1", "problem1", "create", null
+				"hacker3", "curriculum3", "position5", "create", null
 			},
 
 		/*
-		 * Positive: A hacker tries to create an Application.
+		 * Positive test: A hacker tries to create an Application. Hacker 2. 172
 		 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
 		 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
 		 * Data coverage : We created a application with 2 out of 2 valid parameters.
@@ -82,10 +88,10 @@ public class ApplicationServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 			//Total sentence coverage : Coverage 92.1% | Covered Instructions 70 | Missed Instructions 6 | Total Instructions 76
 			{
-				"hacker2", null, "application1", "edit", IllegalArgumentException.class
+				"hacker2", null, "application1", "editNegative", IllegalArgumentException.class
 			},
 		/*
-		 * Positive: A hacker tries to create an Application.
+		 * Negative test: A hacker tries to create an Application.
 		 * Requisite tested: Functional requirement - 10.1 An actor who is authenticated as a hacker must be able to
 		 * Manage his or her applications, which includes listing them grouped by status, showing them, creating them, and updating them
 		 * Data coverage : From 5 editable attributes we tried to edit 1 attribute (answerDescription) with a user that is not the owner.
@@ -113,33 +119,24 @@ public class ApplicationServiceTest extends AbstractTest {
 			if (operation.equals("edit")) {
 				final Application application = this.applicationService.findOne(this.getEntityId(id));
 				application.setAnswerDescription("Consider your problem solved");
-
 				this.applicationService.save(application);
 
-				//			} else if (operation.equals("create")) {
-				//
-				//				final Application application = this.applicationService.create();
-				//				final Position position = this.positionService.create();
-				//				final Position saved = this.positionService.save(position);
-				//				final Problem problem = this.problemService.create();
-				//				final Problem savedproblem = this.problemService.save(problem);
-				//
-				//				final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				//				final Date moment = sdf.parse("21/03/2019 12:34");
-				//
-				//				final SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-				//				final Date moment1 = sdf1.parse("25/04/2019 12:34");
-				//				application.setMoment(moment);
-				//				application.setAnswerDescription("answerdescription");
-				//				application.setAnswerLink("https://www.link.es");
-				//				application.setAnswerMoment(moment1);
-				//				application.setStatus(Status.ACCEPTED);
-				//				application.setPosition(saved);
-				//				application.setProblem(savedproblem);
+			} else if (operation.equals("create")) {
+
+				final Curriculum c = this.curriculumService.findOne(this.getEntityId(st));
+				final Application application = this.applicationService.create();
+				application.setCurriculum(c);
+				final Position position = this.positionService.findOne(this.getEntityId(id));
+				application.setPosition(position);
+				application.setProblem(this.problemService.randomProblemInFinalModeByPosition(application.getPosition().getId()));
+				this.applicationService.save(application);
+
+			} else if (operation.equals("editNegative")) {
+				final Application application = this.applicationService.findOne(this.getEntityId(id));
+				application.setAnswerDescription("Consider your problem solved");
 
 				this.applicationService.save(application);
 			}
-
 			this.applicationService.flush();
 			super.unauthenticate();
 		} catch (final Throwable oops) {

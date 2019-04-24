@@ -22,7 +22,7 @@ import domain.PositionData;
 @Transactional
 public class PositionDataServiceTest extends AbstractTest {
 
-	// System under test: Hacker ------------------------------------------------------
+	// System under test: PositionData ------------------------------------------------------
 
 	// Tests ------------------------------------------------------------------
 	// PLEASE READ
@@ -92,7 +92,7 @@ public class PositionDataServiceTest extends AbstractTest {
 				"hacker1", "", "curriculum1", "createNegative", ConstraintViolationException.class
 			},
 			/*
-			 * Positive: A hacker tries to create a positionData
+			 * Negative test: A hacker tries to create a positionData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
 			 * Data coverage: We created a positionData with 3 out of 4 valid parameters.

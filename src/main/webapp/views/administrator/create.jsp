@@ -86,7 +86,12 @@
 		<legend><jstl:out value="${creditCard}"/></legend>
 		<acme:textbox code="administrator.creditCard.holder" path="creditCard.holder" />
 		<acme:textbox code="administrator.creditCard.make" path="creditCard.make" />
-		<acme:textbox code="administrator.creditCard.number" path="creditCard.number" />
+		<form:label path="creditCard.number">
+			<jstl:out value="${number}"/>
+		</form:label>	
+		<form:input path="creditCard.number" pattern="(\d*)|(\d*.\d*)" placeholder="num."/>
+		<form:errors path="creditCard.number" cssClass="error" />
+		<br>
 		<acme:textbox code="administrator.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
 		<acme:textbox code="administrator.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
 		<acme:textbox code="administrator.creditCard.cvv" path="creditCard.cvv" />

@@ -89,7 +89,7 @@ public class ProblemServiceTest extends AbstractTest {
 				"company1", " ", null, "createNegative", ConstraintViolationException.class
 			},
 			/*
-			 * Positive: A company tries to create a Miscellaneous Record.
+			 * Positive: A company tries to create a problem.
 			 * Requisite tested: Functional requirement - 9.2. An actor who is authenticated as a company must be able to:
 			 * Manage their database of problems, which includes listing, showing, creating, updating, and deleting them.
 			 * Data coverage : We created a problem with 4 out of 5 valid parameters.

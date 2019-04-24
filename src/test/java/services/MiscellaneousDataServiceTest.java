@@ -20,7 +20,7 @@ import domain.MiscellaneousData;
 @Transactional
 public class MiscellaneousDataServiceTest extends AbstractTest {
 
-	// System under test: Hacker ------------------------------------------------------
+	// System under test: MiscellaneousData ------------------------------------------------------
 
 	// Tests ------------------------------------------------------------------
 	// PLEASE READ
@@ -90,7 +90,7 @@ public class MiscellaneousDataServiceTest extends AbstractTest {
 				"hacker1", "", "curriculum1", "createNegative", ConstraintViolationException.class
 			},
 			/*
-			 * Positive: A hacker tries to create a miscellaneousData
+			 * Negative test: A hacker tries to create a miscellaneousData
 			 * Requisite tested: Functional requirement - 17.1. An actor who is authenticated as a hacker must be able
 			 * to: Manage his or her curricula , which includes listing, showing, creating, updating, and deleting them.
 			 * Data coverage: We created a miscellaneousData with 1 out of 2 valid parameters.
