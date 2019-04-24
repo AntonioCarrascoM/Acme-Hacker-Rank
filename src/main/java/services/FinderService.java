@@ -61,7 +61,7 @@ public class FinderService {
 	public Finder save(final Finder f) {
 		Assert.notNull(f);
 		//Assertion that the user modifying this finder has the correct privilege.
-		//Assert.isTrue(f.getId() == this.findPrincipalFinder().getId());//this.findPrincipalFinder().getId()
+		Assert.isTrue(f.getId() == this.findPrincipalFinder().getId());//this.findPrincipalFinder().getId()
 		//If all fields of the finder are null, the finder returns the entire listing of available tasks.
 		f.setPositions(f.getPositions());
 		f.setMoment(new Date(System.currentTimeMillis() - 1));
@@ -155,5 +155,9 @@ public class FinderService {
 		if (res == null)
 			res = 0.0;
 		return res;
+	}
+
+	public void flush() {
+		this.finderRepository.flush();
 	}
 }
