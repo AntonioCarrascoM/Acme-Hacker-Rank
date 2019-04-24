@@ -56,9 +56,9 @@
 	
 	<acme:textbox code="finder.specificDeadline" path="specificDeadline" placeholder="finder.ph"/>
 	
-	<acme:textbox code="finder.minSalary" path="minSalary" />
+	<acme:textnumber code="finder.minSalary" path="minSalary" placeholder="sal.ph" />
 	
-	<acme:textbox code="finder.maxSalary" path="maxSalary" />
+	<acme:textnumber code="finder.maxSalary" path="maxSalary" placeholder="sal.ph" />
 	
 	<br />
 	

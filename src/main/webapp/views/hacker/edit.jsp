@@ -66,7 +66,7 @@
 		<acme:textbox code="hacker.creditCard.number" path="creditCard.number" />
 		<acme:textbox code="hacker.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
 		<acme:textbox code="hacker.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
-		<acme:textbox code="hacker.creditCard.cvv" path="creditCard.cvv" />
+		<acme:textbox code="hacker.creditCard.cvv" path="creditCard.cvv" placeholder="cvv.ph"/>
 		</fieldset>
 		<acme:textbox code="hacker.photo" path="photo" placeholder="link"/>
 		<acme:textbox code="hacker.email" path="email" placeholder="hacker.mail.ph"/>

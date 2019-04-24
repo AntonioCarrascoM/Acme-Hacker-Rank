@@ -89,7 +89,7 @@
 		<acme:textbox code="administrator.creditCard.number" path="creditCard.number" />
 		<acme:textbox code="administrator.creditCard.expMonth" path="creditCard.expMonth" placeholder="month.ph"/>
 		<acme:textbox code="administrator.creditCard.expYear" path="creditCard.expYear" placeholder="year.ph"/>
-		<acme:textbox code="administrator.creditCard.cvv" path="creditCard.cvv" />
+		<acme:textbox code="administrator.creditCard.cvv" path="creditCard.cvv" placeholder="cvv.ph"/>
 		</fieldset>
 		<acme:textbox code="administrator.photo" path="photo" placeholder="link"/>
 		<acme:textbox code="administrator.email" path="email" placeholder="mail.ph"/>
