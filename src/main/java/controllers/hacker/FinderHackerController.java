@@ -47,7 +47,7 @@ public class FinderHackerController extends AbstractController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
-		final ModelAndView result;
+		ModelAndView result = new ModelAndView();
 		Finder finder;
 
 		finder = this.finderService.findPrincipalFinder();
@@ -58,7 +58,7 @@ public class FinderHackerController extends AbstractController {
 		final Long millis = this.configurationService.findAll().iterator().next().getExpireFinderMinutes() * 60000L;
 
 		if (finder.getMoment() == null || (new Date(System.currentTimeMillis()).getTime() - finder.getMoment().getTime()) > millis)
-			positions = this.finderService.limitResults(this.positionService.findAll());
+			positions = this.finderService.limitResults(this.positionService.getPublicPositions());
 
 		result = this.createEditModelAndView(finder);
 		result.addObject("positions", positions);
@@ -77,6 +77,7 @@ public class FinderHackerController extends AbstractController {
 		else
 			try {
 				positions = this.finderService.find(finder);
+				positions = this.finderService.limitResults(positions);
 
 				finder.setPositions(positions);
 
@@ -89,6 +90,35 @@ public class FinderHackerController extends AbstractController {
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(finder, "finder.commit.error");
 			}
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "clear")
+	public ModelAndView clear(@Valid final Finder finder, final BindingResult binding) {
+		ModelAndView result;
+		Collection<Position> positions = new ArrayList<Position>();
+		final Hacker h = this.hackerService.hackerByFinder(finder.getId());
+
+		try {
+			finder.setKeyWord(null);
+			finder.setSpecificDeadline(null);
+			finder.setMinSalary(null);
+			finder.setMaxSalary(null);
+
+			positions = this.finderService.find(finder);
+			positions = this.finderService.limitResults(positions);
+
+			finder.setPositions(positions);
+
+			final Finder saved = this.finderService.save(finder);
+			h.setFinder(saved);
+			this.hackerService.save(h);
+
+			return this.edit();
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(finder, "finder.commit.error");
+		}
 		return result;
 	}
 

@@ -34,9 +34,7 @@
 <spring:message code="position.finalMode.true" var="msgTrue" />
 <spring:message code="position.company" var="company" />
 <spring:message code="position.return" var="returnMsg" />
-<spring:message code="position.formatDate" var="formatDate" />
-
-<security:authorize access="hasRole('COMPANY')">
+<spring:message code="position.formatDate.pattern" var="formatDate" />
 	
 	<%-- Displays the information of the selected position --%>
 	
@@ -97,4 +95,3 @@
 	
 	<a href="welcome/index.do"><jstl:out value="${returnMsg}" /></a>
 
-</security:authorize>

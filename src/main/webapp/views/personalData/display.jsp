@@ -28,14 +28,14 @@
 <spring:message code="personalData.return" var="msgReturn" />
 
 
-
+<security:authorize access="hasRole('HACKER')">
 	<%-- For the curriculum in the list received as model, display the following information: --%>
 	<jstl:out value="${msgFullName}" />:
 	<jstl:out value="${personalData.fullName}" />
 	<br />
 	
 	<jstl:out value="${msgStatement}" />:
-	<a href="${personalData.statement}"><jstl:out value="${personalData.statement}" /></a>
+	<jstl:out value="${personalData.statement}" />
 	<br />
 	
 	<jstl:out value="${msgPhoneNumber}" />:
@@ -47,16 +47,16 @@
 	<br />
 	
 	<jstl:out value="${msgLinkedInProfile}" />:
-	<a href="${personalData.linkedInProfile}"><jstl:out value="${personalData.linkedInProfile}" /></a>
+	<jstl:out value="${personalData.linkedInProfile}" />
 	<br />
 	
 
-<security:authorize access="hasRole('HACKER')">
 	<spring:url var="editUrl"
 		value="personalData/hacker/edit.do">
 		<spring:param name="varId"
 			value="${personalData.id}"/>
 	</spring:url>
+	
+	<br>
 	<a href="${editUrl}"><jstl:out value="${msgEdit}" /></a>
 </security:authorize>
-<a href="#"><jstl:out value="${msgReturn}" /></a>

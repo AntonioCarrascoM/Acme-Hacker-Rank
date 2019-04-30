@@ -30,6 +30,8 @@
 
 <%-- Listing grid --%>
 
+<security:authorize access="hasRole('HACKER')">
+
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="miscellaneousDatas" requestURI="${requestURI}" id="row">
 	
@@ -39,9 +41,6 @@
 	<display:column property="text" title="${text}" sortable="true" />
 	<display:column property="attachments" title="${attachments}" sortable="true" />
 	
-	
-
-
 	<%-- Links towards display, apply, edit and cancel views --%>
 	
 	<spring:url var="displayUrl"
@@ -56,9 +55,9 @@
 
 </display:table>
 
-<security:authorize access="hasRole('HACKER')">
 	<spring:url var="createUrl"
 		value="miscellaneousData/hacker/create.do">
+		<spring:param name="varId" value="${curriculum.id}" />
 	</spring:url>
 	<a href="${createUrl}"><jstl:out value="${msgCreate}" /></a>
 </security:authorize>

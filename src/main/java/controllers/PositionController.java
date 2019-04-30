@@ -27,15 +27,19 @@ public class PositionController extends AbstractController {
 	//Listing all
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam(required = false) final String keyword) {
 		final ModelAndView result;
 		final Collection<Position> positions;
 
-		positions = this.positionService.findAll();
+		if (keyword == null || keyword.isEmpty())
+			positions = this.positionService.getPublicPositions();
+		else
+			positions = this.positionService.searchPosition(keyword);
 
 		result = new ModelAndView("position/list");
 		result.addObject("positions", positions);
 		result.addObject("requestURI", "position/list.do");
+		result.addObject("keyword", keyword);
 
 		return result;
 	}

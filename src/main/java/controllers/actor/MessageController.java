@@ -54,23 +54,25 @@ public class MessageController extends AbstractController {
 	public ModelAndView display(@RequestParam final int varId) {
 		final ModelAndView result;
 		final Message message = this.messageService.findOne(varId);
+		final Integer principal = this.actorService.findByPrincipal().getId();
 
 		//Assertion the actor listing these messages has the correct privilege
-		if (this.actorService.findByPrincipal().getId() != message.getSender().getId() || this.actorService.findByPrincipal().getId() != message.getRecipient().getId()) {
-			result = new ModelAndView("redirect:/welcome/index.do");
+		if (principal.equals(message.getSender().getId()) || principal.equals(message.getRecipient().getId())) {
+			result = new ModelAndView("message/display");
+			result.addObject("msg", message);
+			result.addObject("requestURI", "message/display.do");
+
 			return result;
+
 		}
-
-		result = new ModelAndView("message/display");
-		result.addObject("msg", message);
-		result.addObject("requestURI", "message/display.do");
-
+		result = new ModelAndView("redirect:/welcome/index.do");
 		return result;
+
 	}
 
 	//Creation
 
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView create() {
 
 		final ModelAndView result;
@@ -84,7 +86,7 @@ public class MessageController extends AbstractController {
 
 	//Sending
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Message message, final BindingResult binding) {
 		ModelAndView result;
 
@@ -116,14 +118,21 @@ public class MessageController extends AbstractController {
 	public ModelAndView delete(@RequestParam final int varId) {
 		ModelAndView result;
 		final Message message = this.messageService.findOne(varId);
+		final Integer principal = this.actorService.findByPrincipal().getId();
 
-		try {
-			this.messageService.delete(message);
-			result = new ModelAndView("redirect:/message/list.do");
+		//Assertion the actor listing these messages has the correct privilege
+		if (principal.equals(message.getSender().getId()) || principal.equals(message.getRecipient().getId())) {
 
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(message, "message.commit.error");
+			try {
+				this.messageService.delete(message);
+				result = new ModelAndView("redirect:/message/list.do");
+
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(message, "message.commit.error");
+			}
+			return result;
 		}
+		result = new ModelAndView("redirect:/welcome/index.do");
 		return result;
 	}
 
@@ -143,11 +152,11 @@ public class MessageController extends AbstractController {
 		final Collection<Actor> recipients = this.actorService.findAll();
 		recipients.remove(this.actorService.findByPrincipal());
 
-		result = new ModelAndView("message/create");
+		result = new ModelAndView("message/edit");
 		result.addObject("recipients", recipients);
 		result.addObject("msg", message);
 		result.addObject("message", messageCode);
-		result.addObject("requestURI", "message/create.do");
+		result.addObject("requestURI", "message/edit.do");
 
 		return result;
 

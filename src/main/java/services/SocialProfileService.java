@@ -3,6 +3,8 @@ package services;
 
 import java.util.Collection;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,9 +88,13 @@ public class SocialProfileService {
 		result.setNick(sp.getNick());
 		result.setSocialNetwork(sp.getSocialNetwork());
 
-		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getActor().getId());
-
 		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		//Assertion the user has the correct privilege
+		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getActor().getId());
 
 		return result;
 
@@ -96,5 +102,8 @@ public class SocialProfileService {
 	//The social profiles from an Actor
 	public Collection<SocialProfile> socialProfilesFromActor(final int actorId) {
 		return this.socialProfileRepository.socialProfilesFromActor(actorId);
+	}
+	public void flush() {
+		this.socialProfileRepository.flush();
 	}
 }

@@ -22,21 +22,32 @@
 <%-- Stored message variables --%>
 
 <spring:message code="position.title" var="title" />
-<spring:message code="position.statement" var="statement" />
-<spring:message code="position.hint" var="hint" />
+<spring:message code="position.ticker" var="ticker" />
+<spring:message code="position.deadline" var="deadline" />
 <spring:message code="position.company.commercialName" var="commercialName" />
 <spring:message code="position.display" var="display" />
 <spring:message code="position.company" var="company" />
 <spring:message code="position.return" var="msgReturn" />
 <spring:message code="position.edit" var="edit" />
 <spring:message code="position.delete" var="delete" />
+<spring:message code="position.applications" var="applications" />
 <spring:message code="position.confirm" var="msgConfirm" />
+<spring:message code="position.create" var="msgCreate" />
+<spring:message code="position.search" var="msgSearch" />
+<spring:message code="position.clear" var="msgClear" />
+<spring:message code="position.keyword" var="msgKeyword" />
 <spring:message code="position.cancel" var="cancel" />
-<spring:message code="position.formatDate" var="formatDate" />
+<spring:message code="position.formatDate.pattern" var="formatDate" />
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <jsp:useBean id="now" class="java.util.Date"/>
 
 <%-- Listing grid --%>
+
+<form action="${requestURI}" method="get">
+	<input type="search" name="keyword" value="${keyword}" placeholder="${msgKeyword}">
+	<input type="submit" value="${msgSearch}">
+</form>
 
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="positions" requestURI="${requestURI}" id="row">
@@ -44,10 +55,9 @@
 	<%-- Attributes --%>
 	
 	<display:column property="ticker" title="${ticker}" sortable="true" />
-	<display:column property="company.commercialName" title="${commercialName}" sortable="true" />
 	<display:column property="title" title="${title}" sortable="true" />
 	
-	<display:column title="${hint}" sortable="true">
+	<display:column title="${deadline}" sortable="true">
 		<fmt:formatDate value="${row.deadline}" pattern="${formatDate}"/>
 	</display:column>
 	
@@ -84,7 +94,7 @@
 	</spring:url>
 
 	<display:column title="${company}">
-			<a href="${companyUrl}"><jstl:out value="${company}" /></a>
+			<a href="${companyUrl}"><jstl:out value="${row.company.commercialName}" /></a>
 	</display:column>
 	
 	<display:column title="${display}">
@@ -98,6 +108,8 @@
 		</jstl:if>
 	</display:column>
 	
+	<jstl:if test="${requestURI != 'position/list.do'}">
+	
 	<display:column title="${edit}">
 		<jstl:if test="${row.finalMode eq false}">
 			<a href="${editUrl}"><jstl:out value="${edit}" /></a>
@@ -109,8 +121,28 @@
 			<a href="${deleteUrl}" onclick="return confirm('${msgConfirm}')"><jstl:out value="${delete}" /></a>
 		</jstl:if>
 	</display:column>
+	</jstl:if>
 	</security:authorize>
+	
+	<security:authorize access="hasRole('COMPANY')">
+	<spring:url var="listApplicationsUrl"
+		value="application/company/list.do">
+		<spring:param name="varId"
+			value="${row.id}"/>
+	</spring:url>
 
+	<display:column title="${applications}">
+			<a href="${listApplicationsUrl}"><jstl:out value="${applications}" /></a>
+	</display:column>
+	</security:authorize>
 </display:table>
+
+<security:authorize access="hasRole('COMPANY')">
+<spring:url var="createUrl"
+		value="position/company/create.do">
+	</spring:url>
+	<a href="${createUrl}"><jstl:out value="${msgCreate}" /></a>
+	<br>
+	</security:authorize>
 <a href="welcome/index.do"><jstl:out value="${msgReturn}" /></a>
 

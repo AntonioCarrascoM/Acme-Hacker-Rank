@@ -41,6 +41,6 @@
 	<form:label path="${path}">
 		<spring:message code="${code}" />
 	</form:label>
-	<form:textarea path="${path}" readonly="${readonly}" />
+	<form:textarea path="${path}" placeholder="${ph}" readonly="${readonly}" />
 	<form:errors path="${path}" cssClass="error" />
 </div>

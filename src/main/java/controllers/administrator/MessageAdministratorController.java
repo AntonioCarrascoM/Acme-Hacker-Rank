@@ -33,7 +33,7 @@ public class MessageAdministratorController extends AbstractController {
 
 	//Create notification
 
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView create() {
 		final ModelAndView result;
 		Message message;
@@ -46,14 +46,14 @@ public class MessageAdministratorController extends AbstractController {
 
 	//Broadcast notification
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "broadcast")
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "broadcast")
 	public ModelAndView broadcast(Message message, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
 			message = this.messageService.reconstructBroadcast(message, binding);
 		} catch (final ValidationException oops) {
-			return this.createEditModelAndView(message);
+			return this.createEditModelAndView(message, "message.validation.error");
 		} catch (final Throwable oops) {
 			return this.createEditModelAndView(message, "message.commit.error");
 		}
@@ -84,11 +84,11 @@ public class MessageAdministratorController extends AbstractController {
 
 		recipients = this.actorService.findAll();
 
-		result = new ModelAndView("message/create");
+		result = new ModelAndView("message/edit");
 		result.addObject("msg", message);
 		result.addObject("recipients", recipients);
 		result.addObject("message", messageCode);
-		result.addObject("requestURI", "message/administrator/create.do");
+		result.addObject("requestURI", "message/administrator/edit.do");
 
 		return result;
 

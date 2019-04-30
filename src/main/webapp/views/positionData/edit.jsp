@@ -27,8 +27,8 @@
 <spring:message code="positionData.startDate" var="startDate" />
 <spring:message code="positionData.endDate" var="endDate" />
 <spring:message code="positionData.save" var="save" />
-<spring:message code="positionData.delete" var="delete" />
 <spring:message code="positionData.cancel" var="cancel" />
+<spring:message code="positionData.delete" var="delete" />
 <spring:message code="positionData.confirm" var="confirm" />
 
 <security:authorize access="hasRole('HACKER')">
@@ -38,10 +38,7 @@
 		<%-- Forms --%>
 
 		<form:hidden path="id" />
-		<form:hidden path="version" />
 		<form:hidden path="curriculum" />
-		
-		
 		
 		<acme:textbox code="positionData.title" path="title"/>
 		
@@ -50,7 +47,6 @@
 		 path="description"/>
 		 <br />
 		 
-		 		
 		 <acme:textbox 
 	     placeholder="positionData.ph"
 		 code = "positionData.startDate" 
@@ -63,7 +59,6 @@
 		 path="endDate"/>
 		 <br/>
 	
-
 		<%-- Buttons --%>
 
 		<acme:submit code="positionData.save" name="save" />
@@ -74,7 +69,7 @@
 				onclick="return confirm('${confirm}')" />&nbsp;
 	</jstl:if>
 
-	<acme:cancel url="welcome/index.do" code="positionData.cancel" />
+	<acme:cancel url="curriculum/hacker/list.do" code="positionData.cancel" />
 
 
 </form:form>

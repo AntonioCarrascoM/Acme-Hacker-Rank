@@ -151,9 +151,22 @@
 		<property name="phone" value="639854163" />
 		<property name="address" value="c/Sevilla 34" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount1" />
 	</bean>
 	
+	<!-- Messages beans (for tests) -->
+	<bean id="message1" class="domain.Message">
+		<property name="sent" value="10/10/2010 10:00" />
+		<property name="subject" value="Prueba" />
+		<property name="body" value="Me gusta bailar pene dick Nigeria malo no me gusta bad" />
+		<property name="spam" value="true" />
+		<property name="tags" value="hola que tal" />
+		<property name="sender" ref="company3" />
+		<property name="recipient" ref="company2" />
+		
+	</bean>
+
 	<!-- Company beans -->
 	
 	<bean id="company1" class="domain.Company">
@@ -166,6 +179,8 @@
 		<property name="email" value="luigargal@gmail.com" />
 		<property name="phone" value="637754163" />
 		<property name="address" value="c/Tabladilla 12" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="CodeLuis" />
 		<property name="userAccount" ref="userAccount2" />
 	</bean>
@@ -181,6 +196,7 @@
 		<property name="phone" value="666654163" />
 		<property name="address" value="c/Almendro 13" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="Informatic Profesionals Marmor" />
 		<property name="userAccount" ref="userAccount3" />
 	</bean>
@@ -196,6 +212,7 @@
 		<property name="phone" value="639857821" />
 		<property name="address" value="c/Tarfia 63" />
 		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="commercialName" value="High Mountain Computers" />
 		<property name="userAccount" ref="userAccount4" />
 	</bean>
@@ -212,7 +229,10 @@
 		<property name="email" value="kristocha@gmail.com" />
 		<property name="phone" value="637110163" />
 		<property name="address" value="c/Tabladilla 2" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount5" />
+		<property name="finder" ref="finder1" />
 	</bean>
 	
 	<bean id="hacker2" class="domain.Hacker">
@@ -225,7 +245,10 @@
 		<property name="email" value="tammysully@gmail.com" />
 		<property name="phone" value="600110163" />
 		<property name="address" value="c/America 27" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount6" />
+		<property name="finder" ref="finder2" />
 	</bean>
 	
 	<bean id="hacker3" class="domain.Hacker">
@@ -238,7 +261,10 @@
 		<property name="email" value="kevinmene@gmail.com" />
 		<property name="phone" value="637690163" />
 		<property name="address" value="c/Pakistan 8" />
+		<property name="spammer" value="false" />
+		<property name="evaluated" value="false" />
 		<property name="userAccount" ref="userAccount7" />
+		<property name="finder"><null /></property>
 	</bean>
 	
 	<!-- CreditCard beans -->
@@ -318,8 +344,14 @@
 		<property name="requiredTech" value="Java, MySQL, Spring" />
 		<property name="offeredSalary" value="1000.0" />
 		<property name="cancelled" value="false"/>
-		<property name="finalMode" value="true"/>
+		<property name="finalMode" value="false"/>
  		<property name="company" ref="company1" />
+ 		<property name="problems">
+			<list>
+				<ref bean="problem1" />
+				<ref bean="problem2" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position2" class="domain.Position">
@@ -334,6 +366,11 @@
 		<property name="cancelled" value="false"/> 
 		<property name="finalMode" value="false"/>
  		<property name="company" ref="company1" />
+		<property name="problems">
+			<list>
+				<ref bean="problem3" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position3" class="domain.Position">
@@ -348,6 +385,12 @@
 		<property name="cancelled" value="true"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company2" />
+		<property name="problems">
+			<list>
+				<ref bean="problem4" />
+				<ref bean="problem5" />
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position4" class="domain.Position">
@@ -362,6 +405,10 @@
 		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="false"/>
 		<property name="company" ref="company1" />
+		<property name="problems">
+			<list>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="position5" class="domain.Position">
@@ -376,6 +423,12 @@
 		<property name="cancelled" value="false"/>
 		<property name="finalMode" value="true"/>
 		<property name="company" ref="company3" />
+		<property name="problems">
+			<list>
+				<ref bean="problem6" />
+				<ref bean="problem7" />
+			</list>
+		</property>
 	</bean>
 	
 	<!-- Application beans -->
@@ -437,11 +490,6 @@
 		<property name="attachments" value="Here is the library: http://stringtopdf.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position1" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem2" class="domain.Problem">
@@ -451,11 +499,6 @@
 		<property name="attachments" value="Here is the code: http://codecreate.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position1" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem3" class="domain.Problem">
@@ -465,11 +508,6 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company1" />
-		<property name="positions">
-			<list>
-				<ref bean="position2" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem4" class="domain.Problem">
@@ -479,11 +517,6 @@
 		<property name="attachments" value="Here is the trace: http://tracecode.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="positions">
-			<list>
-				<ref bean="position3" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem5" class="domain.Problem">
@@ -493,11 +526,6 @@
 		<property name="attachments" value="Here is the git account: http://gitaccount.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company2" />
-		<property name="positions">
-			<list>
-				<ref bean="position3" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem6" class="domain.Problem">
@@ -507,11 +535,6 @@
 		<property name="attachments" value="Here is the image: http://imagelocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-				<ref bean="position5" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem7" class="domain.Problem">
@@ -521,11 +544,6 @@
 		<property name="attachments" value="Here is the pom link: http://pomlocation.com"/>
 		<property name="finalMode" value="true" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-				<ref bean="position5" />
-			</list>
-		</property>
 	</bean>
 	
 	<bean id="problem8" class="domain.Problem">
@@ -535,10 +553,6 @@
 		<property name="attachments" value="Here is the link: I'm a link"/>
 		<property name="finalMode" value="false" />
 		<property name="company" ref="company3" />
-		<property name="positions">
-			<list>
-			</list>
-		</property>
 	</bean>
 	
 	
@@ -667,14 +681,13 @@
 	<!-- Finder beans -->
 
 	<bean id="finder1" class="domain.Finder">
-		<property name="keyWord" value="Adobe" />
+		<property name="keyWord" value="Tester" />
 		<property name="specificDeadline"><null /></property>
 		<property name="minSalary"><null /></property>
 		<property name="maxSalary"><null /></property>
 		<property name="moment"><null /></property>
 		<property name="positions">
 			<list>
-				<ref bean="position2" />
 			</list>
 		</property>
 	</bean>
@@ -682,12 +695,11 @@
 	<bean id="finder2" class="domain.Finder">
 		<property name="keyWord"><null /></property>
 		<property name="specificDeadline"><null /></property>
-		<property name="minSalary" value="1400.0" />
-		<property name="maxSalary" value="1700.0" />
+		<property name="minSalary"><null /></property>
+		<property name="maxSalary"><null /></property>
 		<property name="moment"><null /></property>
 		<property name="positions">
 			<list>
-				<ref bean="position4" />
 				<ref bean="position5" />
 			</list>
 		</property>
@@ -700,9 +712,9 @@
 		<property name="banner"
 			value="https://i.imgur.com/7b8lu4b.png" />
 		<property name="welcomeES"
-			value="¡Bien-venidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
+			value="¡Bienvenidos a Acme Hacker Rank! ¡Somos el mercado de trabajo favorito de los profesionales de las TICs!" />
 		<property name="welcomeEN"
-			value="Welcome to Acme hacker Rank! We’re IT hacker’s favourite job marketplace!" />
+			value="Welcome to Acme hacker Rank! We're IT hacker's favourite job marketplace!" />
 		<property name="spamWords">
 			<list>
 				<value>sex</value>

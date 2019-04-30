@@ -3,6 +3,7 @@ package controllers.company;
 
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
 import services.PositionService;
+import services.ProblemService;
 import controllers.AbstractController;
 import domain.Company;
 import domain.Position;
+import domain.Problem;
 
 @Controller
 @RequestMapping("position/company")
@@ -31,39 +34,26 @@ public class PositionCompanyController extends AbstractController {
 	@Autowired
 	private ActorService	actorService;
 
+	@Autowired
+	private ProblemService	problemService;
+
 
 	//	//Listing
-	//
-	//	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	//	public ModelAndView list() {
-	//		final ModelAndView result;
-	//		final Collection<Position> positions;
-	//
-	//		final Company c = (Company) this.actorService.findByPrincipal();
-	//		positions = this.positionService.getAllPositionsForCompany(c.getId());
-	//
-	//		result = new ModelAndView("position/list");
-	//		result.addObject("positions", positions);
-	//		result.addObject("requestURI", "position/company/list.do");
-	//
-	//		return result;
-	//	}
-	//
-	//	//Display
-	//
-	//	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	//	public ModelAndView display(@RequestParam final int varId) {
-	//		final ModelAndView result;
-	//
-	//		final Position position = this.positionService.findOne(varId);
-	//		Assert.notNull(position);
-	//
-	//		result = new ModelAndView("position/display");
-	//		result.addObject("position", position);
-	//		result.addObject("requestURI", "position/company/display.do");
-	//
-	//		return result;
-	//	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+		final ModelAndView result;
+		final Collection<Position> positions;
+
+		final Company c = (Company) this.actorService.findByPrincipal();
+		positions = this.positionService.getAllPositionsForCompany(c.getId());
+
+		result = new ModelAndView("position/list");
+		result.addObject("positions", positions);
+		result.addObject("requestURI", "position/company/list.do");
+
+		return result;
+	}
 
 	//Creation
 
@@ -102,7 +92,24 @@ public class PositionCompanyController extends AbstractController {
 		return result;
 	}
 
-	//Edition
+	//Edit GET
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int varId) {
+		final ModelAndView result;
+		Position position;
+
+		position = this.positionService.findOne(varId);
+
+		if (position == null || position.getCompany().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		result = this.createEditModelAndView(position);
+
+		return result;
+	}
+
+	//Edit POST
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Position position, final BindingResult binding) {
@@ -110,6 +117,13 @@ public class PositionCompanyController extends AbstractController {
 
 		try {
 			position = this.positionService.reconstruct(position, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			final Collection<Position> positions = this.positionService.getAllPositionsForCompany(this.actorService.findByPrincipal().getId());
+			result = new ModelAndView("position/list");
+			result.addObject("positions", positions);
+			result.addObject("requestURI", "position/company/list");
+			result.addObject("message", "position.finalMode.error");
+			return result;
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(position);
 		} catch (final Throwable oops) {
@@ -142,7 +156,7 @@ public class PositionCompanyController extends AbstractController {
 		Collection<Position> positions;
 		Position position;
 
-		result = new ModelAndView("position/hacker/list");
+		result = new ModelAndView("position/list");
 
 		final Company c = (Company) this.actorService.findByPrincipal();
 		positions = this.positionService.getAllPositionsForCompany(c.getId());
@@ -175,9 +189,13 @@ public class PositionCompanyController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Position position, final String messageCode) {
 		ModelAndView result;
+		Collection<Problem> problems;
+
+		problems = this.problemService.finalProblemsOfACompany(this.actorService.findByPrincipal().getId());
 
 		result = new ModelAndView("position/edit");
 		result.addObject("position", position);
+		result.addObject("problems", problems);
 		result.addObject("message", messageCode);
 		result.addObject("requestURI", "position/company/edit.do");
 

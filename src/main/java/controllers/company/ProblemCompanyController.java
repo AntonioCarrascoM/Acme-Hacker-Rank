@@ -3,6 +3,7 @@ package controllers.company;
 
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +105,24 @@ public class ProblemCompanyController extends AbstractController {
 		return result;
 	}
 
-	//Edition
+	//Edit GET
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int varId) {
+		final ModelAndView result;
+		Problem problem;
+
+		problem = this.problemService.findOne(varId);
+
+		if (problem == null || problem.getCompany().getId() != this.actorService.findByPrincipal().getId())
+			return new ModelAndView("redirect:/welcome/index.do");
+
+		result = this.createEditModelAndView(problem);
+
+		return result;
+	}
+
+	//Edit POST
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
 	public ModelAndView save(Problem problem, final BindingResult binding) {
@@ -112,6 +130,8 @@ public class ProblemCompanyController extends AbstractController {
 
 		try {
 			problem = this.problemService.reconstruct(problem, binding);
+		} catch (final ConstraintDefinitionException oops) {
+			return this.createEditModelAndView(problem, "problem.attachments.error");
 		} catch (final ValidationException oops) {
 			return this.createEditModelAndView(problem);
 		} catch (final Throwable oops) {
@@ -122,9 +142,6 @@ public class ProblemCompanyController extends AbstractController {
 			result.addObject("message", "problem.reconstruct.error");
 			return result;
 		}
-
-		if (problem.getId() != 0)
-			result = this.createEditModelAndView(problem);
 
 		try {
 			this.problemService.save(problem);

@@ -36,17 +36,12 @@
 		<%-- Forms --%>
 
 		<form:hidden path="id" />
-		<form:hidden path="version" />
 		<form:hidden path="curriculum" />
 		
 		
+		<acme:textarea code="miscellaneousData.text" path="text"/>
+		<acme:textarea code="miscellaneousData.attachments" path="attachments"/>
 		
-		<acme:textbox code="miscellaneousData.text" path="text"/>
-		<acme:textbox code="miscellaneousData.attachments" path="attachments"/>
-		
-		
-	
-
 		<%-- Buttons --%>
 
 		<acme:submit code="miscellaneousData.save" name="save" />
@@ -57,7 +52,7 @@
 				onclick="return confirm('${confirm}')" />&nbsp;
 	</jstl:if>
 
-	<acme:cancel url="welcome/index.do" code="miscellaneousData.cancel" />
+	<acme:cancel url="curriculum/hacker/list.do" code="miscellaneousData.cancel" />
 
 
 </form:form>

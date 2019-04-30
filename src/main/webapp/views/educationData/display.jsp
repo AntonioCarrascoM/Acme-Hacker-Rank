@@ -23,14 +23,13 @@
 <spring:message code="educationData.degree"  var="msgDegree"/>
 <spring:message code="educationData.institution" var="msgInstitution" />
 <spring:message code="educationData.mark" var="msgMark" />
-
 <spring:message code="educationData.startDate" var="msgStartDate" />
 <spring:message code="educationData.endDate" var="msgEndDate" />
 <spring:message code="educationData.edit" var="msgEdit" />
 <spring:message code="educationData.return" var="msgReturn" />
 <spring:message code="educationData.formatDate" var="formatDate"/>
 
-
+<security:authorize access="hasRole('HACKER')">
 
 	<%-- For the curriculum in the list received as model, display the following information: --%>
 	<jstl:out value="${msgDegree}" />:
@@ -52,17 +51,4 @@
 	<jstl:out value="${msgEndDate}" />:
 	<fmt:formatDate value="${educationData.endDate}" pattern="${formatDate}"/>
 	<br />
-	
-	
-	
-	
-<security:authorize access="hasRole('HACKER')">
-	<spring:url var="editUrl"
-		value="educationData/hacker/edit.do">
-		<spring:param name="educationDataId"
-			value="${educationData.id}"/>
-	</spring:url>
-	<a href="${editUrl}"><jstl:out value="${msgEdit}" /></a>
-</security:authorize>
-
-<a href="#"><jstl:out value="${msgReturn}" /></a>
+	</security:authorize>

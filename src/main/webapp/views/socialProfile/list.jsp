@@ -32,6 +32,7 @@
 <spring:message code="socialProfile.create" var="create" />
 <spring:message code="socialProfile.confirm.delete" var="confirm" />
 <spring:message code="socialProfile.cancel" var="cancel" />
+<spring:message code="socialProfile.display" var="display" />
 
 <%-- Listing grid --%>
 
@@ -47,25 +48,37 @@
 	<display:column property="profileLink" title="${profileLink}" sortable="true" />
 
 	<%-- Links towards display, apply, edit and cancel views --%>
+	
+		<spring:url var="displayUrl"
+		value="socialProfile/display.do">
+		<spring:param name="varId" value="${row.id}" />
+	</spring:url>
 
-		<spring:url var="editUrl" value="socialProfile/edit.do">
-			<spring:param name="socialProfileId" value="${row.id}" />
+	<display:column title="${display}">
+		<a href="${displayUrl}"><jstl:out value="${display}" /></a>
+	</display:column>
+
+		<%-- <spring:url var="editUrl" value="socialProfile/edit.do">
+			<spring:param name="varId" value="${row.id}" />
 		</spring:url>
+		
 
 		<display:column title="${edit}">
 			<a href="${editUrl}"><jstl:out value="${edit}" /></a>
 		</display:column>
 		
 		<spring:url var="deleteUrl" value="socialProfile/delete.do">
-			<spring:param name="socialProfileId" value="${row.id}" />
+			<spring:param name="varId" value="${row.id}" />
 		</spring:url>
 
 		<display:column title="${delete}">
 			<a href="${deleteUrl}" onclick="return confirm('${confirm}')" ><jstl:out value="${delete}" /></a>
-		</display:column>
+		</display:column> --%>
 	
 </display:table>
 
-<spring:url var="createUrl" value="socialProfile/create.do"/>
+<spring:url var="createUrl" value="socialProfile/create.do">
+<spring:param name="varId" value="${curriculum.id}" />
+</spring:url>
 	<a href="${createUrl}"><jstl:out value="${create}"/></a>
 		

@@ -20,6 +20,14 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0'")
 	Collection<Position> getPublicPositions();
 
+	//Retrieves a list of positions given a certain problem
+	@Query("select distinct p from Position p join p.problems pr where pr.id=?1")
+	Collection<Position> getPositionsOfAProblem(int id);
+
+	//Positions which a hacker can do applications
+	@Query("select p from Position p where p.finalMode=true and p.cancelled=false and p not in (select a.position from Application a where a.hacker.id=?1 and a.status!='3')")
+	Collection<Position> positionsForRequestsByHacker(int id);
+
 	//Retrieves a list of positions with final mode = true and not cancelled for a certain company
 	@Query("select p from Position p where p.finalMode='1' and p.cancelled='0' and p.company.id=?1")
 	Collection<Position> getPublicPositionsForCompany(int id);
@@ -39,5 +47,9 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 	//The worst position in terms of salary
 	@Query("select p.title from Position p where p.finalMode=true order by p.offeredSalary asc")
 	Collection<String> worstPositions();
+
+	//Search positions 
+	@Query("select p from Position p join p.company c where p.finalMode='1' and p.cancelled='0' and (p.title like %?1% or p.description like %?1% or p.requiredSkills like %?1% or p.requiredTech like %?1% or p.requiredProfile like %?1% or p.description like %?1% or c.commercialName like %?1%)")
+	Collection<Position> searchPosition(String keyWord);
 
 }

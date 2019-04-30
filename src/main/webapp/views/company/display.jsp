@@ -34,6 +34,8 @@
 <spring:message code="company.phone" var="phone" />
 <spring:message code="company.address" var="address" />
 <spring:message code="company.spammer" var="spammer" />
+<spring:message code="company.Tspammer" var="Tspammer" />
+<spring:message code="company.Fspammer" var="Fspammer" />
 
 <spring:message code="company.return" var="returnMsg" />
 
@@ -74,17 +76,28 @@
 	<br />
 	
 	<security:authorize access="hasRole('ADMIN')" >
+	<jstl:if test="${actor.evaluated eq true}">
 	<jstl:out value="${spammer}" />:
-	<jstl:out value="${company.spammer}"/>
+	<jstl:if test="${actor.spammer eq true}">
+	<jstl:out value="${Tspammer}"/>
+	</jstl:if>
+	<jstl:if test="${actor.spammer eq false}">
+	<jstl:out value="${Fspammer}"/>
+	</jstl:if>
 	<br />
+	</jstl:if>
+	<jstl:if test="${actor.evaluated eq false}">
+	<jstl:out value="${spammer}" />:
+	<jstl:out value="N/A"/>
+	<br />
+	</jstl:if>
   	</security:authorize>
 	
 	<br />
 	
-	<jstl:out value="${creditCard}" />
-	<br />
-	<br />
-		
+	<fieldset>
+	<legend><jstl:out value="${creditCard}" /></legend>
+	
 	<jstl:out value="${holder}" />:
 	<jstl:out value="${company.creditCard.holder}"/>
 	<br />
@@ -104,7 +117,7 @@
 	<jstl:out value="${cvv}" />:
 	<jstl:out value="${company.creditCard.cvv}"/>
 	<br />
-	
+	</fieldset>
   		
 	<a href="welcome/index.do"><jstl:out value="${returnMsg}" /></a>
 

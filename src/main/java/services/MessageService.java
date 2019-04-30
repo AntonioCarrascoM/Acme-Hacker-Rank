@@ -18,10 +18,12 @@ import repositories.MessageRepository;
 import security.Authority;
 import domain.Actor;
 import domain.Application;
+import domain.Company;
 import domain.Configuration;
 import domain.Finder;
 import domain.Hacker;
 import domain.Message;
+import domain.Status;
 
 @Service
 @Transactional
@@ -146,11 +148,8 @@ public class MessageService {
 	}
 
 	//Sends a message to the member associated to an request.
-	//TODO adaptar a los estados de la application, si el estado es submitted se manda a company, si es accepted o rejected se manda a hacker
 	public void applicationStatusNotification(final Application p) {
 		Assert.notNull(p);
-
-		final Hacker h = p.getHacker();
 
 		final Message msg = this.create();
 		msg.setSubject("Application status changed / El estado de la solicitud ha cambiado");
@@ -158,10 +157,14 @@ public class MessageService {
 		msg.setTags("Application status / Estado de la solicitud");
 		msg.setSent(new Date(System.currentTimeMillis() - 1));
 
-		this.send(msg, h);
-
+		if (p.getStatus() == Status.SUBMITTED) {
+			final Company company = p.getPosition().getCompany();
+			this.send(msg, company);
+		} else if (p.getStatus() == Status.ACCEPTED || p.getStatus() == Status.REJECTED) {
+			final Hacker h = p.getHacker();
+			this.send(msg, h);
+		}
 	}
-
 	//Sends a message to the member associated to an request.
 	public void offerMatchesHackerFinderNotification(final Finder f) {
 		Assert.notNull(f);
@@ -203,6 +206,7 @@ public class MessageService {
 	}
 
 	//Reconstruct broadcast
+
 	public Message reconstructBroadcast(final Message m, final BindingResult binding) {
 		Message result;
 		final Authority authAdmin = new Authority();
@@ -215,7 +219,9 @@ public class MessageService {
 
 		result.setSubject(m.getSubject());
 		result.setBody(m.getBody());
-		result.setTags(m.getTags());
+		result.setTags(m.getTags() + ", SYSTEM");
+		if (!this.actorService.findAll().isEmpty())
+			result.setRecipient(this.actorService.findAll().iterator().next());
 
 		this.validator.validate(result, binding);
 

@@ -22,9 +22,12 @@
 <%-- Stored message variables --%>
 
 <spring:message code="administrator.name" var="name" />
-<spring:message code="administrator.surnames" var="surname" />
+<spring:message code="administrator.surnames" var="surnames" />
 <spring:message code="administrator.vatNumber" var="vatNumber" />
+<spring:message code="administrator.reminderMsg" var="msgReminder" />
 <spring:message code="administrator.return" var="msgReturn" />
+<spring:message code="administrator.actor.display" var="msgDisplay" />
+<spring:message code="administrator.ban.title" var="msgBanUnban" />
 <spring:message code="administrator.ban.text" var="msgBan" />
 <spring:message code="administrator.unban.text" var="msgUnban" />
 <spring:message code="administrator.selfBan.error" var="msgSelfBan"/>
@@ -35,6 +38,8 @@
 <security:authorize access="hasRole('ADMIN')">
 
 <%-- Listing grid --%>
+
+<h3><jstl:out value="${msgReminder}"/></h3>
 
 <display:table pagesize="5" class="displaytag" keepStatus="false"
 	name="actors" requestURI="${requestURI}" id="row">
@@ -54,8 +59,18 @@
 		<spring:param name="varId"
 			value="${row.id}"/>
 	</spring:url>
+	
+	<spring:url var="displayUrl"
+		value="administrator/actorDisplay.do">
+		<spring:param name="varId"
+			value="${row.id}"/>
+	</spring:url>
+	
+	<display:column title="${msgDisplay}">
+			<a href="${displayUrl}"><jstl:out value="${msgDisplay}" /></a>
+	</display:column>
 
-	<display:column>
+	<display:column title="${msgBanUnban}">
 		<jstl:if test="${row.userAccount.banned eq false}">
 			<a href="${banUrl}"><jstl:out value="${msgBan}" /></a>
 		</jstl:if>

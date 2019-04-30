@@ -212,6 +212,7 @@ public class ActorService {
 			address = null;
 		return !StringUtils.isWhitespace(address);
 	}
+
 	//Method to check the phone only contains numbers
 	public boolean checkPhone(final String phone) {
 		Boolean result = true;
@@ -248,6 +249,24 @@ public class ActorService {
 
 		return result;
 	}
+
+	//Flag spammers
+	public void flagSpammers() {
+		final Collection<Actor> actors = this.findAll();
+		final Collection<Actor> spammers = this.bannableActors();
+
+		for (final Actor a : actors) {
+			a.setEvaluated(true);
+			if (spammers.contains(a)) {
+				a.setSpammer(true);
+				this.save(a);
+			} else {
+				a.setSpammer(false);
+				this.save(a);
+			}
+		}
+	}
+
 	//Method to ban or unban an actor
 	public void BanOrUnban(final int actorId) {
 		final Actor a = this.actorRepository.findOne(actorId);
@@ -265,6 +284,7 @@ public class ActorService {
 	}
 
 	//Ancillary methods
+
 	public Actor findByUserAccountId(final int id) {
 		return this.actorRepository.findByUserAccountId(id);
 	}
@@ -273,7 +293,12 @@ public class ActorService {
 		return this.actorRepository.getActorByUsername(username);
 	}
 
-	// TODO Listing of actors with at least 10% of the messages flagged as spam.
+	//Listing of actors with spammer flag activated
+	public Collection<Actor> spammerActors() {
+		return this.actorRepository.spammerActors();
+	}
+
+	// Listing of actors with at least 10% of the messages flagged as spam.
 	public Collection<Actor> bannableActors() {
 		return this.actorRepository.bannableActors();
 	}

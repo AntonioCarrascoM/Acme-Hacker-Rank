@@ -2,8 +2,10 @@
 package services;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 
+import javax.validation.ConstraintDefinitionException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,7 @@ public class AdministratorService {
 
 		final Administrator administrator = new Administrator();
 		administrator.setSpammer(false);
+		administrator.setEvaluated(false);
 		administrator.setUserAccount(account);
 
 		return administrator;
@@ -124,6 +127,17 @@ public class AdministratorService {
 		if (binding.hasErrors())
 			throw new ValidationException();
 
+		final int year = Calendar.getInstance().get(Calendar.YEAR);
+		final int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+
+		//Assertion to make sure that the credit card has a valid expiration date.
+		if (result.getCreditCard() != null) {
+			if (result.getCreditCard().getExpYear() < year)
+				throw new ConstraintDefinitionException();
+			if (result.getCreditCard().getExpYear() == year && result.getCreditCard().getExpMonth() < month)
+				throw new ConstraintDefinitionException();
+		}
+
 		//Assertion that the email is valid according to the checkAdminEmail method.
 		Assert.isTrue(this.actorService.checkAdminEmail(result.getEmail()));
 
@@ -152,6 +166,20 @@ public class AdministratorService {
 		result.setAddress(administrator.getAddress());
 
 		this.validator.validate(result, binding);
+
+		if (binding.hasErrors())
+			throw new ValidationException();
+
+		final int year = Calendar.getInstance().get(Calendar.YEAR);
+		final int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+
+		//Assertion to make sure that the credit card has a valid expiration date.
+		if (result.getCreditCard() != null) {
+			if (result.getCreditCard().getExpYear() < year)
+				throw new ConstraintDefinitionException();
+			if (result.getCreditCard().getExpYear() == year && result.getCreditCard().getExpMonth() < month)
+				throw new ConstraintDefinitionException();
+		}
 
 		//Assertion the user has the correct privilege
 		Assert.isTrue(this.actorService.findByPrincipal().getId() == result.getId());
